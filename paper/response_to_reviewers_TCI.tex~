@@ -1,0 +1,209 @@
+\documentclass{article}
+\topmargin -0.8in
+\oddsidemargin -0.01in
+\evensidemargin -0.01in
+\textwidth 6.5in
+\textheight 8.5in
+\usepackage{amsmath,amssymb,graphicx,cases}
+\usepackage{color}
+\usepackage{url,hyperref}
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\bibliographystyle{IEEEtran}
+\begin{document}
+\title{Author Response to Reviewers for the paper `Eliminating prior-bias from sparse-projection tomographic reconstructions'}
+
+\author{Preeti Gopal, Sharat Chandran, Imants Svalbe, Ajit Rajwade}
+
+\maketitle
+
+We would like to thank the editor and all three reviewers for their insightful comments. Here, we are including our response to each reviewer, and pointers to modifications (in \textbf{bold}) that we have included within our revised manuscript, based on the comments from the reviewers. 
+
+\section{Response to Reviewer 1} 
+\begin{enumerate}
+\item \textit{There are some concerns associated with the compressive sensing (CS) method, the explanation for weight selection, and the clarity of results. Some of the major issues are described below.}
+  
+  \textit{In Fig. 4, the caption says CS and no prior. This is not true. CS does have a prior in the sense that it forces the reconstruction to lie in a sparse basis. You did explain this aspect of CS in section III (A). $\lambda_1$ seems to decide the strength of the CS prior. However, in section V (B), you mention that $\lambda_1$ is always chosen to be one. But, it is clear that the potato image in Fig. 10 (c) is over-regularized. It is extremely blurred. In CS, since you use cross-validation on a test image to select $\lambda_1$, it is necessary to tune this parameter until you reach a desired SSIM or root-mean-squared-error (RMSE). With CS priors, I would expect increasing $\lambda_1$ to also lead to smoother results. What is the sparsity basis for CS prior in equation (1)? Why is a CS prior necessary when you have the selective/unselective prior? What happens if there is no CS prior and if we use only the selective/unselective priors?} \\
+\textbf{\color{blue}{Response:}}
+
+\item \textit{Schematic 1 in section III (B) does not make sense. But, the explanation in section III (B) (2) is clear. I found section III (B) (2) algorithm to compute weights map W very interesting. However, it is hard to understand what artifacts can be attributed to the system geometry and an algorithm. For instance, in the third step, you mention that the difference between $P^{fdk}$ and $X^{fdk}$ will not contain false positives due to imaging geometry but will contain false positives specific to the reconstruction method. Can you show these artifacts for the potato dataset? While Fig. 7 showing weights is interesting, from a clarity standpoint, I would like to see images of artifacts that get removed at each stage of your algorithm (2) Algorithm to compute weights maps W.} \\
+\textbf{\color{blue}{Response:}}
+
+\item \textit{In results, the images are simply too big relative to the ROIs, which are tiny. It is very difficult to see the changes within the ROI. If the paper is printed, then there is no way to zoom into the images. It will be better if you could could also present zoomed images of the ROI. Otherwise, you could present one full sized image and rest of the images could be only the ROI. Table I, II, and III present SSIM comparison. It will also be interesting to present a root mean squared error (RMSE) comparison. RMSE measure will help in evaluating the quantitative accuracy of your reconstruction. For instance, in Fig. 10 (e), the region within the ROI seems to be brighter than the surrounding holes. This may also happen if an incorrect choice of the CS prior regularization parameter $\lambda_1$ results in excessive blurring.}\\
+\textbf{\color{blue}{Response:}} 
+
+\item \textit{Some relatively minor issues are below -
+4. Page 3, line 7, section II: Consider defining longitudinal study.} \\
+\textbf{\color{blue}{Response:}} 
+
+\item \textit{Images in Fig. 3 seem to be clipped in the lower left along a circular arc! Are all reconstructions within a circular outer region of interest?} \\
+\textbf{\color{blue}{Response:}}
+
+
+\item \textit{ 6. In Fig. 8, what is (g) combined? Also, there is no (h) but is mentioned in caption.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{Try to mention the actual number of views/projections instead as a percentage. The percentage only makes sense when you are comparing against Nyquist limit for views. For instance, the total number of views for Potato dataset is 900, which is simply too many for a reconstruction size of 150x150. For such a small reconstruction, 900 is not a "typical" number views. It may be more "typical" to use 150 views in standard practice. So, expressing views as a percentage of 900 is confusing.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ Hard to notice the features within the ROI in Fig. 15. It may help to present images that zoom into the ROI.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{In section V (B), how was the cross-validation or empirical selection of $\lambda_1$ and $\lambda_2$ done? Did you use SSIM as a comparison metric? Did you use any particular object prior image for cross-validation? If so, which image did you use? } \\
+  \textbf{\color{blue}{Response:}}
+
+  \item \textit{You are allowed to submit documents or media as supplementary material. Instead of posting them on a dropbox, you could submit them as supplementary material to the journal. You could also use supplementary material to add additional text or figures to reduce number of pages in main paper.} \\
+\textbf{\color{blue}{Response:}}
+
+\item \textit{To save space and if you feel comfortable, you could move the section III (A) (1) on patch based techniques to supplementary since it is not a contribution of your paper.} \\
+\textbf{\color{blue}{Response:}}
+
+
+
+\end{enumerate}
+
+\section{Response to Reviewer 2}
+\begin{enumerate}
+\item \textit{I have one main question concerning Table 1, where I notice FDK gives for the ROI much better SSIM value than the variants of the proposed method. What is the reason of this? Why can then the authors state that their method is better than FDK? A bit more detailed explanation would be satisfactory.} \\
+\textbf{\color{blue}{Response:}}
+
+\item \textit{Beside this, I only have minor comments:
+P1, L49, right panel: "a" should not be typeset in italic.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{P2, L31, left panel: The subtitle should be typeset in bold.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P2, L50, left panel: "reconstruction-" should be corrected to "reconstruction -"} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P5, L10, left panel: "Eq 6" should be corrected to "Eq. 6" (same in P6, L54, right panel)} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P6, L17, left panel: "i.e" should be replaced with "i.e." (correct each further occurrence)} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P6, L42, left panel: "Eqn. 8" should be corrected "Eq. 8" (same in P7, L19, left panel)} \\
+  \textbf{\color{blue}{Response:}}
+  
+\item \textit{Caption of Fig. 8: The correct form is (a)-(f) and (g)} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{P6, L40, right panel: Subtitle should be typeset in bold} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P7, L3, and L7: "proposed methods" <--> "proposed method". Choose one.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ Caption of Figs 10, 12, and 13: "Unselective prior" should be typeset in two lines instead of three.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P7, L50, left panel: Replace "Figs. 9" with "Fig. 9"} \\
+  \textbf{\color{blue}{Response:}} This has now been corrected.
+
+\item \textit{ P7, L28, right panel: do not use bold typesetting here} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{Caption of Fig. 15: "Letters missing"} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P8, L49, right panel: Correct "shows" to "show"} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{Caption of Fig. 16: "slice-8" should be replaced with "image-8"} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{P9, L20, right panel: Move [16] to the second place. } \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P9, L34, right panel: "[38](FDK" space is missing} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ P9, L36, right panel: "in-dept" should be corrected to "in-depth", "in" should be corrected to "is"} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{ Caption of Fig. 17: "weight maps" should be corrected to "weights maps"} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{Acknowledgement: "Dr.Andrew Kingston" space is missing} \\
+  \textbf{\color{blue}{Response:}}       
+    
+\end{enumerate}
+
+\section{Response to Reviewer 3}
+\begin{enumerate}
+\item \textit{This paper extends an existing algorithm for reconstructing longitudinal tomographic data with a reduced number of projections, by adding a weight map that determines how much to weigh a specific term in the cost function for each voxel of the reconstructed image. The authors give an explanation of the approach, and show results for both simulated and experimental data. Although the proposed approach seems mathematically sound, the paper itself has several significant issues that make it difficult to assess whether the approach actually improves on existing work. Most importantly, results are compared with only a single existing method that is specifically designed for low-angle tomography (compressed sensing), and the results of that method seem sub-optimal (at least, it does not match my experience with both applying such methods myself and published results of such methods). Since no details are given about the method that is compared with (what function does in optimize? what were the parameters? how were these chosen?), the experimental results in the paper give very little information to the reader. To address these issues, a large amount of changes would be required in the paper (not only in the experiments, but also throughout the paper, since the performance of compressed sensing methods is one of the main motivations of introducting a new approach). Other issues are present in the paper as well (see below for more detailed comments). Therefore, I unfortunately have to recommend rejection of the current manuscript.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{- The comparisons with existing methods in the current manuscript are insufficient to support the conclusions made in the paper. My main concerns are: - The authors only compare with a single method specific to reconstructing tomographic images from a low number of projections (which they call compressed sensing). However, this topic is highly studied, and there are many methods available for this. The paper would be improved by including results from more methods, for example dictionary learning, total variation minimization, algebraic techniques (DART etcetera), or even simply SIRT with a nonnegativity constraint.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{No details are given about the CS method that was compared with. What type of sparsity did the method assume? What objective function did it minimize? What parameters did the authors choose? How were those parameters chosen? How many iterations were used to minimize the objective function? Without this information, the comparison does not have much information, and therefore can't be used to support the conclusions made in the paper.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{Based on my experience with reconstructing tomographic data from few projections, I would expect the CS results to look \_much\_ better than what is presented in the paper. As an example, in Fig 10, based on the results of the FDK algorithm, I would expect any reasonable iterative method with regularization (CS or otherwise) to produce fairly accurate results. I'm not sure what the cause of this is, because no details about the used CS method are given (see point above). Looking at the images (and other images from iterative methods given by the authors), it seems like the methods have not converged yet, but there could be other causes.} \\
+  \textbf{\color{blue}{Response:}}
+
+
+  \item \textit{Related to the previous point, in several results it seems that FDK actually gives the most 'accurate' reconstruction for the object. For example, in Fig 10 the shape of the leftmost void is changed by the proposed method, and in Fig 12 the shape of the seeds (?) is not well reconstructed by the proposed method. This should be discussed in the manuscript.} \\
+    \textbf{\color{blue}{Response:}}
+
+\item \textit{There exist methods that are relevant to the current work, since they use a similar approach. For example, "Region-based iterative reconstruction of structurally changing objects in CT" uses a similar approach in which image regions that change between scans are detected and reconstructed with a weaker 'similarity' prior than other regions. A discussion of such methods should be included in the manuscript, and, ideally, direct comparisons should be included to show how the proposed method compares with them.} \\
+  \textbf{\color{blue}{Response:}}
+
+
+\item \textit{Related to the previous point, this type of data seems well suited for data-driven techniques (e.g. deep learning) that have become very popular in recent years. Many papers exist that use deep learning for improving tomographic reconstruction from a low number of projections. It would be useful to include a comparison with a deep learning method, and, at the very least, discuss the possibility of using deep learning in this context.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{The discussion of hyperparameter sensitivity is not very detailed. It is important to show how reconstruction change when adjusting these paremeters (for example, what happens if $\lambda_1$ is set to 0?). In the current manuscript, the authors simply give a range of values that worked for them, but this is not very informative since it depends critically on the scaling of the data, which we don't know.} \\
+  \textbf{\color{blue}{Response:}}
+
+ \item \textit{A discussion about computational costs (time, memory) should be included in the paper. Since most of the shown results are for quite small images, I'm worried that the approach might not scale well to the large image sizes that are common in high-resolution tomography.} \\
+   \textbf{\color{blue}{Response:}}
+
+\item \textit{How does measurement noise influence results? Typically, in low-dose settings, significant noise is present in tomographic data. Does the method work well with such noisy images? This should be discussed and ideally results should be shown.
+} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{The paper includes several statements that are either false or not well supported. Examples include:
+    - 'Fig. 1 shows that although CS removes the artefacts created due to subsampling, its reconstruction is blurred.' This is a very broad statement about the performance of an entire group of methods (CS), for which giving only a single image without any details is not enough support by far.} \\
+  \textbf{\color{blue}{Response:}}   
+
+\item \textit{'which is an important issue that has so far been overlooked in the literature on tomography' -- this is again very broad, and there are actually papers that do address this issue (see above).} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{'which was shown [23] to be better when compared to dictionary-based priors.' -- better in which respect? Currently, this strong statement is only supported by a paper that is written by the same authors -- more papers should probably be included to support this.} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{ 'convergence of this optimization is guaranteed by the monotone convergence theorem' -- I think a reference is useful here.} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{'we emphasize that in most of the literature on tomographic reconstruction, the results are shown on recosntruction from projections simulated from 3D volumes'. This is simply not true: there are \_many\_ papers on tomographic reconstruction that include comparisons using real (raw) data, especially outside the medical context. In fact, many of such datasets are publicly available, and are regularly used to compare methods.} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{It is not really clear from the paper what the main contributions are compared with existing work. I think this is mainly caused by the structure of the paper, which is not really clear for me. For example, the 'Contributions' section includes, for a large part, a description of one of the experimental applications of the method -- I don't understand this inclusion. It would be better to clearly state here the contribution of this paper compared with existing methods. Also, for me the fact that some results are given before the explanation of the method is confusing -- for me it would be clearer to have all experiments in a single section. Furthermore, Schematic 1 was not clear to me while reading the paper, since at that point terms like 'old regions' and 'pilot reconstruction' are not introduced. All these unclarities made it difficult to assess what is novel in the paper.} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{ The mathematical notation is not always clear: for example, the authors define 'y = Rx' while later minimizing '||Rx-y||', which, given the mathematical definition, should always be zero. Of course, I understand what the authors mean here, but I think it is important to be clear with the mathematical description to avoid any confusion.} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{It seems that the weight map approach proposed by the authors is novel in this context. However, related methods exist that also try to predict the image regions where change is happening and improve reconstructions using this information. These methods are not discussed in the paper (or compared with), making it difficult to assess the novelty properly.} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{Rate the Bibliography: Unsatisfactory} \\
+  \textbf{\color{blue}{Response:}}     
+
+\item \textit{Is the length of the paper appropriate? If not, recommend what should be added or eliminated.: No (Explain): null: More and better comparisons should be included with popular existing methods.} \\
+  \textbf{\color{blue}{Response:}}
+
+\item \textit{Are symbols, terms, and concepts adequately defined?: Not always} \\
+  \textbf{\color{blue}{Response:}}
+
+\end{enumerate}
+
+
+\bibliography{mylit}
+
+\end{document}
+
+
