@@ -181,9 +181,9 @@ In this context, measurements in conventional data acquisition techniques are ac
 \end{figure}
 
 In addition, when some extra information about the object's structure is known~\cite{PICCS,cardiacPICCS,lubner2011,pirple,mota2017}, it is beneficial in further reducing the number of measurements.  These prior-based techniques use information from previously scanned data (`object-prior') of the same object or a similar one, and utilize it to reconstruct new volumes from very few sets of additional measurements. However, the above methods have the following two limitations: (1) the prior information may potentially overwhelm the essential details that appear in the test, (2) there is the key issue of choice of \textit{a} particular previously scanned object among the many previously acquired scans. A large part of this paper is dedicated to alleviating the former limitation, which is an important issue that has so far been overlooked in the literature on tomography. The latter limitation was relaxed in~\cite{liu2016,Xu2012} by building dictionary-based priors from multiple previously scanned objects. However, as reported in~\cite{my_dicta_paper}, dictionary priors are not as accurate and fast as global eigenspace priors.  Global eigenspace priors are better able to exploit the similarity of a test volume to object-prior, by assuming that the new test volume lies within the space spanned by the eigenvectors of the multiple representative previously scanned objects. Fig.~\ref{fig:diff_methods} shows the advantage of combining the global prior with CS.
-\subsection{Contributions}
+\subsection{\textbf{Contributions}}
 \label{sec:contributions}
-In this work (Fig.~\ref{fig:prior_overview}), we focus on further reducing the number of measurements, with  particular emphasis on longitudinal studies. For example, we consider medical datasets which consist of multiple CT scans being taken during a radio-frequency ablation procedure~\cite{Dong2015}. The process consists of inserting a needle probe into a patient's body. When the needle reaches the tumor site, an electric current is passed to burn the tumor. Repeated CT scans of the patient need to be acquired in order to visualize the movement of the needle and to ensure that it is reaching the appropriate target. A few initial densely-sampled scans are used as object-prior to help the physician know the position of the needle. The later scans are used to reveal the exact changes during and after burning of the tumor (ablation).  In this context, we demonstrate the combined use of CS with the global prior, in two flavors: the vanilla (unselective) and selective global prior-based reconstruction. The choice of the number of measurement views and the type of reconstruction- unselective or selective, is driven by the goal of the procedure. 
+In this work (Fig.~\ref{fig:prior_overview}), we focus on further reducing the number of measurements, with  particular emphasis on longitudinal studies. For example, we consider medical datasets which consist of multiple CT scans being taken during a radio-frequency ablation procedure~\cite{Dong2015}. The process consists of inserting a needle probe into a patient's body. When the needle reaches the tumor site, an electric current is passed to burn the tumor. Repeated CT scans of the patient need to be acquired in order to visualize the movement of the needle and to ensure that it is reaching the appropriate target. A few initial densely-sampled scans are used as object-prior to help the physician know the position of the needle. The later scans are used to reveal the exact changes during and after burning of the tumor (ablation).  In this context, we demonstrate the combined use of CS with the global prior, in two flavors: the vanilla (unselective) and selective global prior-based reconstruction. The choice of the number of measurement views and the type of reconstruction - unselective or selective, is driven by the goal of the procedure. 
 
 \begin{figure}[h]
 \centering
@@ -448,9 +448,9 @@ because it is unlikely that \emph{every} algorithm would produce a significant a
 %It must be chosen empirically based on the reconstruction of one of the template
 %volumes. 
 We found that our final reconstruction results obtained by
-solving Eqn.~\ref{eq:selective_prior} were robust over a wide range of $k$ values, as discussed in Sec.~\ref{sec:discussion}.
+solving Eq.~\ref{eq:selective_prior} were robust over a wide range of $k$ values, as discussed in Sec.~\ref{sec:discussion}.
 %-------------------------------------------
-\subsubsection{Motivation for the use of multiple types of eigenspaces for the computation of weights}
+\subsubsection{\textbf{Motivation for the use of multiple types of eigenspaces for the computation of weights}}
 
 
 
@@ -513,7 +513,7 @@ solving Eqn.~\ref{eq:selective_prior} were robust over a wide range of $k$ value
         \includegraphics[width=\textwidth]{../images/potato/2D/weightsIm_all_methods30.png}
         \caption{combined}
      \end{subfigure}
-      \caption{Weights-maps (corresponding to the difference between pilot reconstruction of the image in the last sub-figure of Fig.~\ref{fig:object-prior_test_potato_A1} and its projection onto the eigenspace $V_{low}$) constructed using different reconstruction methods, as specified in Eq.~\ref{eq:weights}. The weights-maps are different because the reconstruction artefacts of the new structures in test image will be different for every reconstruction method used, as seen in Fig.~\ref{fig:reconstructions_diff_methods}. }
+      \caption{Weights-maps (corresponding to the difference between pilot reconstruction of the image in the last sub-figure of Fig.~\ref{fig:object-prior_test_potato_A1} and its projection onto the eigenspace $V_{low}$) constructed using different reconstruction methods, as specified in Eq.~\ref{eq:weightsEq}. The weights-maps are different because the reconstruction artefacts of the new structures in test image will be different for every reconstruction method used, as seen in Fig.~\ref{fig:reconstructions_diff_methods}. }
 \label{fig:weights_map_2Dpotato}
 \end{figure}
 %-----------------------------potato 2D weights
@@ -557,7 +557,7 @@ The changes and new structures present in the test data will generate different 
 \section{Results}
 \label{sec:results}
 
-The proposed methods have been validated on 2D and 3D synthetic and real tomographic data of biological and medical specimens. The results below demonstrate the advantage of the selective global prior method over the unselective method.
+The proposed method has been validated on 2D and 3D synthetic and real tomographic data of biological and medical specimens. The results below demonstrate the advantage of the selective global prior method over the unselective method.
 
 
 %\subsection{\textbf{Evaluation of selective prior-reconstruction in real 3D data}}
@@ -565,7 +565,7 @@ The proposed methods have been validated on 2D and 3D synthetic and real tomogra
 %-----------------------results of potato dataset
 
 
-The proposed method has been validated on new\footnote {These and our code will be made available to the community.} scans of biological specimens in a longitudinal setting. These datasets in the form of \emph{raw cone-beam projection measurements} were acquired from a lab at the Australian National University (ANU). We emphasize that in most of the literature on tomographic reconstruction, the results are shown on reconstruction from projections \emph{simulated} from 3D volumes. This is because most CT scanners do not reveal the raw projections, and instead output only the full reconstructed volumes. Moreover, the process of conversion from the projections to the full volumes is proprietary. \emph{Departing from this, we demonstrate reconstruction results from raw projection data.} In all figures in this section, `unselective prior' refers to optimizing Eqn.~\ref{eq:selective_prior} with $\boldsymbol{W}(x,y,z)=1$.
+The proposed method has been validated on new\footnote {These and our code will be made available to the community.} scans of biological specimens in a longitudinal setting. These datasets in the form of \emph{raw cone-beam projection measurements} were acquired from a lab at the Australian National University (ANU). We emphasize that in most of the literature on tomographic reconstruction, the results are shown on reconstruction from projections \emph{simulated} from 3D volumes. This is because most CT scanners do not reveal the raw projections, and instead output only the full reconstructed volumes. Moreover, the process of conversion from the projections to the full volumes is proprietary. \emph{Departing from this, we demonstrate reconstruction results from raw projection data.} In all figures in this section, `unselective prior' refers to optimizing Eq.~\ref{eq:selective_prior} with $\boldsymbol{W}(x,y,z)=1$.
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/template_1.png}
@@ -599,7 +599,7 @@ The proposed method has been validated on new\footnote {These and our code will 
 \subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.185\columnwidth]{../images/potato/testIm_color.png}}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/fdkIm.png}}\hfill
 \subcaptionbox{CS, no prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/csIm.png}}\hfill
-\subcaptionbox{Unselective \\ prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/plainPriorIm.png}}\hfill
+\subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/plainPriorIm.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/weightedPriorIm.png}}
 \caption{Slice-A from 3D reconstruction of the potato with $5\%$ projection views--(b) has strong streak artefacts with unclear shadow of the potato, (c) largely blurred, (d) no new information detected (prior dominates) and (e) new information detected while simultaneously reducing streak artefacts. The reconstructed volumes can be viewed in~\cite{supp_paper}.}
 \label{fig:potato_3D_results_A}
@@ -669,7 +669,7 @@ In order to test on data with intricate structures, a second (Okra) dataset cons
 \subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.185\columnwidth]{../images/okra/testCropped.png}}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/fdk_cropped.png}}\hfill
 \subcaptionbox{CS, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/cs_cropped.png}}\hfill
-\subcaptionbox{Unselective \\ prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
+\subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/prior_weighted_cropped.png}}
 \caption{3D reconstruction of the okra from $10\%$ projection
   views (b) has strong streak artefacts, (c) blurred, (d) no new
@@ -687,7 +687,7 @@ In order to test on data with intricate structures, a second (Okra) dataset cons
 \subcaptionbox{Test}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/input_cropped.png}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/FDK_cropped.png}}\hfill
 \subcaptionbox{CS, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/pca_cropped.png}}\hfill
-\subcaptionbox{Unselective \\ prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/pca_cropped.png}}\hfill
+\subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/pca_cropped.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/weighted_prior_cropped.png}}
 \caption{Zoomed in portion corresponding to the red RoI of Fig.~\ref{fig:okra_3D_results} for various methods (b) has strong streak artefacts, (c) blurred, (d) no new  information detected (prior dominates -- the deformity from the prior
   shows up as a false positive) and (e) new information detected (no deformities
@@ -815,7 +815,7 @@ shown in~\cite{supp_paper}. One of the slices of the
 reconstructed volumes is shown in
 Fig.~\ref{fig:sprouts_3D_results}. For the sake of exposition, the red region of interest (RoI) has been culled out from 7
 consecutive slices in the 3D volume to indicate new structures; other
-changes can be viewed in the video. Tables~\ref{table:potato_ssim},~\ref{table:okra_ssim} and \ref{table:sprouts_ssim} shows the improvement in the Structure
+changes can be viewed in the video. Tables~\ref{table:potato_ssim},~\ref{table:okra_ssim} and \ref{table:sprouts_ssim} show the improvement in the Structure
 Similarity Index (SSIM) of the reconstructed new regions as compared
 to other methods. 
 
@@ -937,7 +937,7 @@ Slice t=8 & During, after ablation & 120 & Selective \\ \hline
 %--------------------------------------------------------------------------
 \section{Discussion}
 \label{sec:discussion}
-The presented unselective prior-based algorithm is suited to applications where we wish to detect the location of new changes in an object over time, and the presented selective prior-based algorithm is suited to applications where we wish to observe the intricate details of those new changes. This distinction in the techniques used has not been studied earlier in literature~\cite{geyer2015,Ali2018,Tan2017,PICCS} to the best of our knowledge. Eventhough methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-dept analysis of each of the results in presented in Sec.~\ref{sec:results}. We now discuss the need for registration between object-prior and the test, and the effect of hyper-parameters on our reconstructions.
+The presented unselective prior-based algorithm is suited to applications where we wish to detect the location of new changes in an object over time, and the presented selective prior-based algorithm is suited to applications where we wish to observe the intricate details of those new changes. This distinction in the techniques used has not been studied earlier in literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our knowledge. Eventhough methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sec.~\ref{sec:results}. We now discuss the need for registration between object-prior and the test, and the effect of hyper-parameters on our reconstructions.
 
 \subsection{Issue of misalignment between test and templates}
 As with any global prior-based method, there is a need for the test volume to be registered with the object-prior. In all our longitudinal study experiments, the volumes were already aligned during imaging. However, if this were not the case, then the prior must be aligned to the test based on an initial pilot reconstruction of the test.
