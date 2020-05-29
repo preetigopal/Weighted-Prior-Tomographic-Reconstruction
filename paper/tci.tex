@@ -323,67 +323,9 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  Optimal values of $\lambda_1, \lambda_2$ must be empirically chosen \textit{a priori}, based on the reconstructions of one of the template volumes (see also Sec.~\ref{sec:discussion}). The cost function described in Eq.~\ref{Eq:main_prior} is biconvex and the convergence of this optimization is guaranteed by the monotone convergence theorem.
  %---------------------------------------------------------
  \vspace{2mm}
-\subsubsection{\textbf{Patch-based techniques}}
-\label{sec:patch_based}
-Next we present a comparison~\cite{my_dicta_paper} of the performance of the aforementioned PCA-based global prior with a prior that is based on construction of patch-wise dictionaries. In both cases, the reconstruction routine is based on typical CS techniques. The well-known K-SVD algorithm \cite{Aharon2006} was chosen for construction of patch-based dictionaries. For this, patches were extracted from each of the template volumes, from which an overcomplete dictionary was obtained. The basic aim of the K-SVD algorithm (or any overcomplete dictionary learning technique) is the compact linear representation of all these patches using the dictionary columns. Let $\boldsymbol{D}$ denote the dictionary learned, $N_p$ the total number of patches, and $\boldsymbol{H_i}$ the operator to extract the $i^{\textrm{th}}$ patch from the intermediate reconstructed slice/volume. Then, once $\boldsymbol{D}$ is computed in an earlier `training phase', each new test slice (or test volume) can be reconstructed by optimizing a cost function such as the one below:
-\begin{multline}
-J_2(\boldsymbol{\theta},\{\boldsymbol{\alpha_i}\}_{i=1}^{N_p}) = \lVert\boldsymbol{\mathcal{R}\Upsilon\theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \\ \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\lVert \boldsymbol{H_i\Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2 +\frac{\lambda_3}{ N_p}\sum_{i=1}^{N_p}\lVert\boldsymbol{\alpha_i}\rVert_1.
-\label{Eq:main_patchBased}
-\end{multline}
-The reconstruction proceeds in an alternating manner, first by minimization of Eq.~\ref{Eq:primaryObj_patchBased} and then by minimization of Eq.~\ref{Eq:alpha_patchBased}. For both these, the solver in~\cite{l1ls} is used. For the former case, the cost function reduces to:
-\begin{equation}
-J_{\boldsymbol{\alpha}}(\boldsymbol{\theta}) = \lVert \boldsymbol{\mathcal{R} \Upsilon \theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\rVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2.
-\label{Eq:primaryObj_patchBased}
-\end{equation}
-For each $i \in \{1,...,N_p\}$, the cost function reduces to:
-\begin{equation}
-J_{\boldsymbol{\theta}}(\boldsymbol{\alpha}_i) =  \lVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D\alpha_i}\rVert_2^2  + \frac{\lambda_3}{\lambda_2}\lVert\boldsymbol{\alpha_i}\rVert_1.
-\label{Eq:alpha_patchBased}
-\end{equation}
-This summarizes the comparison with patch-based methods.
-%----------------------------------------------------
 
 \subsection{\textbf{Selective prior-based reconstruction}}
 \label{sec:selective_prior}
-\vspace{1mm}
-\noindent \begin{boxedminipage}{0.5\textwidth} 
-{\bf Schematic 1}: Motivation behind our algorithm. (The plus $\oplus$ and the
-minus $\ominus$ operators denote set-union and set-difference respectively; precise details available
-in Section~\ref{sec:thealgo}). 
-%\vspace{0.2cm}
-
-{\small
- Let \textcolor{blue}{prior $Q:=$ old regions ($O$)}\\
- Let \textcolor{blue}{test volume $\boldsymbol{x}:=$ old regions ($O$) $\oplus$ new regions ($N$)}\\
-% \textbf{Steps:}     
-    \begin{enumerate}
-\item  Compute pilot reconstruction of $\boldsymbol{x}$. Let this be called $X$.\\ \textcolor{blue}{$X = O \oplus N \oplus Ar(O) \oplus Ar(N)$}, where \\ \textcolor{blue}{$Ar(O)$} denote the reconstruction artefacts that depend on the \textit{old} regions, the imaging geometry and the reconstruction method, and\\
- \textcolor{blue}{$Ar(N)$} denote the reconstruction artefacts that depend on the \textit{new} regions, imaging geometry and the reconstruction method.
-\item  Note that \textcolor{blue}{$Q \ominus X = N \oplus Ar(O) \oplus Ar(N)$} gives the new regions, but along with lots of artefacts due to the imaging geometry (sparse views). To eliminate these unwanted artefacts, compute \textcolor{blue}{$Y = Q \oplus Ar(O)$} by simulating projections from $Q$ using the same imaging geometry used to scan $\boldsymbol{x}$, and then reconstructing a lower quality prior volume $Y$. 
-    \item Note that \textcolor{blue}{$Y \ominus X = N \oplus Ar(N)$} contains the artefacts due to the new regions only. These are different for different reconstruction methods. To eliminate these method dependent artefacts, compute $Y$ and $X$ using different reconstruction methods. Let these be denoted by $Y^j$ and $X^j$ respectively.
-    \item Compute
-\vspace{-0.2cm}
-           \textcolor{blue}{\begin{equation*}
-            Y^1 \ominus X^1 = N \oplus Ar^1(N)
-           \end{equation*}
-\vspace{-0.5cm}
-           \begin{equation*}
-            Y^2 \ominus X^2 = N \oplus Ar^2(N)
-           \end{equation*}}
-\vspace{-0.4cm}
-   \item  New regions are obtained by computing
-\vspace{-0.2cm}
-          \textcolor{blue}{\begin{equation*}
-          (Y^1 \ominus X^1)\cap(Y^2 \ominus X^2)= N
-          \end{equation*}}   
-\vspace{-0.5cm}
-    \item Finally, assign space-varying weights $\boldsymbol{W}$ based on step $5$.
-    \end{enumerate}
-\label{algo:newRegionDetection}
-}
-\end{boxedminipage}
-%--------------------------------------------------
-\\
 
 Although the unselective global prior can be very useful in some circumstances, as was shown in Sec.~\ref{sec:tmh}, it poses a major limitation when we want accurate details of the new changes. While the unselective prior compensates very well for the possible artefacts due to sparse measurements, it dominates the regions with new changes masking the signal, as seen in Fig.~\ref{fig:RFA2_few_views}-d. Ideally, we will want to impose the prior only in the regions that are common between the test and object-prior.  Our selective prior based reconstruction overcomes this limitation by minimizing the following cost function:
 \begin{equation}
@@ -396,7 +338,7 @@ The key to our method is the discovery of a diagonal weights
  matrix $\boldsymbol{W}$, where $W_{ii}$ contains the (non-negative) weight assigned to the $i^{\textrm{th}}$ voxel of the prior. $\boldsymbol{W}$ is first constructed using some preliminary reconstruction methods (to be described in the following section), following which Eq.~\ref{eq:selective_prior} is used to obtain the final reconstruction. In regions of change in test data, we want lower weights for the prior when compared to regions that are similar to the prior.  
 \vspace{2mm}
  \subsubsection{\textbf{Computation of weights matrix $\boldsymbol{W}$}}
-Since the test volume (referred to as $\boldsymbol{x}$) is unknown to begin with, it is not possible to decipher the precise regions in $\boldsymbol{x}$ that are different from all the previously scanned objects (`object-prior'). We refer the reader to Schematic 1 that describes the evolution of the procedure used to detect the new regions in the unknown volume. We start with $X^{\text{fdk}}$, the initial backprojection reconstruction of the test volume using the Feldkamp-Davis-Kress (FDK) algorithm~\cite{FDK} in an attempt to discover the difference between the object-prior and the test volume. Let $\boldsymbol{V_{\text{high}}}$ be the eigenspace constructed from high-quality object-prior. However, the difference between $X^{\text{fdk}}$ and its projection onto the eigenspace $\boldsymbol{V_{\text{high}}}$ will detect the new regions along with  many false positives (false new regions). This is because, $X^{\text{fdk}}$ will contain many geometric-specific artefacts arising from sparse measurements (angle undersampling), which are absent in the high quality object-prior used to construct the eigenspace $\boldsymbol{V_{\text{high}}}$. To discover unwanted artefacts of the imaging geometry, in a counter-intuitive way, we generate \emph{low quality} reconstruction of the object-prior as described below.
+Since the test volume (referred to as $\boldsymbol{x}$) is unknown to begin with, it is not possible to decipher the precise regions in $\boldsymbol{x}$ that are different from all the previously scanned objects (`object-prior'). We start with $X^{\text{fdk}}$, the initial backprojection reconstruction of the test volume using the Feldkamp-Davis-Kress (FDK) algorithm~\cite{FDK} in an attempt to discover the difference between the object-prior and the test volume. Let $\boldsymbol{V_{\text{high}}}$ be the eigenspace constructed from high-quality object-prior. However, the difference between $X^{\text{fdk}}$ and its projection onto the eigenspace $\boldsymbol{V_{\text{high}}}$ will detect the new regions along with  many false positives (false new regions). This is because, $X^{\text{fdk}}$ will contain many geometric-specific artefacts arising from sparse measurements (angle undersampling), which are absent in the high quality object-prior used to construct the eigenspace $\boldsymbol{V_{\text{high}}}$. To discover unwanted artefacts of the imaging geometry, in a counter-intuitive way, we generate \emph{low quality} reconstruction of the object-prior as described below.
 \vspace{2mm}
 \subsubsection{\textbf{Algorithm to compute weights-map $\boldsymbol{W}$}}
 \label{sec:thealgo}
@@ -406,8 +348,7 @@ Since the test volume (referred to as $\boldsymbol{x}$) is unknown to begin with
   test volume $\boldsymbol{x}$ using FDK.
 
 \item Compute low quality template volumes $Y^\text{fdk}$. 
-In Schematic 1, for ease of exposition, we assumed a single
-template. In the sequel, we assume $L$ previously scanned objects from which we build
+We assume $L$ previously scanned objects from which we build
 an eigenspace. 
 \vspace{-0.1cm}
 
@@ -1072,7 +1013,7 @@ The parameters $\lambda_1$ and $\lambda_2$ must be chosen empirically or by cros
 %--------------------------Conclusion-----------------------
 \section{Conclusions}
 \label{sec:conclusions}
-This work deals with the effective use of priors for tomographic reconstruction in longitudinal studies. We show that we can either use the unselective global prior method or the selective prior method to our advantage, depending on our goal. We establish the context under which these methods can be used, as shown in Schematic~1. When we wish to approximately know the location of new changes, we apply an unselective prior because it is fast and sufficient for the task at hand. We also choose a smaller number of views in order to reduce radiation. In addition, we show that when our goal shifts to observing the details of the new changes accurately, we acquire projections from a moderate number of views in order to capture more information. We further combine this with the somewhat slower but more accurate technique of reconstruction-- the selective prior-based method. This method ensures that the reconstruction of localized new information in the data is not affected by the priors. We have thus improved the state of the art by detecting these regions of change and assigning low prior weights wherever necessary. The probability of presence of a `new region' is enhanced considerably by a novel combination of different reconstruction techniques.  We have validated our technique on medical 2D and real, biological 3D datasets for longitudinal studies. The method is also largely robust to the number of previously scanned objects used. We urge the reader to see the videos of reconstructed volumes in~\cite{supp_paper}. 
+This work deals with the effective use of priors for tomographic reconstruction in longitudinal studies. We show that we can either use the unselective global prior method or the selective prior method to our advantage, depending on our goal. We establish the context under which these methods can be used, as outlined in Fig.~\ref{fig:prior_overview}. When we wish to approximately know the location of new changes, we apply an unselective prior because it is fast and sufficient for the task at hand. We also choose a smaller number of views in order to reduce radiation. In addition, we show that when our goal shifts to observing the details of the new changes accurately, we acquire projections from a moderate number of views in order to capture more information. We further combine this with the somewhat slower but more accurate technique of reconstruction-- the selective prior-based method. This method ensures that the reconstruction of localized new information in the data is not affected by the priors. We have thus improved the state of the art by detecting these regions of change and assigning low prior weights wherever necessary. The probability of presence of a `new region' is enhanced considerably by a novel combination of different reconstruction techniques.  We have validated our technique on medical 2D and real, biological 3D datasets for longitudinal studies. The method is also largely robust to the number of previously scanned objects used. We urge the reader to see the videos of reconstructed volumes in~\cite{supp_paper}. 
 %Our method has been shown to make the best use of prior
 %only when needed, thus detecting new changes of the test
 %data. 
