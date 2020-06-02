@@ -487,12 +487,22 @@ solving Eq.~\ref{eq:selective_prior} were robust over a wide range of $k$ values
         \includegraphics[width=\textwidth]{../images/potato/2D/weighted_pca_all_methods30.png}
         \caption{combined}
      \end{subfigure}
-      \caption{(a)-(f):Different reconstructions of~\ref{fig:potato_test}. The magnitude and sharpness of the artefacts is different for each method. (g) Selective-prior method that combines weights-map information from all other methods.} 
+      \caption{(a)-(f):Different reconstructions of~\ref{fig:potato_test}. The magnitude and sharpness of the artefacts is different for each method. (g) Selective-prior method that combines weights-map information from all other methods. The SSIM of these reconstructions is shown in Table.~\ref{table:potato_2D_ssim}.} 
 \label{fig:reconstructions_diff_methods}
 \end{figure}
 
 The changes and new structures present in the test data will generate different artifacts for different reconstruction techniques. These artifacts would not be captured by reconstructions of the object-prior since the underlying new changes and structures may be absent in all of the previously scanned objects. We aim to let the weights be independent of the type of artifact. Hence, we use a combination of different reconstruction techniques to generate different types of eigenspaces and combine information from all of them to compute weights. To illustrate the benefit of this method, we first performed 2D reconstruction of a test slice from the potato dataset (please refer Sec.~\ref{Sec:potato} for details of the dataset) Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template slices. Fig.~\ref{fig:weights_map_2Dpotato}  shows the weights-maps generated using Eq.~\ref{eq:weightsEq} by various reconstruction methods. It can be seen that the weights are low in the region of the new change in test data. Because all the iterative methods are computationally expensive, we chose only FBP and CS-DCT for computing weights-maps for all 3D reconstructions.  
-
+%---------------------------------------
+\begin{table}[!h]
+\caption{SSIM of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of the ground-truth (ideal reconstruction) is 1, and these are computed within the red RoI of the test image shown in Fig.~\ref{fig:potato_test}.}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+\hline
+ Fig.~\ref{fig:reconstructions_diff_methods}  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} \\\hline
+\textbf{red RoI}  & 0.502 & 0.597  & 0.453 & 0.474 & 0.565 & 0.523 & \textcolor{red}{0.759} \\ \hline
+\end{tabular}
+\label{table:potato_2D_ssim}
+\end{table}
+%-------------------------------------------------
 
 %----------------------------------------Results-----------------------
 \section{Results}
