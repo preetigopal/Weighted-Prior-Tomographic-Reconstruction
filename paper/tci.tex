@@ -24,8 +24,8 @@
 \usepackage{subcaption}
 \usepackage[font=small,skip=2pt]{caption}
 \usepackage{boxedminipage}
-\usepackage{algpseudocode}
-\usepackage{algorithm}
+%\usepackage{algpseudocode}
+%\usepackage{algorithm}
 \usepackage{xcolor}
 
 
@@ -130,7 +130,13 @@ Limited-view tomographic reconstruction, compressed sensing, priors, longitudina
 \label{sec:intro}
 Computed Tomography (CT) deals with the recovery of an entire object from a limited set of projection data which are acquired by passing X-rays at different orientations (`views') through the object. In order to minimize the radiation exposed to the subject, current research seeks to either significantly reduce the radiation intensity required to reconstruct with adequate fidelity~\cite{gopal2019low} or significantly reduce the number of measurements required to reconstruct with adequate fidelity. In this regard, there are two lines of pursuit. One is to intelligently choose those sets of projection views that capture most information~\cite{King2018,Anthony2018,barkan17,fischer16,andrei14}, and the other is to improve the reconstruction algorithms to get the most accurate recovery of the underlying slice, given the measurements from any limited set of views~\cite{yang2018,geyer2015,kilic2011}. This paper deals with the latter scenario.
 
-In this context, measurements in conventional data acquisition techniques are acquired by sampling the physical object uniformly above the Nyquist rate. However, in the last decade, reconstruction from sub-Nyquist sampled data has been made possible due to methods such as the widely used Compressed Sensing (CS) technique~\cite{Donoho,introCS}, which assumes the data to exhibit properties such as sparsity of the underlying image under certain mathematical transforms such as the Discrete Cosine Transform (DCT) or wavelet transforms. Fig.~\ref{fig:diff_methods} shows that although CS removes the artefacts created due to sub-sampling, its reconstruction is blurred. When prior information about the data is used along with CS, the reconstruction improves significantly. The algorithm presented in~\cite{Essam2015} drew inspiration from CS and solved for the reconstruction from limited views using alternating direction method of multipliers. In other techniques like in~\cite{Polak2017}, reconstruction is performed by estimating sparse gradients in the data. In~\cite{Li2015}, the required number of views is reduced by minimizing the total variation in the data. The measurements and an initial estimate of the data guide the iterative routines. 
+In this context, measurements in conventional data acquisition techniques are acquired by sampling the physical object uniformly above the Nyquist rate. However, in the last decade, reconstruction from sub-Nyquist sampled data has been made possible due to methods such as the widely used Compressed Sensing (CS) technique~\cite{Donoho,introCS}, which assumes the data to exhibit properties such as sparsity of the underlying image under certain mathematical transforms such as the Discrete Cosine Transform (DCT) or wavelet transforms. Among the many optimizers used in CS, we used the l1-regularized least squares (l1-ls) form and observed that although this optimizer removes most of the artefacts created due to sub-sampling, its reconstruction is blurred when the number of views is very limited, as shown in Fig.~\ref{fig:diff_methods}. Specifically, the reconstruction in Fig.~\ref{fig:humerus_cs} is obtained by minimizing the following cost using the solver in~\cite{l1ls}:
+ \begin{equation}
+J_{CS}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
+\label{Eq:simple_cs}
+\end{equation}
+Here, $\boldsymbol{x} = \boldsymbol{\Upsilon\theta}$ denotes the reconstructed volume, $\boldsymbol{y}$ its measured tomographic projections, $\boldsymbol{\mathcal{R}}$ the tomographic projection operator such that ideally $\boldsymbol{y} = \boldsymbol{\mathcal{R} x}$, and $\boldsymbol{\theta}$ the sparse coefficients of $\boldsymbol{x}$. $\boldsymbol{\Upsilon}$ is the basis in which $\boldsymbol{x}$ is assumed to be sparse, and is chosen to be DCT here.
+In addition to this sparsity prior, when object specific prior information is  used as well, the reconstruction improves significantly. The algorithm presented in~\cite{Essam2015} drew inspiration from CS and solved for the reconstruction from limited views using alternating direction method of multipliers. In other techniques like in~\cite{Polak2017}, reconstruction is performed by estimating sparse gradients in the data. In~\cite{Li2015}, the required number of views is reduced by minimizing the total variation in the data. The measurements and an initial estimate of the data guide the iterative routines. 
 
 
 \begin{figure}[!h]
@@ -170,20 +176,21 @@ In this context, measurements in conventional data acquisition techniques are ac
      \end{subfigure}
     \begin{subfigure}[b]{0.23\linewidth}
         \includegraphics[width=\textwidth]{../images/humerus/global_local/reconNoPrior.png}
-        \caption{CS}
+        \caption{l1-ls}
+        \label{fig:humerus_cs}
     \end{subfigure}
     \begin{subfigure}[b]{0.23\linewidth}
         \includegraphics[width=\textwidth]{../images/humerus/global_local/global.png}
         \caption{This paper}
      \end{subfigure}
-    \caption{\textit{Knowing more about the data helps.} Reconstructions of (g) a test slice  of size $(200,200)$ from the Humerus CT dataset~\cite{humerus} are performed using object-prior [(a)-(f)] and from measurements obtained from only 10 views. (h) Filtered backprojection (FBP) shows streaky sub-sampling artefacts (i) CS reduces the artefacts significantly while slightly blurring details (j) Prior information coupled with CS greatly improves the reconstruction.}
+    \caption{\textit{Knowing more about the data helps.} Reconstructions of (g) a test slice  of size $(200,200)$ from the Humerus CT dataset~\cite{humerus} are performed using object-prior [(a)-(f)] and from measurements obtained from only 10 views. (h) Filtered backprojection (FBP) shows streaky sub-sampling artefacts (i) l1-ls reduces the artefacts significantly while slightly blurring details (j) Prior information coupled with l1-ls (CS) greatly improves the reconstruction.}
 \label{fig:diff_methods}
 \end{figure}
 
-In addition, when some extra information about the object's structure is known~\cite{PICCS,cardiacPICCS,lubner2011,pirple,mota2017}, it is beneficial in further reducing the number of measurements.  These prior-based techniques use information from previously scanned data (`object-prior') of the same object or a similar one, and utilize it to reconstruct new volumes from very few sets of additional measurements. However, the above methods have the following two limitations: (1) the prior information may potentially overwhelm the essential details that appear in the test, (2) there is the key issue of choice of \textit{a particular} previously scanned object among the many previously acquired scans. A large part of this paper is dedicated to alleviating the former limitation, which is an important issue that has so far been overlooked in the literature on tomography. The latter limitation was relaxed in~\cite{liu2016,Xu2012} by building dictionary-based priors from multiple previously scanned objects. However, as reported in~\cite{my_dicta_paper}, dictionary priors are not as accurate and fast as global eigenspace priors.  Global eigenspace priors are better able to exploit the similarity of a test volume to object-prior, by assuming that the new test volume lies within the space spanned by the eigenvectors of the multiple representative previously scanned objects. Fig.~\ref{fig:diff_methods} shows the advantage of combining the global prior with CS.
+In addition, when some extra information about the object's structure is known~\cite{PICCS,cardiacPICCS,lubner2011,pirple,mota2017}, it is beneficial in further reducing the number of measurements.  These prior-based techniques use information from previously scanned data (`object-prior') of the same object or a similar one, and utilize it to reconstruct new volumes from very few sets of additional measurements. However, the above methods have the following two limitations: (1) the prior information may potentially overwhelm the essential details that appear in the test, (2) there is the key issue of choice of \textit{a particular} previously scanned object among the many previously acquired scans. A large part of this paper is dedicated to alleviating the former limitation, which is an important issue that has so far been overlooked in the literature on tomography. The latter limitation was relaxed in~\cite{liu2016,Xu2012} by building dictionary-based priors from multiple previously scanned objects. However, as reported in~\cite{my_dicta_paper}, dictionary priors are not as accurate and fast as global eigenspace priors.  Global eigenspace priors are better able to exploit the similarity of a test volume to object-prior, by assuming that the new test volume lies within the space spanned by the eigenvectors of the multiple representative previously scanned objects. Fig.~\ref{fig:diff_methods} shows the advantage of combining the global prior with the l1-ls form of CS.
 \subsection{\textbf{Contributions}}
 \label{sec:contributions}
-In this work (Fig.~\ref{fig:prior_overview}), we focus on further reducing the number of measurements, with  particular emphasis on longitudinal studies. For example, we consider medical datasets which consist of multiple CT scans being taken during a radio-frequency ablation procedure~\cite{Dong2015}. The process consists of inserting a needle probe into a patient's body. When the needle reaches the tumor site, an electric current is passed to burn the tumor. Repeated CT scans of the patient need to be acquired in order to visualize the movement of the needle and to ensure that it is reaching the appropriate target. A few initial densely-sampled scans are used as object-prior to help the physician know the position of the needle. The later scans are used to reveal the exact changes during and after burning of the tumor (ablation).  In this context, we demonstrate the combined use of CS with the global prior, in two flavors: the vanilla (unselective) and selective global prior-based reconstruction. The choice of the number of measurement views and the type of reconstruction -- unselective or selective, is driven by the goal of the procedure. 
+In this work (Fig.~\ref{fig:prior_overview}), we focus on further reducing the number of measurements, with  particular emphasis on longitudinal studies. For example, we consider medical datasets which consist of multiple CT scans being taken during a radio-frequency ablation procedure~\cite{Dong2015}. The process consists of inserting a needle probe into a patient's body. When the needle reaches the tumor site, an electric current is passed to burn the tumor. Repeated CT scans of the patient need to be acquired in order to visualize the movement of the needle and to ensure that it is reaching the appropriate target. A few initial densely-sampled scans are used as object-prior to help the physician know the position of the needle. The later scans are used to reveal the exact changes during and after burning of the tumor (ablation).  In this context, we demonstrate the combined use of l1-ls (CS) with the global prior, in two flavors: the vanilla (unselective) and selective global prior-based reconstruction. The choice of the number of measurement views and the type of reconstruction -- unselective or selective, is driven by the goal of the procedure. 
 
 \begin{figure}[h]
 \centering
@@ -260,9 +267,9 @@ Before diving into the details of the unselective and the selective global prior
 \centering
 \subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/very_few_views/colorTestIm.png}}}\hfill
 \subcaptionbox{Backprojection}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/fbp.png}}\hfill
-\subcaptionbox{CS}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/cs.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/cs.png}}\hfill
 \subcaptionbox{Proposed\\ method: unselective prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/plain_pca.png}}
-\caption[Representative results-1]{\textbf{Goal: Track new changes.}\small{ Reconstruction of slice 7 (`test') of Fig.~\ref{fig:RFA2_test_object-prior} from only 90 views, using (b) Filtered backprojection and no prior resulting in streaks, SSIM $= 0.48$ (c) CS and no prior resulting in blurred bone structures, SSIM $=0.35$ and (d) unselective global prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks, SSIM $=0.55$. The region enclosed in red rectangle is our RoI as it contains both the new position of the needle and some background. All SSIM values are computed for this RoI.}}
+\caption[Representative results-1]{\textbf{Goal: Track new changes.}\small{ Reconstruction of slice 7 (`test') of Fig.~\ref{fig:RFA2_test_object-prior} from only 90 views, using (b) Filtered backprojection and no prior resulting in streaks, SSIM $= 0.48$ (c) l1-ls resulting in blurred bone structures, SSIM $=0.35$ and (d) unselective global prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks, SSIM $=0.55$. The region enclosed in red rectangle is our RoI as it contains both the new position of the needle and some background. All SSIM values are computed for this RoI.}}
 \label{fig:RFA2_very_few_views}
 \end{figure}
 
@@ -272,11 +279,11 @@ Before diving into the details of the unselective and the selective global prior
 \centering
 \subcaptionbox{Test}{\fcolorbox{white}{blue}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/few_views/colorTestIm.png}}}\hfill
 \subcaptionbox{Backprojection}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/fbp.png}}\hfill
-\subcaptionbox{CS}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/cs_dct.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/cs_dct.png}}\hfill
 \subcaptionbox{Proposed\\ method: unselective\\ prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/plain_pca.png}}
 \subcaptionbox{Proposed\\ method: selective prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/weighted_pca_all_methods_kk_0_01.png}}
 \subcaptionbox{Weights map}{\includegraphics[width=0.275\columnwidth]{../images/tmh/RFA2/few_views/weights_colormap.png}}
-\caption[Representative results-2]{\textbf{Goal: Observe details of new changes.} Reconstruction of slice 8 of Fig.~\ref{fig:RFA2_test_object-prior} from 120 views, using (b) FBP with SSIM $= 0.50$ (c) CS with SSIM $=0.46$ and (d) unselective global prior, with SSIM $=0.51$ (\emph{notice dominance of the prior: a prominent residual shadow of the needle which was present in the object-prior, but not present in the test image}), and (e) selective prior with SSIM $=0.56$ (\emph{notice that the dominance of the prior is significantly controlled}). The region enclosed in green rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background. The SSIM is computed in this RoI. (f) shows the computed weights map (defined later in the paper) used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}
+\caption[Representative results-2]{\textbf{Goal: Observe details of new changes.} Reconstruction of slice 8 of Fig.~\ref{fig:RFA2_test_object-prior} from 120 views, using (b) FBP with SSIM $= 0.50$ (c) l1-ls with SSIM $=0.46$ and (d) unselective global prior, with SSIM $=0.51$ (\emph{notice dominance of the prior: a prominent residual shadow of the needle which was present in the object-prior, but not present in the test image}), and (e) selective prior with SSIM $=0.56$ (\emph{notice that the dominance of the prior is significantly controlled}). The region enclosed in green rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background. The SSIM is computed in this RoI. (f) shows the computed weights map (defined later in the paper) used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}
 \label{fig:RFA2_few_views}
 \end{figure}
 
@@ -302,7 +309,7 @@ Having presented the application, we first review the algorithm~\cite{my_dicta_p
 
 Principal Component Analysis (PCA) has been traditionally used to find the significant modes of (Gaussian corrupted) data. In this regard, it has been widely applied in the context of data compression. However, PCA can also be seen as a tool to provide an orthogonal basis to represent the space in which the test data could lie. This space is constructed from the available set of previously scanned objects which must cover a realistically representative range of structures. We first present the eigenspace-cum-CS prior-based reconstruction, which was shown~\cite{my_dicta_paper} to be better when compared to dictionary-based priors. %A preliminary version of this particular method was earlier presented in \cite{my_dicta_paper}. 
 
-To begin with, when an object is scanned multiple times, a set of high quality reconstructions (i.e. reconstructions from a dense set of projection views) may be chosen as object-prior for the reconstruction of future scan volumes, which in turn, may be scanned using far fewer measurements. The eigenspace $E_{\text{high}}$ of the $L$ previously scanned objects $Q_1,Q_2,...,Q_L$ is pre-computed. Here, it is assumed that the test volume can be expressed as a sparse linear combination of the principal components (eigenvectors of the covariance matrix) obtained from a group of structurally similar volumes. Hence, the object-prior is represented by means of PCA. For the eigenspace to encompass a range of possible structures in the test slice, the object-prior must represent a wide structural range. Moreover, if these volumes are not aligned, then they must be first registered before computing the prior. The prior is built by computing the covariance matrix from the template set $\{Q_i\}_{i=1}^L$. \emph{The space spanned by the eigenvectors $\{\boldsymbol{V_k}\}_{k=1}^{L-1}$ (eigenspace) of the covariance matrix is the global prior and is assumed to contain any test slice that is similar, but not necessarily identical to the object-prior.}  We use all of the $L-1$ orthogonal eigenvectors as a basis to represent the unknown test volume. Let $\boldsymbol{x} = \boldsymbol{\Upsilon\theta}$ denote the reconstructed volume, $\boldsymbol{y} = \boldsymbol{\mathcal{R} x}$ its measured tomographic projections, $\boldsymbol{\mathcal{R}}$ the tomographic projection operator, $\boldsymbol{\theta}$ the sparse coefficients of $\boldsymbol{x}$, $\boldsymbol{\Upsilon}$ the basis in which $\boldsymbol{x}$ is assumed to be sparse, $\boldsymbol{\mu}$ the mean of the previously scanned objects, and $\boldsymbol{\alpha}$ the vector of eigen-coefficients of the test scan, of which $\alpha_k$ is the $k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed, the test is reconstructed by minimizing the following cost function:
+To begin with, when an object is scanned multiple times, a set of high quality reconstructions (i.e. reconstructions from a dense set of projection views) may be chosen as object-prior for the reconstruction of future scan volumes, which in turn, may be scanned using far fewer measurements. The eigenspace $E_{\text{high}}$ of the $L$ previously scanned objects $Q_1,Q_2,...,Q_L$ is pre-computed. Here, it is assumed that the test volume can be expressed as a sparse linear combination of the principal components (eigenvectors of the covariance matrix) obtained from a group of structurally similar volumes. Hence, the object-prior is represented by means of PCA. For the eigenspace to encompass a range of possible structures in the test slice, the object-prior must represent a wide structural range. Moreover, if these volumes are not aligned, then they must be first registered before computing the prior. The prior is built by computing the covariance matrix from the template set $\{Q_i\}_{i=1}^L$. \emph{The space spanned by the eigenvectors $\{\boldsymbol{V_k}\}_{k=1}^{L-1}$ (eigenspace) of the covariance matrix is the global prior and is assumed to contain any test slice that is similar, but not necessarily identical to the object-prior.}  We use all of the $L-1$ orthogonal eigenvectors as a basis to represent the unknown test volume. Let $\boldsymbol{\mu}$ denote the mean of the previously scanned objects, and $\boldsymbol{\alpha}$ the vector of eigen-coefficients of the test scan, of which $\alpha_k$ is the $k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed, the test is reconstructed by minimizing the following cost function:
 \vspace{4mm}
  \begin{equation}
    \setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
@@ -432,11 +439,11 @@ solving Eq.~\ref{eq:selective_prior} were robust over a wide range of $k$ values
     \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/2D/weightsIm_cs_dct30.png}
-        \caption{CS-DCT}
+        \caption{(l1-ls)-DCT}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/2D/weightsIm_cs_wavelet30.png}
-        \caption{CS-Haar}
+        \caption{(l1-ls)-Haar}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/2D/weightsIm_art30.png}
@@ -465,11 +472,11 @@ solving Eq.~\ref{eq:selective_prior} were robust over a wide range of $k$ values
     \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/2D/cs_dct.png}
-        \caption{CS-DCT}
+        \caption{(l1-ls)-DCT}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/2D/cs_wavelet.png}
-        \caption{CS-Haar}
+        \caption{(l1-ls)-Haar}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/2D/art.png}
@@ -491,7 +498,7 @@ solving Eq.~\ref{eq:selective_prior} were robust over a wide range of $k$ values
 \label{fig:reconstructions_diff_methods}
 \end{figure}
 
-The changes and new structures present in the test data will generate different artifacts for different reconstruction techniques. These artifacts would not be captured by reconstructions of the object-prior since the underlying new changes and structures may be absent in all of the previously scanned objects. We aim to let the weights be independent of the type of artifact. Hence, we use a combination of different reconstruction techniques to generate different types of eigenspaces and combine information from all of them to compute weights. To illustrate the benefit of this method, we first performed 2D reconstruction of a test slice from the potato dataset (please refer Sec.~\ref{Sec:potato} for details of the dataset) Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template slices. Fig.~\ref{fig:weights_map_2Dpotato}  shows the weights-maps generated using Eq.~\ref{eq:weightsEq} by various reconstruction methods. It can be seen that the weights are low in the region of the new change in test data. Because all the iterative methods are computationally expensive, we chose only FBP and CS-DCT for computing weights-maps for all 3D reconstructions.  
+The changes and new structures present in the test data will generate different artifacts for different reconstruction techniques. These artifacts would not be captured by reconstructions of the object-prior since the underlying new changes and structures may be absent in all of the previously scanned objects. We aim to let the weights be independent of the type of artifact. Hence, we use a combination of different reconstruction techniques to generate different types of eigenspaces and combine information from all of them to compute weights. To illustrate the benefit of this method, we first performed 2D reconstruction of a test slice from the potato dataset (please refer Sec.~\ref{Sec:potato} for details of the dataset) Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template slices. Fig.~\ref{fig:weights_map_2Dpotato}  shows the weights-maps generated using Eq.~\ref{eq:weightsEq} by various reconstruction methods. It can be seen that the weights are low in the region of the new change in test data. Because all the iterative methods are computationally expensive, we chose only FBP and (l1-ls)-DCT for computing weights-maps for all 3D reconstructions.  
 %---------------------------------------
 \begin{table}[!h]
 \caption{SSIM of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of the ground-truth (ideal reconstruction) is 1, and these are computed within the red RoI of the test image shown in Fig.~\ref{fig:potato_test}.}
@@ -549,7 +556,7 @@ The proposed method has been validated on new\footnote {These and our code will 
 \centering
 \subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.185\columnwidth]{../images/potato/testIm_color.png}}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/fdkIm.png}}\hfill
-\subcaptionbox{CS}{\includegraphics[width=0.19\columnwidth]{../images/potato/csIm.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/potato/csIm.png}}\hfill
 \subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/plainPriorIm.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/potato/weightedPriorIm.png}}
 \caption{Slice-A from 3D reconstruction of the potato with $5\%$ projection views--(b) has strong streak artefacts with unclear shadow of the potato, (c) largely blurred, (d) no new information detected (prior dominates) and (e) new information detected while simultaneously reducing streak artefacts. The reconstructed volumes can be viewed in~\cite{supp_paper}.}
@@ -568,7 +575,7 @@ ground truth of template volumes, test volume, as well as the 3D reconstructions
 \caption{SSIM of 3D reconstructed potato volumes from various methods. Each RoI spans 7 consecutive slices where the test is different from all of the previously scanned objects. In this dataset alone, the new changes are in a homogeneous background. Hence, the FDK performs the best when the RoI alone is considered. However, it fails when the entire volume is considered due to the prominent streaky artefacts.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
-                   & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{CS} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + CS\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + CS\end{tabular}} \\ \hline
+                   & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + l1-ls\end{tabular}} \\ \hline
 \textbf{red RoI}   & 1 (ideal)                     & \textcolor{red}{0.939}        & 0.850       & 0.712                                                               & 0.852                                                            \\ \hline
 \textbf{full volume} & 1 (ideal)                     & 0.744        & 0.817       & 0.856                                                               & \textcolor{red}{0.857}                                                                  \\ \hline
 \end{tabular}
@@ -619,7 +626,7 @@ In order to test on data with intricate structures, a second (Okra) dataset cons
 \centering
 \subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.185\columnwidth]{../images/okra/testCropped.png}}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/fdk_cropped.png}}\hfill
-\subcaptionbox{CS}{\includegraphics[width=0.19\columnwidth]{../images/okra/cs_cropped.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/okra/cs_cropped.png}}\hfill
 \subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/prior_weighted_cropped.png}}
 \caption{3D reconstruction of the okra from $10\%$ projection
@@ -637,7 +644,7 @@ In order to test on data with intricate structures, a second (Okra) dataset cons
 \centering
 \subcaptionbox{Test}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/input_cropped.png}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/FDK_cropped.png}}\hfill
-\subcaptionbox{CS}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/CS_cropped.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/CS_cropped.png}}\hfill
 \subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/pca_cropped.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/zoomed/weighted_prior_cropped.png}}
 \caption{Zoomed in portion corresponding to the red RoI of Fig.~\ref{fig:okra_3D_results} for various methods (b) has strong streak artefacts, (c) blurred, (d) no new  information detected (prior dominates -- the deformity from the prior
@@ -651,7 +658,7 @@ In order to test on data with intricate structures, a second (Okra) dataset cons
   \caption{SSIM of 3D RoI of reconstructed okra volumes from various methods. Each RoI spans 7 consecutive slices where the test is different from all of the previously scanned objects.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
-                   &  \textbf{\begin{tabular}[c]{@{}c@{}}Ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{CS} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + CS\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + CS\end{tabular}} \\ \hline
+                   &  \textbf{\begin{tabular}[c]{@{}c@{}}Ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + l1-ls\end{tabular}} \\ \hline
 \textbf{red RoI}   & 1 (ideal)                     & 0.737        & 0.836       & 0.858                                                               & \textcolor{red}{0.883}                                                                  \\ \hline
 \textbf{green RoI} & 1 (ideal)                     & 0.798        & \textcolor{red}{0.861}       & 0.800                                                               & \textcolor{red}{0.861}                                                                  \\ \hline
 \end{tabular}
@@ -726,7 +733,7 @@ nature. %-----------------------------sprouts 3D results
     \begin{subfigure}[b]{0.3\linewidth}
         \includegraphics[width=\textwidth]{../images/sprouts/csIm.png}
 %\captionsetup{labelformat=empty}
-        \caption{CS}
+        \caption{l1-ls}
      \end{subfigure}\\
 \quad
     \begin{subfigure}[b]{0.3\linewidth}
@@ -754,7 +761,7 @@ nature. %-----------------------------sprouts 3D results
 \centering
 \subcaptionbox{Test}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/input_cropped.png}}\hfill
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/FDK_cropped.png}}\hfill
-\subcaptionbox{CS}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/CS_cropped.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/CS_cropped.png}}\hfill
 \subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/pca_cropped.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/weighted_prior_cropped.png}}
 \caption{Zoomed-in portion $(16 \times 21)$ corresponding to the red RoI of Fig.~\ref{fig:sprouts_3D_results} for various methods (b) unclear, (c) unclear, (d) only two strong structures seen and (e) there is a hint of a third structure too (as seen in the test RoI).}
@@ -766,7 +773,7 @@ nature. %-----------------------------sprouts 3D results
 \caption{SSIM of 3D RoI of reconstructed sprouts volumes from various methods. The RoI spans 7 consecutive slices where the test is different from all of the previously scanned objects.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
-                   & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{CS} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + CS\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + CS\end{tabular}} \\ \hline
+                   & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + l1-ls\end{tabular}} \\ \hline
 \textbf{red RoI}   & 1 (ideal)                     & 0.852        & 0.843       & 0.834                                                               & \textcolor{red}{0.881}                                                                  \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
@@ -887,7 +894,7 @@ Earlier in Sec.~\ref{sec:tmh}, we discussed that the imaging protocols fell unde
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{\begin{tabular}[c]{@{}c@{}}Slice being\\ imaged at\\ time t\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Probe distance from\\ tumor or \\ ablation stage\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Number of\\ imaging\\ views\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Reconstruction\\ protocol: type \\ of global prior\end{tabular}} \\ \hline
-Slice t=1 & Very far from tumor & 360 & CS \\ \hline
+Slice t=1 & Very far from tumor & 360 & l1-ls \\ \hline
 Slice t=2 & Sufficiently far from tumor & 40 & Unselective \\ \hline
 Slice t=3 & Far from tumor & 50 & Unselective \\ \hline
 Slice t=4 & Near tumor & 60 & Unselective \\ \hline
