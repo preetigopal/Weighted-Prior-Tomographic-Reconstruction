@@ -386,8 +386,8 @@ an eigenspace.
 \item Finally, the weight to prior for each voxel coordinate $(x,y,z)$ is given by
   \begin{equation} 
     \boldsymbol{W_v}(x,y,z) = (1+k(\min_{j}|X^j(x,y,z) - P^j(x,y,z)|))^{-1}.
+    \label{eq:weightsEq}
   \end{equation}
-\label{eq:weightsEq}
 \end{enumerate}
 \vspace{0.01mm}
 Note that here $\boldsymbol{W_v}(x,y,z)$ represents the weight to the prior in the $(x,y,z)^{th}$ voxel. $\boldsymbol{W_v}(x,y,z)$ must be
@@ -758,13 +758,18 @@ nature. %-----------------------------sprouts 3D results
 %--------------------------------------zoomed sprouts
 
 \begin{figure}[!h]
-\centering
-\subcaptionbox{Test}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/input_marked.png}}\hfill
-\subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/FDK_marked.png}}\hfill
-\subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/CS_marked.png}}\hfill
-\subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/pca_marked.png}}\hfill
+  \centering
+  \subcaptionbox*{}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/input_croppedBig.png}}\hfill
+    \subcaptionbox*{}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/FDK_croppedBig.png}}\hfill
+      \subcaptionbox*{}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/CS_croppedBig.png}}\hfill
+        \subcaptionbox*{}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/pca_croppedBig.png}}\hfill
+        \subcaptionbox*{}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/weighted_prior_croppedBig.png}}\hfill
+          \subcaptionbox{Test}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/input_marked.png}}\hfill
+            \subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/FDK_marked.png}}\hfill
+              \subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/CS_marked.png}}\hfill
+                \subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/pca_marked.png}}\hfill
 \subcaptionbox{Selective\\ prior}{\includegraphics[width=0.19\columnwidth]{../images/sprouts/zoomed/weighted_prior_marked.png}}
-\caption{Zoomed-in portion $(41 \times 36)$ containing the RoI of Fig.~\ref{fig:sprouts_3D_results} for various methods (a) the test showing 3 distinct structures (in red here) (b) 3 structures recovered with poor contrast, (c) structures indistinguishable, (d) only two strong structures seen and (e) there is a hint of a third structure too with better contrast.}
+\caption{Zoomed-in portion $(41 \times 36)$ containing the RoI of Fig.~\ref{fig:sprouts_3D_results} for various methods. The images of the bottom row are the same as repective images of the top row, with regions marked additionally. (a) the test showing 3 distinct structures (in red here) (b) 3 structures recovered with poor contrast, (c) structures indistinguishable, (d) only two strong structures seen and (e) there is a hint of a third structure too with better contrast.}
 \label{fig:sprouts_zoomed_3D_results}
 \end{figure}
 
