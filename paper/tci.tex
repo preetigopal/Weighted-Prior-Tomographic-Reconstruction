@@ -501,11 +501,12 @@ solving Eq.~\ref{eq:selective_prior} were robust over a wide range of $k$ values
 The changes and new structures present in the test data will generate different artifacts for different reconstruction techniques. These artifacts would not be captured by reconstructions of the object-prior since the underlying new changes and structures may be absent in all of the previously scanned objects. We aim to let the weights be independent of the type of artifact. Hence, we use a combination of different reconstruction techniques to generate different types of eigenspaces and combine information from all of them to compute weights. To illustrate the benefit of this method, we first performed 2D reconstruction of a test slice from the potato dataset (please refer Sec.~\ref{Sec:potato} for details of the dataset) Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template slices. Fig.~\ref{fig:weights_map_2Dpotato}  shows the weights-maps generated using Eq.~\ref{eq:weightsEq} by various reconstruction methods. It can be seen that the weights are low in the region of the new change in test data. Because all the iterative methods are computationally expensive, we chose only FBP and (l1-ls)-DCT for computing weights-maps for all 3D reconstructions.  
 %---------------------------------------
 \begin{table}[!h]
+  \centering
 \caption{SSIM of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of the ground-truth (ideal reconstruction) is 1, and these are computed within the red RoI of the test image shown in Fig.~\ref{fig:potato_test}.}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
  Fig.~\ref{fig:reconstructions_diff_methods}  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} \\\hline
-\textbf{red RoI}  & 0.502 & 0.597  & 0.453 & 0.474 & 0.565 & 0.523 & \textcolor{red}{0.759} \\ \hline
+\textbf{red RoI}  & 0.50 & 0.60  & 0.45 & 0.47 & 0.56 & 0.52 & \textcolor{red}{0.76} \\ \hline
 \end{tabular}
 \label{table:potato_2D_ssim}
 \end{table}
@@ -603,8 +604,8 @@ Our first dataset is that of an Okra specimen consisting of its five scans (Fig.
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
                    &  \textbf{\begin{tabular}[c]{@{}c@{}}Ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + l1-ls\end{tabular}} \\ \hline
-\textbf{red RoI}   & 1 (ideal)                     & 0.737        & 0.836       & 0.858                                                               & \textcolor{red}{0.883}                                                                  \\ \hline
-\textbf{green RoI} & 1 (ideal)                     & 0.798        & \textcolor{red}{0.861}       & 0.800                                                               & \textcolor{red}{0.861}                                                                  \\ \hline
+\textbf{red RoI}   & 1 (ideal)                     & 0.74        & 0.84       & 0.86                                                               & \textcolor{red}{0.88}                                                                  \\ \hline
+\textbf{green RoI} & 1 (ideal)                     & 0.80        & \textcolor{red}{0.86}       & 0.80                                                               & \textcolor{red}{0.86}                                                                  \\ \hline
 \end{tabular}
 \label{table:okra_ssim}
 \end{table}
@@ -723,7 +724,7 @@ nature. %-----------------------------sprouts 3D results
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
                    & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + l1-ls\end{tabular}} \\ \hline
-\textbf{red RoI}   & 1 (ideal)                     & 0.852        & 0.843       & 0.834                                                               & \textcolor{red}{0.881}                                                                  \\ \hline
+\textbf{red RoI}   & 1 (ideal)                     & 0.85        & 0.84       & 0.83                                                               & \textcolor{red}{0.88}                                                                  \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
 \end{table}
@@ -910,10 +911,10 @@ Table~\ref{table:potato_ssim} shows the Structure Similarity Index (SSIM) of the
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
                    & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior\\+ l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior\\+ l1-ls\end{tabular}} \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}red RoI\\volume\end{tabular}}   & 1 (ideal)                     & \textcolor{red}{0.939}        & 0.877      & 0.712                                                               & 0.852                                                            \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}green RoI\\volume\end{tabular}} & 1 (ideal)                     & \textcolor{red}{0.918}        & 0.911      & 0.871                                                               & 0.880                                                                  \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}cyan  RoI\\volume\end{tabular}} & 1 (ideal)                     &  0.878       & \textcolor{red}{0.939}    & 0.922                                                            & 0.895                                                                  \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}full \\ volume\end{tabular}} & 1 (ideal)                     & 0.744        & 0.813       & 0.856                                                               & \textcolor{red}{0.857}                                                                  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}red RoI\\volume\end{tabular}}   & 1 (ideal)                     & \textcolor{red}{0.94}        & 0.88      & 0.71                                                               & 0.85                                                            \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}green RoI\\volume\end{tabular}} & 1 (ideal)                     & \textcolor{red}{0.92}        & 0.91      & 0.87                                                               & 0.88                                                                  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}cyan  RoI\\volume\end{tabular}} & 1 (ideal)                     &  0.88       & \textcolor{red}{0.94}    & 0.92                                                            & 0.89                                                                  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}full \\ volume\end{tabular}} & 1 (ideal)                     & 0.74        & 0.81       & \textcolor{red}{0.86}                                                               & \textcolor{red}{0.86}                                                                  \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
 \end{table}
