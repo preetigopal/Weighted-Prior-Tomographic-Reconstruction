@@ -910,10 +910,10 @@ Table~\ref{table:potato_ssim} shows the Structure Similarity Index (SSIM) of the
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
                    & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior\\+ l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior\\+ l1-ls\end{tabular}} \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}red RoI\\volume\end{tabular}}   & 1 (ideal)                     & \textcolor{red}{0.939}        & 0.807      & 0.712                                                               & 0.852                                                            \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}green RoI\\volume\end{tabular}} & 1 (ideal)                     & \textcolor{red}{0.918}        & 0.870      & 0.871                                                               & 0.880                                                                  \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}cyan  RoI\\volume\end{tabular}} & 1 (ideal)                     &  0.878       & \textcolor{red}{0.928}    & 0.922                                                            & 0.895                                                                  \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}full \\ volume\end{tabular}} & 1 (ideal)                     & 0.744        & 0.874       & 0.856                                                               & \textcolor{red}{0.857}                                                                  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}red RoI\\volume\end{tabular}}   & 1 (ideal)                     & \textcolor{red}{0.939}        & 0.877      & 0.712                                                               & 0.852                                                            \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}green RoI\\volume\end{tabular}} & 1 (ideal)                     & \textcolor{red}{0.918}        & 0.911      & 0.871                                                               & 0.880                                                                  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}cyan  RoI\\volume\end{tabular}} & 1 (ideal)                     &  0.878       & \textcolor{red}{0.939}    & 0.922                                                            & 0.895                                                                  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}full \\ volume\end{tabular}} & 1 (ideal)                     & 0.744        & 0.813       & 0.856                                                               & \textcolor{red}{0.857}                                                                  \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
 \end{table}
@@ -924,11 +924,11 @@ The presented unselective prior-based algorithm is suited to applications where 
 
 \begin{table}[!h]
   \centering
-\caption{Computation time for reconstruction of volumes using various methods}
+\caption{Computation time for reconstruction of volumes using various methods. The configuration of the system used was x86\_64 architecture, 62GB RAM, 12-core AMD 3.8GHz processor, with Nvidia GeForce RTX 2080 Ti GPU.}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
    & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Selective\\prior + l1-ls\end{tabular}} \\\hline
-\textbf{Potato}  &  &   &  &  \\ \hline
+\textbf{Potato, 45 views}  & 5 sec. & 8 min.  & 54 min. & 53 min. \\ \hline
 \textbf{Okra}  &  &   &  &  \\ \hline
 \textbf{Sprouts}  &  &   &  &  \\ \hline
 \end{tabular}
