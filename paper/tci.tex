@@ -331,7 +331,154 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  %---------------------------------------------------------
  \vspace{2mm}
 
-\subsection{\textbf{Selective prior-based reconstruction}}
+ \section{Resuls: Reconstruction by unselective prior}
+ %--------------------------------okra data-------------------------------
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_1.png}
+\captionsetup{labelformat=empty}       
+ \caption{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_4.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.176\linewidth}
+        \fcolorbox{yellow}{yellow}{\includegraphics[width=\textwidth]{../images/okra/test.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+     \caption{Okra 3D dataset: One slice each from the previously scanned objects (the
+       first four from the left), and one from the test volume
+       (extreme right). In the regions marked in red and green, while
+       all slices have deformities, the test
+       has none.}
+\label{fig:object-prior_test_okra}
+\end{figure}
+%----------------------------------------------------
+
+\begin{figure}[!h]
+\centering
+\subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.185\columnwidth]{../images/okra/test.png}}}\hfill
+\subcaptionbox{FDK, no prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/fdk_cropped.png}}\hfill
+\subcaptionbox{l1-ls}{\includegraphics[width=0.19\columnwidth]{../images/okra/cs_cropped.png}}\hfill
+\subcaptionbox{\mbox{Unselective}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
+\caption{3D reconstruction of the okra from $10\%$ projection
+  views (b) has strong streak artefacts, (c) blurred, (d) The prior enables better reconstruction.The reconstructed volumes can be viewed in ~\cite{supp_paper}.}
+\label{fig:okra_3D_results_unselective}
+\end{figure}
+
+%---------------------------------------
+\begin{table}[!h]
+  \centering
+  \caption{SSIM of the full reconstructed okra volume by various methods.}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+                   &  \textbf{\begin{tabular}[c]{@{}c@{}}Ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} \\ \hline
+\textbf{full Volume} & 1 (ideal)                     & 0.87        &  0.92       & \textcolor{red}{0.95}                                                                                   \\ \hline
+\end{tabular}
+\label{table:okra_ssim_full_volume}
+\end{table}
+
+
+%-------------------------sprouts data
+
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_1.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+    \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}\\
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_4.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_5.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.29\linewidth}
+        \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+      \caption{Sprouts 3D dataset: One slice each from the previously scanned objects (the first five from left) and a slice from the test (extreme
+        right).}
+\label{fig:object-prior_test_sprouts}
+\addtolength{\textfloatsep}{-0.8cm}
+\end{figure}
+ %-----------------------------sprouts 3D results
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.29\linewidth}
+        \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
+%\captionsetup{labelformat=empty}
+        \caption{Test}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/fdkIm.png}
+%\captionsetup{labelformat=empty}
+        \caption{FDK}
+    \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/csIm.png}
+%\captionsetup{labelformat=empty}
+        \caption{l1-ls}
+     \end{subfigure}\\
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/plainPriorIm.png}
+%\captionsetup{labelformat=empty}
+        \caption{Unselective Prior}
+     \end{subfigure}
+     \caption{3D reconstruction of sprouts from $2.5\%$ projection views
+   (b, c) have poor details (d) no new information detected (the
+   prior dominates as can be seen in the blue and red regions) and
+   (e) new information detected in the regions of interest. The reconstructed volumes can be viewed in ~\cite{supp_paper}.} 
+\label{fig:sprouts_3D_results}
+%\addtolength{\textfloatsep}{-0.8cm}
+\end{figure}
+
+\begin{table}
+  \centering
+  \caption{SSIM of the full reconstructed sprouts volume by various methods.}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+                   & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Unselective\\prior + l1-ls\end{tabular}} \\ \hline
+\textbf{Full volume}   & 1 (ideal)                    & 0.82        & 0.71       & \textcolor{red}{0.92}                                                                                                                       \\ \hline
+\end{tabular}
+\label{table:sprouts_ssim}
+\end{table}
+%----------------------------------------------------------------------
+\section{Method:Selective prior-based reconstruction}
 \label{sec:selective_prior}
 
 Although the unselective global prior can be very useful in some circumstances, as was shown in Sec.~\ref{sec:tmh}, it poses a major limitation when we want accurate details of the new changes. While the unselective prior compensates very well for the possible artefacts due to sparse measurements, it dominates the regions with new changes masking the signal, as seen in Fig.~\ref{fig:RFA2_few_views}-d. Ideally, we will want to impose the prior only in the regions that are common between the test and object-prior.  Our selective prior based reconstruction overcomes this limitation by minimizing the following cost function:
@@ -531,40 +678,8 @@ The proposed method has been validated on new\footnote {These and our code will 
 \label{Sec:okra}
 Our first dataset is that of an Okra specimen consisting of its five scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements consisted of real cone-beam projections from 450 views, each of size $336\times156$. The corresponding size of the reconstructed volume is $338\times338\times123$. Prior to the first scan, two holes were drilled on the surface of the specimen. This was followed by four scans, each after introducing one new cut. The specimen was kept in the same position throughout the acquisitions. In cases where such an alignment is not present, all the template volumes must be pre-aligned before computing the eigenspace. The test must be registered to the object-prior after its preliminary pilot reconstruction. The ground truth consists of FDK reconstructed volumes from the the full set of 450 view projections. The test volume was reconstructed from a partial set of 45 projections, i.e. $10\%$ of the projection views from which ground truth was reconstructed. The selected 3D ground truth of template volumes, the test volume as well as the 3D reconstructions can be seen in~\cite{supp_paper}. One of the slices of the reconstructed volumes is shown in Fig.~\ref{fig:okra_3D_results}. The red and green 3D RoI in the video and images show the regions where new changes are present. Based on the potato and the okra experiments, we see that our method is able to \emph{discover both} the presence of a new structure, as well as the absence of a structure.
 
-%--------------------------------okra data-------------------------------
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_1.png}
-\captionsetup{labelformat=empty}       
- \caption{}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_2.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_3.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_4.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.176\linewidth}
-        \fcolorbox{yellow}{yellow}{\includegraphics[width=\textwidth]{../images/okra/testCropped.png}}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-     \caption{Okra 3D dataset: One slice each from the previously scanned objects (the
-       first four from the left), and one from the test volume
-       (extreme right). In the regions marked in red and green, while
-       all slices have deformities, the test
-       has none.}
-\label{fig:object-prior_test_okra}
-\end{figure}
+
+
 %----------------------------------------------------
 
 \begin{figure}[!h]
@@ -612,48 +727,6 @@ Our first dataset is that of an Okra specimen consisting of its five scans (Fig.
 
 
 
-%-------------------------sprouts data
-
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_1.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-    \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_2.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_3.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}\\
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_4.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_5.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.29\linewidth}
-        \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-      \caption{Sprouts 3D dataset: One slice each from the previously scanned objects (the first five from left) and a slice from the test (extreme
-        right).}
-\label{fig:object-prior_test_sprouts}
-\addtolength{\textfloatsep}{-0.8cm}
-\end{figure}
 \subsubsection{\textbf{Sprouts dataset}}
 \label{Sec:sprouts}
 The second dataset consists of six scans of an in vivo
