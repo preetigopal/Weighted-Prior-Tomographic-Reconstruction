@@ -301,11 +301,9 @@ The dataset from this longitudinal medical study consists of 8 scans taken durin
 \textbf{Observing details of the ablation:} Next, we choose slices 1-7 as our object-prior and reconstruct slice 8 from 120 views i.e. a somewhat higher number of views this time. Fig.~\ref{fig:RFA2_few_views} shows the reconstructions of slice 8 by different methods. We see that the selective prior reconstruction brings in the advantage of the prior without it adversely affecting the new regions.
 
 %---------------------------------Unselective section---------------------
-\section{Methods}
-\label{sec:methods}
-Having presented the application, we first review the algorithm~\cite{my_dicta_paper} for a global (unselective) prior-based reconstruction in Sec.~\ref{sec:unselective_global_prior}. This is followed by details of our technique in Sec.~\ref{sec:selective_prior}. Our method estimates the location and magnitude of new changes, and eventually prevents the prior from adversely affecting the reconstruction of new regions in the test. This, we refer to as a \textit{selective} global prior-based reconstruction routine.
-\subsection{\textbf{Summary of unselective global prior-based reconstruction}}
+\section{Method: unselective global prior-based reconstruction}
 \label{sec:unselective_global_prior}
+Having presented the application, we first review the algorithm~\cite{my_dicta_paper} for a global (unselective) prior-based reconstruction in Sec.~\ref{sec:unselective_global_prior}. This is followed by details of our technique in Sec.~\ref{sec:selective_prior}. Our method estimates the location and magnitude of new changes, and eventually prevents the prior from adversely affecting the reconstruction of new regions in the test. This, we refer to as a \textit{selective} global prior-based reconstruction routine.
 
 Principal Component Analysis (PCA) has been traditionally used to find the significant modes of (Gaussian corrupted) data. In this regard, it has been widely applied in the context of data compression. However, PCA can also be seen as a tool to provide an orthogonal basis to represent the space in which the test data could lie. This space is constructed from the available set of previously scanned objects which must cover a realistically representative range of structures. We first present the eigenspace-cum-CS prior-based reconstruction, which was shown~\cite{my_dicta_paper} to be better when compared to dictionary-based priors. %A preliminary version of this particular method was earlier presented in \cite{my_dicta_paper}. 
 
@@ -332,6 +330,18 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  \vspace{2mm}
 
  \section{Resuls: Reconstruction by unselective prior}
+
+ 
+ The proposed method has been validated on new\footnote {These and our code will be made available to the community.} scans of biological specimens in a longitudinal setting. These datasets in the form of \emph{raw cone-beam projection measurements} were acquired from a lab at the Australian National University (ANU). %We emphasize that in most of the literature on tomographic reconstruction, the results are shown on reconstruction from projections \emph{simulated} from 3D volumes. This is because most CT scanners do not reveal the raw projections, and instead output only the full reconstructed volumes. Moreover, the process of conversion from the projections to the full volumes is proprietary. \emph{Departing from this, we demonstrate reconstruction results from raw projection data.}
+In all figures in this section, `unselective prior' refers to optimizing Eq.~\ref{eq:selective_prior} with $\boldsymbol{W}(x,y,z)=1$.
+%----------------------------------------------------------
+%-------------------------------------------------
+\subsubsection{\textbf{Okra dataset}}
+\label{Sec:okra_unselective}
+Our first dataset is that of an Okra specimen consisting of its five scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements consisted of real cone-beam projections from 450 views, each of size $336\times156$. The corresponding size of the reconstructed volume is $338\times338\times123$. Prior to the first scan, two holes were drilled on the surface of the specimen. This was followed by four scans, each after introducing one new cut. The specimen was kept in the same position throughout the acquisitions. In cases where such an alignment is not present, all the template volumes must be pre-aligned before computing the eigenspace. The test must be registered to the object-prior after its preliminary pilot reconstruction. The ground truth consists of FDK reconstructed volumes from the the full set of 450 view projections. The test volume was reconstructed from a partial set of 45 projections, i.e. $10\%$ of the projection views from which ground truth was reconstructed. The selected 3D ground truth of template volumes, the test volume as well as the 3D reconstructions can be seen in~\cite{supp_paper}. One of the slices of the reconstructed volumes is shown in Fig.~\ref{fig:okra_3D_results}. The red and green 3D RoI in the video and images show the regions where new changes are present. Based on the potato and the okra experiments, we see that our method is able to \emph{discover both} the presence of a new structure, as well as the absence of a structure.
+
+
+
  %--------------------------------okra data-------------------------------
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.18\linewidth}
@@ -390,8 +400,14 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
 \end{tabular}
 \label{table:okra_ssim_full_volume}
 \end{table}
-
-
+\subsubsection{\textbf{Sprouts dataset}}
+\label{Sec:sprouts}
+The second dataset consists of six scans of an in vivo
+sprout specimen imaged at its various stages of growth
+(Fig.~\ref{fig:object-prior_test_sprouts}). Projections were generated from the given volume of size $130\times130\times130$. In contrast to the scientific
+experiment performed for the case of the okra and the potato where we
+introduced man-made defects, the changes here are purely the work of
+nature.
 %-------------------------sprouts data
 
 \begin{figure}[!h]
@@ -660,23 +676,11 @@ The changes and new structures present in the test data will generate different 
 %-------------------------------------------------
 
 %----------------------------------------Results-----------------------
-\section{Results}
+\section{Results: Reconstruction by selective prior}
 \label{sec:results}
 
 The proposed method has been validated on 2D and 3D synthetic and real tomographic data of biological and medical specimens. The results below demonstrate the advantage of the selective global prior method over the unselective method.
 
-
-%\subsection{\textbf{Evaluation of selective prior-reconstruction in real 3D data}}
-
-%-----------------------results of potato dataset
-
-
-The proposed method has been validated on new\footnote {These and our code will be made available to the community.} scans of biological specimens in a longitudinal setting. These datasets in the form of \emph{raw cone-beam projection measurements} were acquired from a lab at the Australian National University (ANU). We emphasize that in most of the literature on tomographic reconstruction, the results are shown on reconstruction from projections \emph{simulated} from 3D volumes. This is because most CT scanners do not reveal the raw projections, and instead output only the full reconstructed volumes. Moreover, the process of conversion from the projections to the full volumes is proprietary. \emph{Departing from this, we demonstrate reconstruction results from raw projection data.} In all figures in this section, `unselective prior' refers to optimizing Eq.~\ref{eq:selective_prior} with $\boldsymbol{W}(x,y,z)=1$.
-%----------------------------------------------------------
-%-------------------------------------------------
-\subsubsection{\textbf{Okra dataset}}
-\label{Sec:okra}
-Our first dataset is that of an Okra specimen consisting of its five scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements consisted of real cone-beam projections from 450 views, each of size $336\times156$. The corresponding size of the reconstructed volume is $338\times338\times123$. Prior to the first scan, two holes were drilled on the surface of the specimen. This was followed by four scans, each after introducing one new cut. The specimen was kept in the same position throughout the acquisitions. In cases where such an alignment is not present, all the template volumes must be pre-aligned before computing the eigenspace. The test must be registered to the object-prior after its preliminary pilot reconstruction. The ground truth consists of FDK reconstructed volumes from the the full set of 450 view projections. The test volume was reconstructed from a partial set of 45 projections, i.e. $10\%$ of the projection views from which ground truth was reconstructed. The selected 3D ground truth of template volumes, the test volume as well as the 3D reconstructions can be seen in~\cite{supp_paper}. One of the slices of the reconstructed volumes is shown in Fig.~\ref{fig:okra_3D_results}. The red and green 3D RoI in the video and images show the regions where new changes are present. Based on the potato and the okra experiments, we see that our method is able to \emph{discover both} the presence of a new structure, as well as the absence of a structure.
 
 
 
@@ -729,12 +733,7 @@ Our first dataset is that of an Okra specimen consisting of its five scans (Fig.
 
 \subsubsection{\textbf{Sprouts dataset}}
 \label{Sec:sprouts}
-The second dataset consists of six scans of an in vivo
-sprout specimen imaged at its various stages of growth
-(Fig.~\ref{fig:object-prior_test_sprouts}). Projections were generated from the given volume of size $130\times130\times130$. In contrast to the scientific
-experiment performed for the case of the okra and the potato where we
-introduced man-made defects, the changes here are purely the work of
-nature. %-----------------------------sprouts 3D results
+ %-----------------------------sprouts 3D results
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.29\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
