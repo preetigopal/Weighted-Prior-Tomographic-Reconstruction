@@ -1,7 +1,7 @@
 
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL /tmp/old.tex   Thu Jul  9 16:07:56 2020
-%DIF ADD tci.tex        Thu Jul  9 18:51:56 2020
+%DIF ADD tci.tex        Thu Jul  9 18:56:41 2020
 %% bare_jrnl.tex
 %% V1.4b
 %% 2015/08/26
@@ -249,16 +249,15 @@ J\DIFdelbegin \DIFdel{_{CS}}\DIFdelend \DIFaddbegin \DIFadd{_{\text{CS}}}\DIFadd
  \DIFdelbegin %DIFDELCMD < 
 
 %DIFDELCMD <  %%%
-\DIFdelend \DIFaddbegin \DIFadd{Fig.~\ref{fig:story} (second column) demonstrates the benefit of
- using sparsity prior when the number of projection views is limited
- (100 views).  }\DIFaddend We solve this cost function using the popular
- l1-regularized least squares (l1-ls) package available
- in~\cite{l1ls}\DIFdelbegin \DIFdel{. We also }\DIFdelend \DIFaddbegin \DIFadd{, and  }\DIFaddend choose DCT as our sparsity basis
- $\boldsymbol{\Upsilon}$. 
-\DIFdelbegin \DIFdel{We observed that there was no significant benefit in choosing wavelets over DCT.
- }%DIFDELCMD < \begin{figure}[h]
+\DIFdelend We solve this cost function using the popular l1-regularized least
+ squares (l1-ls) package available in~\cite{l1ls}\DIFdelbegin \DIFdel{. We also }\DIFdelend \DIFaddbegin \DIFadd{, and }\DIFaddend choose DCT as
+ our sparsity basis $\boldsymbol{\Upsilon}$.  \DIFdelbegin \DIFdel{We observed that there was no significant benefit in choosing wavelets over DCT.
+}%DIFDELCMD < \begin{figure}[h]
 %DIFDELCMD < %%%
-\DIFdelendFL \DIFaddbeginFL 
+\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Fig.~\ref{fig:story}
+ (second column) demonstrates the benefit of using sparsity prior when
+ the number of projection views is limited (100 views).
+}
 
  %DIF > %% Postpone later We observed that there was no significant benefit
  %DIF > %% in choosing wavelets over DCT.  }

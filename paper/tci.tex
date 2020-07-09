@@ -203,12 +203,11 @@ There are multiple ways to incorporate the sparsity prior using CS. We use the L
 J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
 \label{Eq:simple_cs}
  \end{equation}
- Fig.~\ref{fig:story} (second column) demonstrates the benefit of
- using sparsity prior when the number of projection views is limited
- (100 views).  We solve this cost function using the popular
- l1-regularized least squares (l1-ls) package available
- in~\cite{l1ls}, and  choose DCT as our sparsity basis
- $\boldsymbol{\Upsilon}$. 
+ We solve this cost function using the popular l1-regularized least
+ squares (l1-ls) package available in~\cite{l1ls}, and choose DCT as
+ our sparsity basis $\boldsymbol{\Upsilon}$.  Fig.~\ref{fig:story}
+ (second column) demonstrates the benefit of using sparsity prior when
+ the number of projection views is limited (100 views).
 
  %%% Postpone later We observed that there was no significant benefit
  %%% in choosing wavelets over DCT.  }
