@@ -27,7 +27,7 @@
 %\usepackage{algpseudocode}
 %\usepackage{algorithm}
 \usepackage{xcolor}
-\usepackage[sort&compress]{natbib}
+%\usepackage[sort&compress]{natbib}
 
 
 
@@ -99,9 +99,44 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-Tomographic reconstruction from undersampled measurements is a necessity when the measurement process is potentially harmful, needs to be rapid, or is resource-expensive. In such cases, information from previously existing longitudinal scans of the same object (forming the `object-prior'), helps in the reconstruction of the current object (`test') while requiring significantly fewer updating measurements. In this work, we improve the state of the art by proposing the context under which priors can be effectively used based on the final goal of the application at hand.
+  Tomographic reconstruction from undersampled measurements is a
+  necessity when the measurement process is potentially harmful, needs
+  to be rapid, or is resource-expensive. In such cases, information
+  from previously existing longitudinal scans of the same object
+  (`object-prior'), helps in the reconstruction from the current
+  measurements of that object (`test'), while requiring significantly
+  fewer updating measurements. In this work, we improve the state of
+  the art by proposing the context under which priors can be
+  effectively used based on the final goal of the application at hand.
 
-Our work is based on longitudinal data acquisition scenarios where we wish to study new changes that evolve within an object over time, such as in repeated scanning for disease monitoring, or in tomography-guided surgical procedures. While this is easily feasible when measurements are acquired from a large number of projection angles (referred to as `views' henceforth), it is challenging when the number of views is limited. If the goal is to track the changes while simultaneously reducing sub-sampling artefacts, we propose (1) acquiring measurements from a \emph{small} number of views and using a global \emph{`uniform'} prior based reconstruction. If the goal is to observe \emph{details} of new changes, we propose (2) acquiring measurements from a \emph{moderate} number of views and using a more involved reconstruction routine. We show that in the latter case, a `spatially-varying' technique is necessary in order to prevent the prior from adversely affecting the reconstruction of new structures that are absent in any of the earlier scans. The reconstruction of new regions is safeguarded from the bias of the prior by computing regional weights that moderate the local influence of the priors. We are thus able to effectively reconstruct both the old and the new structures in the test. We have tested the efficacy of our method on synthetic as well as real projection data. The results demonstrate the use of both uniform and spatially-varying priors in different scenarios. Our methods significantly improve the overall quality of the reconstructed data while minimizing the number of measurements needed for imaging in longitudinal studies.
+  Our work is based on longitudinal data acquisition scenarios where
+  we wish to study new changes that evolve within an object over time,
+  such as in repeated scanning for disease monitoring, or in
+  tomography-guided surgical procedures. While this is easily feasible
+  when measurements are acquired from a large number of projection
+  angles (`views'), it is challenging when the number of views is
+  limited. 
+
+  If the goal is to track the changes while simultaneously reducing
+  sub-sampling artefacts, we propose (1) acquiring measurements from
+  an \emph{extremely small} number of views and using a global
+  \emph{`uniform'} prior-based reconstruction. If the goal is to
+  observe \textbf{details} of new changes, we propose (2) acquiring
+  measurements from a \emph{moderate} number of views (albeit, still
+  sub-Nyquist), and using a more involved reconstruction routine. We
+  show that in the latter case, a `spatially-varying' technique is
+  appropriate in order to prevent the prior from adversely affecting the
+  reconstruction of new structures that are absent in any of the
+  earlier scans. The reconstruction of new regions is safeguarded from
+  the bias of the prior by computing regional weights that moderate
+  the local influence of the priors. We are thus able to effectively
+  reconstruct both the old and the new structures in the test. We have
+  tested the efficacy of our method on synthetic as well as real
+  projection data. The results demonstrate the use of both uniform and
+  spatially-varying priors in different scenarios. Our methods
+  significantly improve the overall quality of the reconstructed data
+  while minimizing the number of measurements needed for imaging in
+  longitudinal studies.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -128,32 +163,178 @@ Limited-view tomographic reconstruction, compressed sensing, priors, longitudina
 
 \section{Introduction}
 \label{sec:intro}
-Computed Tomography (CT) deals with the recovery of an entire object from a limited set of projection data which are acquired by passing X-rays at different orientations (`views') through the object. It is preferable to minimize the radiation exposed to the object, in order to prevent any potential damage to it and in order to fasten the acquisition time. Therefore, current research seeks to either significantly reduce the radiation intensity required to reconstruct with adequate fidelity~\cite{yang2018,Lin2016,Xie2017,gopal2019low} or significantly reduce the number of measurements required to reconstruct with adequate fidelity. For the latter case, there are two lines of pursuit. One is to intelligently choose those sets of projection views that capture most information~\cite{King2018,Anthony2018,barkan17,fischer16,andrei14}, and the other, which is the focus of this paper, is to design the reconstruction algorithm in order to achieve the most accurate recovery of the underlying slice, given the measurements from any limited set of views~\cite{yang2018,geyer2015,kilic2011}.
+Computed Tomography (CT) deals with the recovery of an entire object
+from a limited set of projection data which are acquired by passing
+X-rays at different orientations (`views'). It is preferable to
+minimize the radiation exposed in order to prevent any potential
+damage to it and in order to reduce the acquisition time. Therefore,
+current research seeks to either significantly reduce the radiation
+intensity required to reconstruct with adequate
+fidelity~\cite{yang2018,Lin2016,Xie2017,gopal2019low} or significantly
+reduce the number of measurements required to reconstruct with
+adequate fidelity. For the latter case, there are two lines of
+pursuit. One is to intelligently choose those sets of projection views
+that capture most
+information~\cite{King2018,Anthony2018,barkan17,fischer16,andrei14},
+and the other, which is the focus of this paper, is to design the
+reconstruction algorithm in order to achieve the most accurate
+recovery of the underlying slice, given the measurements from any
+limited set of views~\cite{yang2018,geyer2015,kilic2011}.
 
-In conventional data acquisition techniques, the tomographic measurements $\boldsymbol{y}$ are acquired by sampling the physical object $\boldsymbol{x}$ uniformly above the Nyquist rate. In such a case when there are sufficient measurements, reconstruction using the conventional filtered backprojection (FBP) suffices, as seen in Fig.~\ref{fig:story} (600 views case). However, in the last decade, reconstruction from limited sampled data has been made possible by assuming the data to exhibit sparsity under certain mathematical transforms $\boldsymbol{\Upsilon}$ such as the Discrete Cosine Transform (DCT) or wavelet transforms. This is known as sparsity prior and is the fundamental principle in the widely used Compressed Sensing (CS) technique~\cite{Donoho,introCS}. Fig.~\ref{fig:story} demonstrates the benefit of using sparsity prior when the number of projection views is limited (100 views in Fig.~\ref{fig:story}).
+In conventional data acquisition techniques, the tomographic
+measurements $\boldsymbol{y}$ are acquired by sampling the physical
+object $\boldsymbol{x}$ uniformly with a substantial number of views,
+ideally above the Nyquist rate. In such a case when there are
+sufficient measurements, reconstruction using the conventional
+filtered backprojection (FBP) suffices, as seen in
+Fig.~\ref{fig:story} (first column, 600 views). The figure shows the
+ground truth image (260x260) of naturally growing sprouts at the top
+left (the details of the dataset is postponed to
+Section~\ref{sec:results_uniform_prior}).
 
-There are multiple ways to incorporate the sparsity prior using CS. We use the LASSO (least absolute shrinkage and selection operator) which iteratively solves for the solution by penalizing a combination of least squares error and l1-norm of the sparse coefficients $\boldsymbol{\theta}$ of the object $\boldsymbol{x}$. If $\boldsymbol{\mathcal{R}}$ represents the acquisition model, then the LASSO solution is described by one that minimizes:
-
+However, in the last decade, reconstruction from reduced views has
+been made possible by assuming the data to exhibit sparsity under
+certain mathematical transforms $\boldsymbol{\Upsilon}$ such as the
+wavelet transforms, or the Discrete Cosine Transform (DCT). This is
+known as sparsity prior and is the fundamental principle in the widely
+used Compressed Sensing (CS) technique~\cite{Donoho,introCS}.
+There are multiple ways to incorporate the sparsity prior using CS. We use the LASSO (least absolute shrinkage and selection operator) which iteratively solves for the solution by penalizing a combination of least squares error and $L_1$-norm of the sparse coefficients $\boldsymbol{\theta}$ of the object $\boldsymbol{x}$. If $\boldsymbol{\mathcal{R}}$ represents the acquisition model, then the LASSO solution is described by one that minimizes
  \begin{equation}
-J_{CS}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1.
+J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
 \label{Eq:simple_cs}
  \end{equation}
+ Fig.~\ref{fig:story} (second column) demonstrates the benefit of
+ using sparsity prior when the number of projection views is limited
+ (100 views).  We solve this cost function using the popular
+ l1-regularized least squares (l1-ls) package available
+ in~\cite{l1ls}, and  choose DCT as our sparsity basis
+ $\boldsymbol{\Upsilon}$. 
 
- We solve this cost function using the popular l1-regularized least squares (l1-ls) package available in~\cite{l1ls}. We also choose DCT as our sparsity basis $\boldsymbol{\Upsilon}$. We observed that there was no significant benefit in choosing wavelets over DCT.
- \begin{figure}[h]
+ %%% Postpone later We observed that there was no significant benefit
+ %%% in choosing wavelets over DCT.  }
+
+ \begin{figure}[t]
 \centering
 	\includegraphics[width=0.4\textwidth]{../images/story/story.png}
-        \caption{Illustration of the use of various priors as the number of views reduces. For large number of views (600 views), the FBP reconstruction is of good quality (SSIM = 0.92. As the number of views become limited (100 views), the reconstruction using sparsity prior (SSIM = 0.90) is better than FBP reconstruction (SSIM = 0.83). If the number of views is further reduced (30 views), the presence of both sparsity prior and object improves the reconstruction (SSIM = 0.85) when compared to presence of only sparsity prior (SSIM = 0.82) or no prior (SSIM = 0.69).}
+        \caption{Illustration of the use of various priors as the
+          number of views reduces. For extremely large number of views
+          (600 views), the FBP reconstruction (first column) is of
+          very good quality (Structural Similarity Index Metric,
+          SSIM=0.92). As the number of views become limited (100
+          views), the reconstruction using sparsity prior (middle
+          column) is better both visually and quantitatively than FBP
+          (SSIM of 0.90 vs 0.83). If the number of views is
+          drastically reduced (30 views), the presence of both
+          sparsity prior and object prior improves the reconstruction
+          (SSIM = 0.85) when compared to presence of only sparsity
+          prior (SSIM = 0.82) or no prior (SSIM = 0.69). In all cases,
+          the ground truth (260x260) appears in the top left.}
  \label{fig:story}
  \end{figure} 
- When the number of views is significantly less, the sparsity prior alone is not sufficient, as seen in Fig.~\ref{fig:story} for the case of 30 views. In such cases, any additional information, specifc to the object being scanned (i.e., object prior) is useful in further improving the reconstruction. Such techniques may also use information from previously scanned data of the same object or a similar one. However, with the use of such an object prior, a new challenge emerges:  the prior information may potentially overwhelm the essential new details that appear in the test. It is in this context that the work in this paper fits in: the design of an algorithm that estimates the location and magnitude of new changes in the (unknown) test object. This eventually prevents the prior from adversely affecting the reconstruction of new regions in the test. We refer to this as a \textit{spatially-varying} uniform prior-based reconstruction routine. We present results on real and simulated 3D data for different longitudinal studies.  These are studies wherein sequential CT scans of the same object are acquired to track time-evolving changes within its interior.
+
+ When the number of views is significantly reduced, the sparsity prior
+ alone is not sufficient.  In such cases additional information
+ specific to the object being scanned (i.e., object prior) is useful
+ in further improving the reconstruction.  While this has been done in
+ the context of dynamic CT-scans (as discussed in
+ Section~\ref{sec:related}), in this paper we use a set $S$ of
+ previous scans of the same object that is more appropriate in a
+ longitudinal context. As seen in Fig.~\ref{fig:story} (last column,
+ 30 views) our method uses the prior scans \emph{uniformly} by
+ creating an eigenspace representation
+ (Section~\ref{sec:method_uniform_prior}).
+
+ However, with the use of such an object prior, a new challenge
+ emerges. The prior set S may potentially overwhelm the necessary
+ details, or since several prior scans are available, finding the
+ right prior may be an issue. We therefore seek an algorithm that
+ estimates the location and magnitude of new changes in the (unknown)
+ test. As we show in Section~\ref{sec:method_spatially_varying_prior},
+ this eventually prevents the prior from adversely affecting the
+ reconstruction of new regions in the test. We refer to this method as
+ a \textit{spatially-varying} global prior-based reconstruction
+ routine, that still uses all the previous scans in the set $S$.
+
+
+ This paper is organized as follows. After discussing related work in
+ Section~\ref{sec:related}, Section~\ref{sec:contributions} lays down
+ the key contributions of this work. Section~\ref{sec:tmh}
+ demonstrates the utility of both the uniform and spatially-varying
+ methods on a longitudinal medical dataset. We now move to the
+ details. Section~\ref{sec:method_uniform_prior} describes the
+ construction of the uniform eigenspace prior, followed by the
+ corresponding results in real and synthetic 3D biological datasets in
+ Section~\ref{sec:results_uniform_prior}. Section~\ref{sec:method_spatially_varying_prior}
+ describes how the uniform prior needs to be modified when accurate
+ details of new changes are to be observed. A spatially-varying
+ technique offers a solution, the results of which are presented in
+ Section~\ref{sec:results_spatially_varying_prior}. Section\ref{sec:discussion}
+ discusses tuning of the hyperparameters involved, and limitations of
+ our method. Finally, we conclude with key inferences that can be
+ drawn from our work in Section~\ref{sec:conclusions}.
+
+
+% We present results on real and simulated 3D
+%  data for different longitudinal studies.  These are studies wherein
+%  sequential CT scans of the same object are acquired to track
+%  time-evolving changes within its interior.
  
   %although this optimizer removes most of the artefacts created due to sub-sampling, its reconstruction is blurred when the number of views is very limited, as shown in Fig.~\ref{fig:story2}. 
 %(2) there is the key issue of the choice of \textit{a particular} previously scanned object as template among the many previously acquired scans
+
  \section{Related Work}
- Most of the related work for object-prior based reconstruction has been in the areas of dynamic CT and 4D-CT. In dynamic CT, the object being scanned undergoes changes between successive projection views and hence is not stationary even within a single complete scan. In 4D-CT, the object undergoes changes between successive scans. In both these cases, it may be possible to use very specific object-properties for reconstruction. For example, in~\cite{Van2015}, the knowledge of attenuation coefficient of the fluid was used as a prior for reconstructing its flow through gravel. In~\cite{Koen2020}, the changes across the sucessive scan volumes is assumed to be continuous, thus enabling the use of optical flow to model the motion between corresponding voxels of different scan volumes. In another study~\cite{vincent2017}, changes between successive scans were modelled by affine deformation whose parameters were computed for motion-correction. Such a correction enables acquisition from fewer views than would have otherwise not been possible for reconstruction with adequate fidelity. In~\cite{daniil2015}, all the scan volumes are reconstructed together using spatio-temporal regularization. Unlike these methods, if however, the object-prior were not available in the first place, then other techniques presented in~\cite{Essam2015,Polak2017} and~\cite{Li2015} could be used for the reconstruction of a single volume from few projection views.
- 
- In contrast to the prior-based studies mentioned above, we reconstruct the current test object without any assumption of continuity of changes or some knowledge of the attenuation coefficients of the structures. We use the current measurements from few-views and previous high-quality scans of the same object. We utilize the uniform global eigenspace prior presented in~\cite{my_dicta_paper} which assume that the new test volume lies within the space spanned by the eigenvectors of the multiple representative previously scanned objects. We then demonstrate how the global prior can impose an inflexible constant weight (and hence a bias) when reconstructing the data. As a solution, we present a method to moderate the control of the prior by estimating and imposing spatially-varying weights to the prior in order to reconstruct new structures accurately. This spatially-varying prior tunes the effect of the templates in different regions of the reconstruction.
+\label{sec:related}
+Few view projection has been explored in~\cite{Essam2015,Polak2017}
+and~\cite{Li2015}. However
+{\color{red} add here!!  Why is this bad and how does it compare with
+ours? }
+
+Most object-prior based reconstruction has been in the areas of
+dynamic CT and 4D-CT. In dynamic CT, the object being scanned
+undergoes changes between successive projection views and hence is not
+stationary even within a single complete scan. In contrast, in 4D-CT,
+a set of 3D CT scans over short intervals of time are taken as the
+object undergoes changes between successive scans. In both these
+cases, it may be possible to use very specific object-properties for
+reconstruction. For example, in~\cite{Van2015}, the knowledge of the
+attenuation coefficient of the fluid is used as a prior for
+reconstructing its flow through gravel. In~\cite{Koen2020}, the
+changes across the sucessive scan volumes is assumed to be continuous,
+thus enabling the use of optical flow to model the motion between
+corresponding voxels of different scan volumes. In another
+study~\cite{vincent2017}, changes between successive scans were
+modelled by affine deformation whose parameters were computed for
+motion-correction. Such a correction enables acquisition from fewer
+views than would have otherwise not been possible for reconstruction
+with adequate fidelity. In~\cite{daniil2015}, all the scan volumes are
+reconstructed together using spatio-temporal regularization.
+
+
+\section{Contributions}
+\label{sec:contributions}
+This paper focusses on few-views reconstruction with an emphasis on
+longitudinal studies.  Fig.~\ref{fig:prior_overview} provides an
+overview. In contrast to the object prior-based studies
+mentioned above, we reconstruct the current test object without any
+assumption of continuity of changes or some knowledge of the
+attenuation coefficients of the structures. We do not make any
+temporal assumption in terms of time intervals such as in 4D CT
+scans. We use the current measurements from few-views and previous
+scans of the same object. A key idea in our work is the starting point
+-- the new test volume is close to the space spanned by the
+eigenvectors of the multiple representative previously scanned
+objects.
+
+% We utilize the uniform global eigenspace prior presented
+% in~\cite{my_dicta_paper} which assume 
+
+We also demonstrate how the global prior can impose an inflexible
+constant weight (and hence an unnecessary bias) when reconstructing
+the data. As a solution, we present a method to moderate the control
+of the prior by estimating and imposing spatially-varying weights to
+the prior in order to reconstruct new structures accurately. This
+spatially-varying prior tunes the effect of the templates in different
+regions of the reconstruction.
 
  %Various forms of object priors have been used for reconstruction from limited views (`few-views'). In ~\cite{Van2014}, the time-varying region within an object is computed by modelling it as a B-spline.
 % \cite{PICCS} uses only a single template and enforces a uniform similarity between the current object's reconstruction and the single template. 
@@ -162,25 +343,75 @@ J_{CS}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\r
  \begin{figure}[h]
 \centering
 	\includegraphics[width=0.5\textwidth]{../images/prior_cmb.png}
-        \caption{Overview of our work. The choice of the number of measurement views and the type of reconstruction is driven by the goal in the application under consideration.  When our goal is relatively simple, such as tracking the location of new changes while simultaneously reducing sub-sampling artefacts, we propose (a) acquiring measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction. When our goal becomes more ambitious, such as observing details of the new changes while simultaneously reducing sub-sampling artefacts, we propose (b) acquiring measurements from a slightly higher number of views (`moderate-view' imaging) and using spatially-varying prior-based reconstruction. In either case, the number of views is lower than what is conventionally used.}
+        \caption{Overview of our work. The choice of the number of
+          measurement views and the type of reconstruction is driven
+          by the goal in the application under consideration.  (a) When
+          our goal is relatively simple, such as tracking the location
+          of new changes while simultaneously reducing sub-sampling
+          artefacts, we propose acquiring measurements from an
+          extremely small number of views (`few-view' imaging) and
+          using uniform prior based reconstruction. (b) When our goal
+          becomes more ambitious, such as observing details of the new
+          changes while simultaneously reducing sub-sampling
+          artefacts, we propose acquiring measurements from a
+          slightly higher number of views (`moderate-view' imaging)
+          and using spatially-varying prior-based reconstruction. In
+          either case, the number of views is lower than what is
+          conventionally used.}
  \label{fig:prior_overview}
 \end{figure}
 
-This paper is organized as follows: Section~\ref{sec:contributions} lays down the key contributions of this work. Section~\ref{sec:tmh} demonstrates the utility of both the uniform and spatially-varying methods on a longitudinal medical dataset. Section~\ref{sec:method_uniform_prior} describes the construction of the uniform eigenspace prior, followed by the corresponding results in real and synthetic 3D biological datasets in Section~\ref{sec:results_uniform_prior}. Section~\ref{sec:method_spatially_varying_prior} describes how the uniform prior needs to be modified when accurate details of new changes are to be observed. A spatially-varying technique offers a solution, the results of which are presented in Section~\ref{sec:results_spatially_varying_prior}. Section\ref{sec:discussion} discusses tuning of the hyperparameters involved, and limitations of our method. Finally, we conclude  with key inferences that can be drawn from our work in Section~\ref{sec:conclusions}.
-\section{Contributions}
-\label{sec:contributions}
-This paper focusses on few-views reconstruction for longitudinal studies, and has the following key contributions:
+In summary, the key contributions are
 \begin{itemize}
-\item The scenarios where a uniform object prior is sufficient for the application at hand, and the scenarios for which it will fail, are demonstrated.
-\item A weights map is designed to depict the location and strength of new changes at every voxel. A novel algorithm is presented to build this map from sub-sampled measurements of the test and a set of high quality templates. Once the weights map is built, it is used for accurate reconstruction of those changes in the test that are absent in all of the templates.
-\item Finally, the methods are validated  on real and syntheric 3D tomographic data of biological datasets from various longitudinal studies, and quatitative accuracies are presented using the Structural Similarity Index Metric (SSIM).
+\item We create and present new 3D biological datasets, and as seen in
+  Fig.~\ref{fig:story} demonstrate the use of object priors when very
+  few views are used. More results appear in
+  Section~\ref{sec:results_uniform_prior} and in the supplementary
+  material.  Our results consist of 3D reconstructions from real
+  cone-beam projections.
+  \item The scenarios where a uniform object prior is sufficient for
+    the application at hand, and the scenarios for which it will fail,
+    are demonstrated. This leads to the idea of a weights map
+    designed to depict the location and strength of new changes at
+    every voxel. A novel algorithm is presented to build this map from
+    sub-sampled measurements of the test and a set of high quality
+    templates. Once the weights map is built, it is used for accurate
+    reconstruction of those changes in the test that are absent in all
+    of the templates. Results appear in
+    Section~\ref{sec:results_spatially_varying_prior}.
+  \item We show the efficacy of our results in a real-life medical
+    longitudinal studies with data obtained in a clinical setting from
+    a live teaching and
+    research hospital 
  \end{itemize}
 
 %--------------------------------THM section-------------------------
 
 \section{Application: Reconstruction for CT-guided radio-ablation study}
 \label{sec:tmh}
-Before diving into the details of the uniform and the spatially-varying global prior methods, we first show how both the techniques can be applied to our advantage in a real-life medical longitudinal study. Here, our data~\footnote{Source: Tata Memorial Centre~\cite{tmh}, Parel, Mumbai.  This is the national comprehensive centre for the prevention, treatment, education and research in cancer, and is recognized as one of the leading cancer centres in India.} consists of successive scans of the liver taken during a radio-frequency ablation procedure. In such a procedure~\cite{Dong2015}, the physician inserts a thin needle-like probe into the organ. Repeated CT scans of the patient need to be acquired in order to track the movement of the needle and to ensure that it is reaching the appropriate target tumor. Once the needle hits the tumor, a high-frequency electric current is passed through the tip of the probe and this burns the malignant tumor (ablation). The scan at this ablation stage must also reveal accurate details of the changes within. In this context, we classify the goal of any of our reconstruction techniques into two categories: 
+Before diving into the details of the uniform and the
+spatially-varying global prior methods, we first show how both the
+techniques can be applied to our advantage in a real-life medical
+longitudinal study. Here, our data~\footnote{Source: Tata Memorial
+  Centre~\cite{tmh}, Parel, Mumbai.  This is the national
+  comprehensive centre for the prevention, treatment, education and
+  research in cancer, and is recognized as one of the leading cancer
+  centres in India.} consists of successive scans of the liver taken
+during a radio-frequency ablation procedure. In such a
+procedure~\cite{Dong2015}, the physician inserts a thin needle-like
+probe into the organ. Repeated CT scans of the patient need to be
+acquired in order to track the movement of the needle and to ensure
+that it is reaching the appropriate target tumor. Once the needle hits
+the tumor, a high-frequency electric current is passed through the tip
+of the probe and this burns the malignant tumor (ablation). The scan
+at this ablation stage must also reveal accurate details of the
+changes within. In this context, we classify the goal of any of our
+reconstruction techniques into two categories: 
+\begin{enumerate}
+\item To track the position of the needle in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
+\item To accurately observe the new changes amidst a relatively well reconstructed background after the needle touches the tumor.%Later, when the probe is proximal to or touches the tumor, our goal is to observe details of tumor ablation while simultaneously reducing sub-sampling artefacts. In this case, we propose to capture measurements from a slightly higher number of views (`moderate-view' imaging) to acquire more information, and use a spatially-varying prior-based reconstruction. The spatially-varying technique moderates the effect of the prior in the reconstruction of new changes in the object being scanned.
+\end{enumerate} 
+
 
 %--------------------------Results on TMH data--------------------------
 %------------------RFA 2 data
@@ -254,10 +485,6 @@ Before diving into the details of the uniform and the spatially-varying global p
 \label{fig:RFA2_few_views}
 \end{figure}
 
-\begin{enumerate}
-\item To track the position of the needle in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
-\item To accurately observe the new changes amidst a relatively well reconstructed background after the needle touches the tumor.%Later, when the probe is proximal to or touches the tumor, our goal is to observe details of tumor ablation while simultaneously reducing sub-sampling artefacts. In this case, we propose to capture measurements from a slightly higher number of views (`moderate-view' imaging) to acquire more information, and use a spatially-varying prior-based reconstruction. The spatially-varying technique moderates the effect of the prior in the reconstruction of new changes in the object being scanned.
-\end{enumerate} 
 Here, we demonstrate the combined use of l1-ls (CS) with the global prior, in two flavors: the vanilla (uniform) and spatially-varying global prior-based reconstruction. The choice of the number of measurement views and the type of reconstruction -- uniform or spatially-varying, is driven by the goal of the procedure. First, in order to track the needle, a very small number of views is sufficient because the needle has a very high attenuation coefficient when compared to that of the organs. We use the uniform global prior reconstruction here to reduce the artefacts due to sub-sampling. The uniform method is fast and sufficient to track the position of the needle.  Once the needle reaches the site of the tumor, we propose changing the imaging protocol to acquire measurements from a moderate number of views. This will enable us to get more information about the new changes. In addition, we then deploy the spatially-varying prior method in order to locate the regions of new changes and penalize any dominance of the prior in these regions.  Regardless of the imaging protocol we use (`few' or `moderate'), the number of views is smaller (atleast one-fifth) than the conventional number of views used in a standard hospital setting.
 
 The dataset from this longitudinal medical study consists of 8 scans taken during the ablation procedure. We demonstrate our method for 2D reconstruction by choosing a single slice from each of the 8 volumes as our dataset. Note that all these 8 slices are located at the \emph{same} index~\footnote{The notion of~\textit{same index} (slice number corresponding to the same depth) makes sense in the context, because in such problems, the different scans are aligned with each other.} within each of the respective volumes. Fig.~\ref{fig:RFA2_test_object-prior} shows the chosen set of 2D slices (each of size $512 \times 512$) from the different volumes. Observe that the needle is seen in all of the first 7 slices  and the effect of ablation is seen in the 8th slice. \\
@@ -899,7 +1126,14 @@ Slice t=8 & During, after ablation & 120 & Spatially-Varying \\ \hline
 
 \section{Discussion}
 \label{sec:discussion}
-The presented uniform prior-based algorithm is suited to applications where we wish to detect the location of new changes in an object over time, and the presented spatially-varying prior-based algorithm is suited to applications where we wish to observe the intricate details of those new changes. This distinction in the techniques used has not been studied earlier in literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our knowledge. Eventhough methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sec.~\ref{sec:results}. We now discuss the need for registration between object-prior and the test, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
+The presented uniform prior-based algorithm is suited to applications
+where we wish to detect the location of new changes in an object over
+time, and the presented spatially-varying prior-based algorithm is
+suited to applications where we wish to observe the intricate details
+of those new changes. This distinction in the techniques used has not
+been studied earlier in
+literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our
+knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sec.~\ref{sec:results}. We now discuss the need for registration between object-prior and the test, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
 
 \begin{table}[!h]
   \centering
