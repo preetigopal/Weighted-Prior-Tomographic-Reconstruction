@@ -197,8 +197,15 @@ been made possible by assuming the data to exhibit sparsity under
 certain mathematical transforms $\boldsymbol{\Upsilon}$ such as the
 wavelet transforms, or the Discrete Cosine Transform (DCT). This is
 known as sparsity prior and is the fundamental principle in the widely
-used Compressed Sensing (CS) technique~\cite{Donoho,introCS}.
-There are multiple ways to incorporate the sparsity prior using CS. We use the LASSO (least absolute shrinkage and selection operator) which iteratively solves for the solution by penalizing a combination of least squares error and $L_1$-norm of the sparse coefficients $\boldsymbol{\theta}$ of the object $\boldsymbol{x}$. If $\boldsymbol{\mathcal{R}}$ represents the acquisition model, then the LASSO solution is described by one that minimizes
+used Compressed Sensing (CS) technique~\cite{Donoho,introCS}.  There
+are multiple ways to incorporate the sparsity prior using CS. We use
+the LASSO (least absolute shrinkage and selection operator) which
+iteratively solves for the solution by penalizing a combination of
+least squares error and $L_1$-norm of the sparse coefficients
+$\boldsymbol{\theta}$ of the object $\boldsymbol{x}$. If $\boldsymbol{\Psi}$
+represents the sparsity basis i.e. if $\boldsymbol{x} = \boldsymbol{\Psi\theta}$, and 
+$\boldsymbol{\mathcal{R}}$ represents the acquisition model, then the
+LASSO solution is described by one that minimizes
  \begin{equation}
 J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
 \label{Eq:simple_cs}
@@ -283,18 +290,20 @@ J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymb
 
  \section{Related Work}
 \label{sec:related}
-Few view projection has been explored in~\cite{Essam2015,Polak2017}
-and~\cite{Li2015}. However
-{\color{red} add here!!  Why is this bad and how does it compare with
-ours? }
+There exist techniques that aim to reconstruct from few-views in
+specialized applications. For example, in~\cite{Essam2015},
+sparsity-constrained optimization is presented for angiography. Here,
+the regions of interest are the vessels alone and they are highlighted
+by physically inserting a contrast agent, and therefore there is a
+inherent sharper contrast between the vessels and the
+background. In many other general application scenarios like the ones presented in this paper,
+any information about the regions of interest is not known. In other applications where the spatial-gradient of the underlying volume is known to be sparse, the `total variation' method, as used in~\cite{Li2015,Polak2017} can be applied. As we will later see in Figs.\ref{fig:object-prior_test_okra} and~\ref{fig:object-prior_test_sprouts}, the spatial-gradient of many datasets is not sparse. 
 
 Most object-prior based reconstruction has been in the areas of
 dynamic CT and 4D-CT. In dynamic CT, the object being scanned
 undergoes changes between successive projection views and hence is not
 stationary even within a single complete scan. In contrast, in 4D-CT,
-a set of 3D CT scans over short intervals of time are taken as the
-object undergoes changes between successive scans. In both these
-cases, it may be possible to use very specific object-properties for
+a set of 3D CT scans are taken over short intervals of time and all the 3D volumes are reconstructed together. Here, the object undergoes changes between successive scans. ~\cite{PICCS} is one of the earliest work to establish the use of object-prior along with sparsity prior in dynamic CT. Its limitation was the unchecked over-emphasis of the prior on the reconstruction of the test at hand. This limitation was later dealt with by applying very specific object-properties for
 reconstruction. For example, in~\cite{Van2015}, the knowledge of the
 attenuation coefficient of the fluid is used as a prior for
 reconstructing its flow through gravel. In~\cite{Koen2020}, the
@@ -484,11 +493,45 @@ reconstruction techniques into two categories:
 \label{fig:RFA2_few_views}
 \end{figure}
 
-Here, we demonstrate the combined use of l1-ls (CS) with the global prior, in two flavors: the vanilla (uniform) and spatially-varying global prior-based reconstruction. The choice of the number of measurement views and the type of reconstruction -- uniform or spatially-varying, is driven by the goal of the procedure. First, in order to track the needle, a very small number of views is sufficient because the needle has a very high attenuation coefficient when compared to that of the organs. We use the uniform global prior reconstruction here to reduce the artefacts due to sub-sampling. The uniform method is fast and sufficient to track the position of the needle.  Once the needle reaches the site of the tumor, we propose changing the imaging protocol to acquire measurements from a moderate number of views. This will enable us to get more information about the new changes. In addition, we then deploy the spatially-varying prior method in order to locate the regions of new changes and penalize any dominance of the prior in these regions.  Regardless of the imaging protocol we use (`few' or `moderate'), the number of views is smaller (atleast one-fifth) than the conventional number of views used in a standard hospital setting.
+Here, we demonstrate the combined use of l1-ls (CS) with the global
+prior, in two flavors: the vanilla (uniform) and spatially-varying
+global prior-based reconstruction. The choice of the number of
+measurement views and the type of reconstruction -- uniform or
+spatially-varying, is driven by the goal of the procedure. First, in
+order to track the needle, a very small number of views is sufficient
+because the needle has a very high attenuation coefficient when
+compared to that of the organs. We use the uniform global prior
+reconstruction here to reduce the artefacts due to sub-sampling. The
+uniform method is fast and sufficient to track the position of the
+needle.  Once the needle reaches the site of the tumor, we propose
+changing the imaging protocol to acquire measurements from a moderate
+number of views. This will enable us to get more information about the
+new changes. In addition, we then deploy the spatially-varying prior
+method in order to locate the regions of new changes and penalize any
+dominance of the prior in these regions.  Regardless of the imaging
+protocol we use (`few' or `moderate'), the number of views is smaller
+(atleast one-fifth) than the conventional number of views used in a
+standard hospital setting.
 
-The dataset from this longitudinal medical study consists of 8 scans taken during the ablation procedure. We demonstrate our method for 2D reconstruction by choosing a single slice from each of the 8 volumes as our dataset. Note that all these 8 slices are located at the \emph{same} index~\footnote{The notion of~\textit{same index} (slice number corresponding to the same depth) makes sense in the context, because in such problems, the different scans are aligned with each other.} within each of the respective volumes. Fig.~\ref{fig:RFA2_test_object-prior} shows the chosen set of 2D slices (each of size $512 \times 512$) from the different volumes. Observe that the needle is seen in all of the first 7 slices  and the effect of ablation is seen in the 8th slice. \\
+The dataset from this longitudinal medical study consists of 8 scans
+taken during the ablation procedure. We demonstrate our method for 2D
+reconstruction by choosing a single slice from each of the 8 volumes
+as our dataset. Note that all these 8 slices are located at the
+\emph{same} index~\footnote{The notion of~\textit{same index} (slice
+  number corresponding to the same depth) makes sense in the context,
+  because in such problems, the different scans are aligned with each
+  other.} within each of the respective
+volumes. Fig.~\ref{fig:RFA2_test_object-prior} shows the chosen set of
+2D slices (each of size $512 \times 512$) from the different
+volumes. Observe that the needle is seen in all of the first 7 slices
+and the effect of ablation is seen in the 8th slice. \\
 
-\textbf{Tracking the needle:} We first choose slices 1-6 as our object-prior, and reconstruct slice 7 with the specific goal of tracking the needle and simultaneously reduce artefacts. Fig.~\ref{fig:RFA2_very_few_views} shows the reconstruction of slice 7 from its measurements from only 90 views. The reconstructions are quantitatively compared using SSIM.\\ 
+\textbf{Tracking the needle:} We first choose slices 1-6 as our
+object-prior, and reconstruct slice 7 with the specific goal of
+tracking the needle and simultaneously reduce
+artefacts. Fig.~\ref{fig:RFA2_very_few_views} shows the reconstruction
+of slice 7 from its measurements from only 90 views. The
+reconstructions are quantitatively compared using SSIM.\\
 
 \textbf{Observing details of the ablation:} Next, we choose slices 1-7 as our object-prior and reconstruct slice 8 from 120 views i.e. a somewhat higher number of views this time. Fig.~\ref{fig:RFA2_few_views} shows the reconstructions of slice 8 by different methods. We see that the spatially-varying prior reconstruction brings in the advantage of the prior without it adversely affecting the new regions.
 
@@ -523,13 +566,45 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  \label{sec:results_uniform_prior}
 
  
- The proposed method has been validated on new\footnote {These and our code will be made available to the community.} scans of biological specimens in a longitudinal setting. These datasets in the form of \emph{raw cone-beam projection measurements} were acquired from a lab at the Australian National University (ANU). %We emphasize that in most of the literature on tomographic reconstruction, the results are shown on reconstruction from projections \emph{simulated} from 3D volumes. This is because most CT scanners do not reveal the raw projections, and instead output only the full reconstructed volumes. Moreover, the process of conversion from the projections to the full volumes is proprietary. \emph{Departing from this, we demonstrate reconstruction results from raw projection data.}
+ The proposed method has been validated on new\footnote {These and our
+   code will be made available to the community.} scans of biological
+ specimens in a longitudinal setting. These datasets in the form of
+ \emph{raw cone-beam projection measurements} were acquired from a lab
+ at the Australian National University (ANU). %We emphasize that in
+ most of the literature on tomographic reconstruction, the results are
+ shown on reconstruction from projections \emph{simulated} from 3D
+ volumes. This is because most CT scanners do not reveal the raw
+ projections, and instead output only the full reconstructed
+ volumes. Moreover, the process of conversion from the projections to
+ the full volumes is proprietary. \emph{Departing from this, we
+   demonstrate reconstruction results from raw projection data.}
 In all figures in this section, `uniform prior' refers to optimizing Eq.~\ref{eq:spatially-varying_prior} with $\boldsymbol{W}(x,y,z)=1$.
 %----------------------------------------------------------
 %-------------------------------------------------
 \subsubsection{\textbf{Okra dataset}}
 \label{Sec:okra_uniform}
-Our first dataset is that of an Okra specimen consisting of its five scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements consisted of real cone-beam projections from 450 views, each of size $336\times156$. The corresponding size of the reconstructed volume is $338\times338\times123$. Prior to the first scan, two holes were drilled on the surface of the specimen. This was followed by four scans, each after introducing one new cut. The specimen was kept in the same position throughout the acquisitions. In cases where such an alignment is not present, all the template volumes must be pre-aligned before computing the eigenspace. The test must be registered to the object-prior after its preliminary pilot reconstruction. The ground truth consists of FDK reconstructed volumes from the the full set of 450 view projections. The test volume was reconstructed from a partial set of 45 projections, i.e. $10\%$ of the projection views from which ground truth was reconstructed. The selected 3D ground truth of template volumes, the test volume as well as the 3D reconstructions can be seen in~\cite{supp_paper}. One of the slices of the reconstructed volumes is shown in Fig.~\ref{fig:okra_3D_results}. The red and green 3D RoI in the video and images show the regions where new changes are present. Based on the potato and the okra experiments, we see that our method is able to \emph{discover both} the presence of a new structure, as well as the absence of a structure.
+Our first dataset is that of an Okra specimen consisting of its five
+scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements
+consisted of real cone-beam projections from 450 views, each of size
+$336\times156$. The corresponding size of the reconstructed volume is
+$338\times338\times123$. Prior to the first scan, two holes were
+drilled on the surface of the specimen. This was followed by four
+scans, each after introducing one new cut. The specimen was kept in
+the same position throughout the acquisitions. In cases where such an
+alignment is not present, all the template volumes must be pre-aligned
+before computing the eigenspace. The test must be registered to the
+object-prior after its preliminary pilot reconstruction. The ground
+truth consists of FDK reconstructed volumes from the the full set of
+450 view projections. The test volume was reconstructed from a partial
+set of 45 projections, i.e. $10\%$ of the projection views from which
+ground truth was reconstructed. The selected 3D ground truth of
+template volumes, the test volume as well as the 3D reconstructions
+can be seen in~\cite{supp_paper}. One of the slices of the
+reconstructed volumes is shown in Fig.~\ref{fig:okra_3D_results}. The
+red and green 3D RoI in the video and images show the regions where
+new changes are present. Based on the potato and the okra experiments,
+we see that our method is able to \emph{discover both} the presence of
+a new structure, as well as the absence of a structure.
 
 
 
@@ -666,10 +741,12 @@ nature.
 %\captionsetup{labelformat=empty}
         \caption{Uniform Prior}
      \end{subfigure}
-     \caption{3D reconstruction of sprouts from $2.5\%$ projection views
-   (b, c) have poor details (d) no new information detected (the
-   prior dominates as can be seen in the blue and red regions) and
-   (e) new information detected in the regions of interest. The reconstructed volumes can be viewed in ~\cite{supp_paper}.} 
+     \caption{3D reconstruction of sprouts from $2.5\%$ projection
+       views (b, c) have poor details (d) no new information detected
+       (the prior dominates as can be seen in the blue and red
+       regions) and (e) new information detected in the regions of
+       interest. The reconstructed volumes can be viewed in
+       ~\cite{supp_paper}.} 
 \label{fig:sprouts_3D_results}
 %\addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
@@ -688,7 +765,16 @@ nature.
 \section{Method: Spatially-Varying prior-based reconstruction}
 \label{sec:method_spatially_varying_prior}
 
-Although the uniform global prior can be very useful in some circumstances, as was shown in Sec.~\ref{sec:tmh}, it poses a major limitation when we want accurate details of the new changes. While the uniform prior compensates very well for the possible artefacts due to sparse measurements, it dominates the regions with new changes masking the signal, as seen in Fig.~\ref{fig:RFA2_few_views}-d. Ideally, we will want to impose the prior only in the regions that are common between the test and object-prior.  Our spatially-varying prior based reconstruction overcomes this limitation by minimizing the following cost function:
+Although the uniform global prior can be very useful in some
+circumstances, as was shown in Sec.~\ref{sec:tmh}, it poses a major
+limitation when we want accurate details of the new changes. While the
+uniform prior compensates very well for the possible artefacts due to
+sparse measurements, it dominates the regions with new changes masking
+the signal, as seen in Fig.~\ref{fig:RFA2_few_views}-d. Ideally, we
+will want to impose the prior only in the regions that are common
+between the test and object-prior.  Our spatially-varying prior based
+reconstruction overcomes this limitation by minimizing the following
+cost function:
 \begin{equation}
 %   \setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
 %\setlength{\abovedisplayskip}{-2pt} \setlength{\abovedisplayshortskip}{-2pt}
@@ -699,7 +785,25 @@ The key to our method is the discovery of a diagonal weights
  matrix $\boldsymbol{W}$, where $W_{ii}$ contains the (non-negative) weight assigned to the $i^{\textrm{th}}$ voxel of the prior. $\boldsymbol{W}$ is first constructed using some preliminary reconstruction methods (to be described in the following section), following which Eq.~\ref{eq:spatially-varying_prior} is used to obtain the final reconstruction. In regions of change in test data, we want lower weights for the prior when compared to regions that are similar to the prior.  
 \vspace{2mm}
  \subsubsection{\textbf{Computation of weights matrix $\boldsymbol{W}$}}
-Since the test volume (referred to as $\boldsymbol{x}$) is unknown to begin with, it is not possible to decipher the precise regions in $\boldsymbol{x}$ that are different from all the previously scanned objects (`object-prior'). We start with $X^{\text{fdk}}$, the initial backprojection reconstruction of the test volume using the Feldkamp-Davis-Kress (FDK) algorithm~\cite{FDK} in an attempt to discover the difference between the object-prior and the test volume. Let $\boldsymbol{V_{\text{high}}}$ be the eigenspace constructed from high-quality object-prior. However, the difference between $X^{\text{fdk}}$ and its projection onto the eigenspace $\boldsymbol{V_{\text{high}}}$ will detect the new regions along with  many false positives (false new regions). This is because, $X^{\text{fdk}}$ will contain many geometric-specific artefacts arising from sparse measurements (angle undersampling), which are absent in the high quality object-prior used to construct the eigenspace $\boldsymbol{V_{\text{high}}}$. To discover unwanted artefacts of the imaging geometry, in a counter-intuitive way, we generate \emph{low quality} reconstruction of the object-prior as described below.
+Since the test volume (referred to as $\boldsymbol{x}$) is unknown to
+begin with, it is not possible to decipher the precise regions in
+$\boldsymbol{x}$ that are different from all the previously scanned
+objects (`object-prior'). We start with $X^{\text{fdk}}$, the initial
+backprojection reconstruction of the test volume using the
+Feldkamp-Davis-Kress (FDK) algorithm~\cite{FDK} in an attempt to
+discover the difference between the object-prior and the test
+volume. Let $\boldsymbol{V_{\text{high}}}$ be the eigenspace
+constructed from high-quality object-prior. However, the difference
+between $X^{\text{fdk}}$ and its projection onto the eigenspace
+$\boldsymbol{V_{\text{high}}}$ will detect the new regions along with
+many false positives (false new regions). This is because,
+$X^{\text{fdk}}$ will contain many geometric-specific artefacts
+arising from sparse measurements (angle undersampling), which are
+absent in the high quality object-prior used to construct the
+eigenspace $\boldsymbol{V_{\text{high}}}$. To discover unwanted
+artefacts of the imaging geometry, in a counter-intuitive way, we
+generate \emph{low quality} reconstruction of the object-prior as
+described below.
 \vspace{2mm}
 \subsubsection{\textbf{Algorithm to compute weights-map $\boldsymbol{W}$}}
 \label{sec:thealgo}
@@ -713,11 +817,23 @@ We assume $L$ previously scanned objects from which we build
 an eigenspace. 
 \vspace{-0.1cm}
 
-  \begin{enumerate}
-  \item Generate simulated measurements $\boldsymbol{y_{Q_i}}$ for every template $Q_i$, using the exact same projections views and imaging geometry with which the measurements $\boldsymbol{y}$ of the test volume $\boldsymbol{x}$ were acquired, and 
-\item Perform $L$  preliminary FDK reconstructions of each of the $L$ object-prior from $\boldsymbol{y_{Q_i}}$.  Let this be denoted by $\{Y^{\text{fdk}}_i\}_{i=1}^L$.
+\begin{enumerate}
+  \item Generate simulated measurements $\boldsymbol{y_{Q_i}}$ for
+    every template $Q_i$, using the exact same projections views and
+    imaging geometry with which the measurements $\boldsymbol{y}$ of
+    the test volume $\boldsymbol{x}$ were acquired, and
+\item Perform $L$ preliminary FDK reconstructions of each of the $L$
+  object-prior from $\boldsymbol{y_{Q_i}}$.  Let this be denoted by
+  $\{Y^{\text{fdk}}_i\}_{i=1}^L$.
   \end{enumerate}
-\item Build eigenspace $\boldsymbol{V_{\text{low}}}$ from $\{Y^{\text{fdk}}_i\}_{i=1}^L$.  Let $P^{\text{fdk}}$ denote projection of $X^{\text{fdk}}$ onto $\boldsymbol{V_{\text{low}}}$. The difference between $P^{\text{fdk}}$ and $X^{\text{fdk}}$ will not contain false positives due to imaging geometry, but will have false positives due to artefacts that are specific to the reconstruction method used. To resolve this, perform steps $4$ and $5$.
+\item Build eigenspace $\boldsymbol{V_{\text{low}}}$ from
+  $\{Y^{\text{fdk}}_i\}_{i=1}^L$.  Let $P^{\text{fdk}}$ denote
+  projection of $X^{\text{fdk}}$ onto
+  $\boldsymbol{V_{\text{low}}}$. The difference between
+  $P^{\text{fdk}}$ and $X^{\text{fdk}}$ will not contain false
+  positives due to imaging geometry, but will have false positives due
+  to artefacts that are specific to the reconstruction method used. To
+  resolve this, perform steps $4$ and $5$.
 %\vspace{-0.3cm}
 \item Project with multiple methods.
 %\vspace{-0.1cm}
@@ -852,7 +968,24 @@ solving Eq.~\ref{eq:spatially-varying_prior} were robust over a wide range of $k
 \label{fig:reconstructions_diff_methods}
 \end{figure}
 
-The changes and new structures present in the test data will generate different artifacts for different reconstruction techniques. These artifacts would not be captured by reconstructions of the object-prior since the underlying new changes and structures may be absent in all of the previously scanned objects. We aim to let the weights be independent of the type of artifact. Hence, we use a combination of different reconstruction techniques to generate different types of eigenspaces and combine information from all of them to compute weights. To illustrate the benefit of this method, we first performed 2D reconstruction of a test slice from the potato dataset (please refer Sec.~\ref{Sec:potato} for details of the dataset) Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template slices. Fig.~\ref{fig:weights_map_2Dpotato}  shows the weights-maps generated using Eq.~\ref{eq:weightsEq} by various reconstruction methods. It can be seen that the weights are low in the region of the new change in test data. Because all the iterative methods are computationally expensive, we chose only FBP and (l1-ls)-DCT for computing weights-maps for all 3D reconstructions.  
+The changes and new structures present in the test data will generate
+different artifacts for different reconstruction techniques. These
+artifacts would not be captured by reconstructions of the object-prior
+since the underlying new changes and structures may be absent in all
+of the previously scanned objects. We aim to let the weights be
+independent of the type of artifact. Hence, we use a combination of
+different reconstruction techniques to generate different types of
+eigenspaces and combine information from all of them to compute
+weights. To illustrate the benefit of this method, we first performed
+2D reconstruction of a test slice from the potato dataset (please
+refer Sec.~\ref{Sec:potato} for details of the dataset)
+Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template
+slices. Fig.~\ref{fig:weights_map_2Dpotato} shows the weights-maps
+generated using Eq.~\ref{eq:weightsEq} by various reconstruction
+methods. It can be seen that the weights are low in the region of the
+new change in test data. Because all the iterative methods are
+computationally expensive, we chose only FBP and (l1-ls)-DCT for
+computing weights-maps for all 3D reconstructions.
 %---------------------------------------
 \begin{table}[!h]
   \centering
@@ -870,7 +1003,10 @@ The changes and new structures present in the test data will generate different 
 \section{Results: Reconstruction by spatially-varying prior}
 \label{sec:results_spatially_varying_prior}
 
-The proposed method has been validated on 2D and 3D synthetic and real tomographic data of biological and medical specimens. The results below demonstrate the advantage of the spatially-varying global prior method over the uniform method.
+The proposed method has been validated on 2D and 3D synthetic and real
+tomographic data of biological and medical specimens. The results
+below demonstrate the advantage of the spatially-varying global prior
+method over the uniform method.
 
 
 
@@ -910,12 +1046,20 @@ The proposed method has been validated on 2D and 3D synthetic and real tomograph
 
 %---------------------------------------
 \begin{table}[!h]
-  \caption{SSIM of 3D RoI of reconstructed okra volumes from various methods. Each RoI spans 7 consecutive slices where the test is different from all of the previously scanned objects.}
+  \caption{SSIM of 3D RoI of reconstructed okra volumes from various
+    methods. Each RoI spans 7 consecutive slices where the test is
+    different from all of the previously scanned objects.}
 \begin{tabular}{|l|c|c|c|c|c|}
-\hline
-                   &  \textbf{\begin{tabular}[c]{@{}c@{}}Ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}c@{}}Spatially\\Varying\\prior + l1-ls\end{tabular}} \\ \hline
-\textbf{red RoI}   & 1 (ideal)                     & 0.74        & 0.84       & 0.86                                                               & \textcolor{red}{0.88}                                                                  \\ \hline
-\textbf{green RoI} & 1 (ideal)                     & 0.80        & \textcolor{red}{0.86}       & 0.80                                                               & \textcolor{red}{0.86}                                                                  \\ \hline
+\hline &
+\textbf{\begin{tabular}[c]{@{}c@{}}Ground\\truth\end{tabular}} &
+\textbf{FDK} & \textbf{l1-ls} &
+\textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior +
+    l1-ls\end{tabular}} &
+\textbf{\begin{tabular}[c]{@{}c@{}c@{}}Spatially\\Varying\\prior +
+    l1-ls\end{tabular}} \\ \hline \textbf{red RoI} & 1 (ideal) & 0.74
+& 0.84 & 0.86 & \textcolor{red}{0.88} \\ \hline \textbf{green RoI} & 1
+(ideal) & 0.80 & \textcolor{red}{0.86} & 0.80 & \textcolor{red}{0.86}
+\\ \hline
 \end{tabular}
 \label{table:okra_ssim}
 \end{table}
@@ -997,13 +1141,16 @@ The ground truth consists of FDK reconstructed volumes from a set of
 set of 45 projections, i.e. $2.5\%$ of the projection views from which
 ground truth was reconstructed. The selected 3D ground truth of
 template volumes, test volume, as well as the 3D reconstructions are
-shown in~\cite{supp_paper}. One of the slices of the
-reconstructed volumes and its zoomed-in RoI are shown in
-Figs.~\ref{fig:sprouts_3D_results} and ~\ref{fig:sprouts_zoomed_3D_results} respectively. For the sake of exposition, the red region of interest (RoI) has been culled out from 7
-consecutive slices in the 3D volume to indicate new structures; other
-changes can be viewed in the video. Tables~\ref{table:okra_ssim} and \ref{table:sprouts_ssim} show the improvement in the Structure
+shown in~\cite{supp_paper}. One of the slices of the reconstructed
+volumes and its zoomed-in RoI are shown in
+Figs.~\ref{fig:sprouts_3D_results} and
+~\ref{fig:sprouts_zoomed_3D_results} respectively. For the sake of
+exposition, the red region of interest (RoI) has been culled out from
+7 consecutive slices in the 3D volume to indicate new structures;
+other changes can be viewed in the video. Tables~\ref{table:okra_ssim}
+and \ref{table:sprouts_ssim} show the improvement in the Structure
 Similarity Index (SSIM) of the reconstructed new regions as compared
-to other methods. 
+to other methods.
 
 \subsection{\textbf{More results on CT-guided radio-frequency ablation data}}
 
@@ -1141,7 +1288,7 @@ knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of
 \hline
    & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Spatially-Varying\\prior + l1-ls\end{tabular}} \\\hline
 %\textbf{\begin{tabular}[c]{@{}c@{}}Potato\\size:(150,150,100)\\45 views\end{tabular}}  & 5 sec. & 8 min.  & 54 min. & 53 min. \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}Okra\\size:(338,338,123)\\45 views\end{tabular}} & 6 sec. & 8 min.  & 25 min. & 27 min. \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}Okra\\size:(338,338,123)\\45 views\end{tabular}} & 6 sec. & 8 min.  & 25 min. & 60 min. \\ \hline
 \textbf{\begin{tabular}[c]{@{}c@{}}Sprouts\\size:(130,130,130)\\xx views\end{tabular}}  &  &   &  &  \\ \hline
 \end{tabular}
 \label{table:Computation_time_3D}
@@ -1199,21 +1346,63 @@ Table~\ref{table:potato_ssim} shows the Structure Similarity Index (SSIM) of the
 \end{figure}
 %------------------------------------------------------------------------
 \begin{table}[!h]
-\caption{SSIM of 3D reconstructed potato volumes from various methods. Each RoI spans 7 consecutive slices where the test is different from all of the previously scanned objects. In this dataset alone, the new changes are in a homogeneous background. Hence, the FDK performs the best when the RoI alone is considered. However, it fails when the entire volume is considered due to the prominent streaky artefacts.}
+\caption{SSIM of 3D reconstructed potato volumes from various
+  methods. Each RoI spans 7 consecutive slices where the test is
+  different from all of the previously scanned objects. In this
+  dataset alone, the new changes are in a homogeneous
+  background. Hence, the FDK performs the best when the RoI alone is
+  considered. However, it fails when the entire volume is considered
+  due to the prominent streaky artefacts.}
 \begin{tabular}{|l|c|c|c|c|c|}
-\hline
-                   & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior\\+ l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Spatially-Varying\\prior\\+ l1-ls\end{tabular}} \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}red RoI\\volume\end{tabular}}   & 1 (ideal)                     & \textcolor{red}{0.94}        & 0.88      & 0.71                                                               & 0.85                                                            \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}green RoI\\volume\end{tabular}} & 1 (ideal)                     & \textcolor{red}{0.92}        & 0.91      & 0.87                                                               & 0.88                                                                  \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}cyan  RoI\\volume\end{tabular}} & 1 (ideal)                     &  0.88       & \textcolor{red}{0.94}    & 0.92                                                            & 0.89                                                                  \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}full \\ volume\end{tabular}} & 1 (ideal)                     & 0.74        & 0.81       & \textcolor{red}{0.86}                                                               & \textcolor{red}{0.86}                                                                  \\ \hline
+\hline &
+\textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} &
+\textbf{FDK} & \textbf{l1-ls} &
+\textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior\\+
+    l1-ls\end{tabular}} &
+\textbf{\begin{tabular}[c]{@{}c@{}}Spatially-Varying\\prior\\+
+    l1-ls\end{tabular}} \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}red RoI\\volume\end{tabular}} & 1
+(ideal) & \textcolor{red}{0.94} & 0.88 & 0.71 & 0.85 \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}green RoI\\volume\end{tabular}} & 1
+(ideal) & \textcolor{red}{0.92} & 0.91 & 0.87 & 0.88 \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}cyan RoI\\volume\end{tabular}} & 1
+(ideal) & 0.88 & \textcolor{red}{0.94} & 0.92 & 0.89 \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}full \\ volume\end{tabular}} & 1
+(ideal) & 0.74 & 0.81 & \textcolor{red}{0.86} & \textcolor{red}{0.86}
+\\ \hline
 \end{tabular}
 \label{table:potato_ssim}
 \end{table}
 
 \subsection{Effect of hyper-parameters}
 \label{subsec:k}
-The parameters $\lambda_1$ and $\lambda_2$ must be chosen empirically or by cross-validation by treating one of the previously scanned objects as test. In our experiments, we had fixed $\lambda_1$ to be 1 and found that this value is nearly data-independent. The value of $\lambda_2$ largely depends on the amount of artefacts we aim to remove by using prior at the cost of their dominance in the new regions. This value was chosen to lie between $0-1$ for our datasets. Finally, the hyper-parameter $k$ defines the sensitivity of the weights map to the difference between the test image and the prior (projection of test onto the space of object-prior). When $k=0$, our method converges to the uniform prior method. As $k$ increases, the weights map starts capturing the new changes in the test, at the cost of detecting a few false positives i.e. false new changes. In other words, as the weights map becomes more sensitive to the difference between the test and object-prior, it becomes more noisy. In order to visualize the effect of the hyper-parameter $k$, we performed 2D reconstructions of okra dataset for different values of $k$. Fig.~\ref{fig:few_view_okra_2D_weights} shows the weights map obtained for each of the $k$ values. We estimate an approximate choice for the optimal value of $k$ by treating one of the object-prior as test and reconstructing it. We also note that although the weights map is heavily influenced by $k$, the final reconstructions are stable for large variations in $k$, as seen in Fig.~\ref{fig:reconstructions_as_k_varies}. Alternatively, in cases where one wishes to completely avoid the use of this hyper-parameter, one can construct a binary weights-map using a learning based method described in~\cite{supp_paper}.
+The parameters $\lambda_1$ and $\lambda_2$ must be chosen empirically
+or by cross-validation by treating one of the previously scanned
+objects as test. In our experiments, we had fixed $\lambda_1$ to be 1
+and found that this value is nearly data-independent. The value of
+$\lambda_2$ largely depends on the amount of artefacts we aim to
+remove by using prior at the cost of their dominance in the new
+regions. This value was chosen to lie between $0-1$ for our
+datasets. Finally, the hyper-parameter $k$ defines the sensitivity of
+the weights map to the difference between the test image and the prior
+(projection of test onto the space of object-prior). When $k=0$, our
+method converges to the uniform prior method. As $k$ increases, the
+weights map starts capturing the new changes in the test, at the cost
+of detecting a few false positives i.e. false new changes. In other
+words, as the weights map becomes more sensitive to the difference
+between the test and object-prior, it becomes more noisy. In order to
+visualize the effect of the hyper-parameter $k$, we performed 2D
+reconstructions of okra dataset for different values of
+$k$. Fig.~\ref{fig:few_view_okra_2D_weights} shows the weights map
+obtained for each of the $k$ values. We estimate an approximate choice
+for the optimal value of $k$ by treating one of the object-prior as
+test and reconstructing it. We also note that although the weights map
+is heavily influenced by $k$, the final reconstructions are stable for
+large variations in $k$, as seen in
+Fig.~\ref{fig:reconstructions_as_k_varies}. Alternatively, in cases
+where one wishes to completely avoid the use of this hyper-parameter,
+one can construct a binary weights-map using a learning based method
+described in~\cite{supp_paper}.
 
 %--------------effect of the value of $k$ on Okra dataset
 
@@ -1327,13 +1516,42 @@ The parameters $\lambda_1$ and $\lambda_2$ must be chosen empirically or by cros
 %--------------------------Conclusion-----------------------
 \section{Conclusions}
 \label{sec:conclusions}
-This work deals with the effective use of priors for tomographic reconstruction in longitudinal studies. We show that we can either use the uniform global prior method or the spatially-varying prior method to our advantage, depending on our goal. We establish the context under which these methods can be used, as outlined in Fig.~\ref{fig:prior_overview}. When we wish to approximately know the location of new changes, we apply an uniform prior because it is fast and sufficient for the task at hand. We also choose a smaller number of views in order to reduce radiation. In addition, we show that when our goal shifts to observing the details of the new changes accurately, we acquire projections from a moderate number of views in order to capture more information. We further combine this with the somewhat slower but more accurate technique of reconstruction-- the spatially-varying prior-based method. This method ensures that the reconstruction of localized new information in the data is not affected by the priors. We have thus improved the state of the art by detecting these regions of change and assigning low prior weights wherever necessary. The probability of presence of a `new region' is enhanced considerably by a novel combination of different reconstruction techniques.  We have validated our technique on medical 2D and real, biological 3D datasets for longitudinal studies. The method is also largely robust to the number of previously scanned objects used. We urge the reader to see the videos of reconstructed volumes in~\cite{supp_paper}. 
+This work deals with the effective use of priors for tomographic
+reconstruction in longitudinal studies. We show that we can either use
+the uniform global prior method or the spatially-varying prior method
+to our advantage, depending on our goal. We establish the context
+under which these methods can be used, as outlined in
+Fig.~\ref{fig:prior_overview}. When we wish to approximately know the
+location of new changes, we apply an uniform prior because it is fast
+and sufficient for the task at hand. We also choose a smaller number
+of views in order to reduce radiation. In addition, we show that when
+our goal shifts to observing the details of the new changes
+accurately, we acquire projections from a moderate number of views in
+order to capture more information. We further combine this with the
+somewhat slower but more accurate technique of reconstruction-- the
+spatially-varying prior-based method. This method ensures that the
+reconstruction of localized new information in the data is not
+affected by the priors. We have thus improved the state of the art by
+detecting these regions of change and assigning low prior weights
+wherever necessary. The probability of presence of a `new region' is
+enhanced considerably by a novel combination of different
+reconstruction techniques.  We have validated our technique on medical
+2D and real, biological 3D datasets for longitudinal studies. The
+method is also largely robust to the number of previously scanned
+objects used. We urge the reader to see the videos of reconstructed
+volumes in~\cite{supp_paper}.
 %Our method has been shown to make the best use of prior
 %only when needed, thus detecting new changes of the test
 %data. 
 
 \section{Acknowledgement}
-We are grateful to Dr. Andrew Kingston for facilitating data collection at the  Australian National University. AR gratefully acknowledges IITB Seed-grant 14IRCCSG012, as well as NVIDIA Corporation for the generous donation of a Titan-X GPU card, which was essential for computing 3D reconstructions for the research reported here. We also thank Dr. Akshay Baheti for providing us with medical data from Tata Memorial Hospital, Mumbai. 
+We are grateful to Dr. Andrew Kingston for facilitating data
+collection at the Australian National University. AR gratefully
+acknowledges IITB Seed-grant 14IRCCSG012, as well as NVIDIA
+Corporation for the generous donation of a Titan-X GPU card, which was
+essential for computing 3D reconstructions for the research reported
+here. We also thank Dr. Akshay Baheti for providing us with medical
+data from Tata Memorial Hospital, Mumbai.
 {%\footnotesize
 \bibliography{tci_ref}}
 \end{document}
