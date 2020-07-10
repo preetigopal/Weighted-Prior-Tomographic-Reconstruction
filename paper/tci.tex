@@ -203,11 +203,11 @@ the LASSO (least absolute shrinkage and selection operator) which
 iteratively solves for the solution by penalizing a combination of
 least squares error and $L_1$-norm of the sparse coefficients
 $\boldsymbol{\theta}$ of the object $\boldsymbol{x}$. If $\boldsymbol{\Psi}$
-represents the sparsity basis i.e. if $\boldsymbol{x} = \boldsymbol{\Psi\theta}$, and 
+represents the sparsity basis, i.e., if $\boldsymbol{x} = \boldsymbol{\Psi\theta}$, and 
 $\boldsymbol{\mathcal{R}}$ represents the acquisition model, then the
 LASSO solution is described by one that minimizes
  \begin{equation}
-J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
+J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} \Psi\theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
 \label{Eq:simple_cs}
  \end{equation}
  We solve this cost function using the popular l1-regularized least
@@ -274,7 +274,7 @@ J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymb
  describes how the uniform prior needs to be modified when accurate
  details of new changes are to be observed. A spatially-varying
  technique offers a solution, the results of which are presented in
- Section~\ref{sec:results_spatially_varying_prior}. Section\ref{sec:discussion}
+ Section~\ref{sec:results_spatially_varying_prior}. Section~\ref{sec:discussion}
  discusses tuning of the hyperparameters involved, and limitations of
  our method. Finally, we conclude with key inferences that can be
  drawn from our work in Section~\ref{sec:conclusions}.
@@ -290,48 +290,64 @@ J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} x}- \boldsymb
 
  \section{Related Work}
 \label{sec:related}
-There exist techniques that aim to reconstruct from few-views in
+The idea of using a reduced number of views is most pronounced in
 specialized applications. For example, in~\cite{Essam2015},
 sparsity-constrained optimization is presented for angiography. Here,
 the regions of interest are the vessels alone and they are highlighted
 by physically inserting a contrast agent, and therefore there is a
-inherent sharper contrast between the vessels and the
-background. In many other general application scenarios like the ones presented in this paper,
-any information about the regions of interest is not known. In other applications where the spatial-gradient of the underlying volume is known to be sparse, the `total variation' method, as used in~\cite{Li2015,Polak2017} can be applied. As we will later see in Figs.\ref{fig:object-prior_test_okra} and~\ref{fig:object-prior_test_sprouts}, the spatial-gradient of many datasets is not sparse. 
+inherent sharper contrast between the vessels and the background.  In
+other applications where the spatial-gradient of the underlying volume
+is known to be sparse, the `total variation' method, as used
+in~\cite{Li2015,Polak2017} can be applied.  In a more generalized
+application scenario, like the ones addressed in this paper, any
+information about the regions of interest is not known, and such
+techniques have limited applicability. 
+
+%  As can be seen
+% in the situatiowe will
+% later see in Figs.\ref{fig:object-prior_test_okra}
+% and~\ref{fig:object-prior_test_sprouts}, the spatial-gradient of many
+% datasets is not sparse.
 
 Most object-prior based reconstruction has been in the areas of
 dynamic CT and 4D-CT. In dynamic CT, the object being scanned
 undergoes changes between successive projection views and hence is not
 stationary even within a single complete scan. In contrast, in 4D-CT,
-a set of 3D CT scans are taken over short intervals of time and all the 3D volumes are reconstructed together. Here, the object undergoes changes between successive scans. ~\cite{PICCS} is one of the earliest work to establish the use of object-prior along with sparsity prior in dynamic CT. Its limitation was the unchecked over-emphasis of the prior on the reconstruction of the test at hand. This limitation was later dealt with by applying very specific object-properties for
-reconstruction. For example, in~\cite{Van2015}, the knowledge of the
-attenuation coefficient of the fluid is used as a prior for
-reconstructing its flow through gravel. In~\cite{Koen2020}, the
-changes across the sucessive scan volumes is assumed to be continuous,
-thus enabling the use of optical flow to model the motion between
-corresponding voxels of different scan volumes. In another
-study~\cite{vincent2017}, changes between successive scans were
-modelled by affine deformation whose parameters were computed for
-motion-correction. Such a correction enables acquisition from fewer
-views than would have otherwise not been possible for reconstruction
-with adequate fidelity. In~\cite{daniil2015}, all the scan volumes are
-reconstructed together using spatio-temporal regularization.
+a set of 3D CT scans are taken over short intervals of time, and the
+object undergoes changes between successive scans.  The reconstruction
+is then performed over the entire set generating several 3D
+volumes. ~\cite{PICCS} is one of the earliest work to establish the
+use of object-prior along with sparsity prior in dynamic CT, in an
+attempt to reduce the number of views. The limitation is the
+unchecked over-emphasis of the prior on the reconstruction of the test
+at hand. This limitation was later dealt with by applying very
+specific object-properties for reconstruction. For example,
+in~\cite{Van2015}, the knowledge of the attenuation coefficient of the
+fluid is used as a prior for reconstructing its flow through
+gravel. In~\cite{Koen2020}, the changes across the sucessive scan
+volumes is assumed to be continuous, thus enabling the use of optical
+flow to model the motion between corresponding voxels of different
+scan volumes. In another study~\cite{vincent2017}, changes between
+successive scans were modelled by affine deformation whose parameters
+were computed for motion-correction. Such a correction enables
+acquisition from fewer views than would have otherwise not been
+possible for reconstruction with adequate
+fidelity. In~\cite{daniil2015}, all the scan volumes are reconstructed
+together using spatio-temporal regularization.
 
 
 \section{Contributions}
 \label{sec:contributions}
 This paper focusses on few-views reconstruction with an emphasis on
-longitudinal studies.  Fig.~\ref{fig:prior_overview} provides an
-overview. In contrast to the object prior-based studies
-mentioned above, we reconstruct the current test object without any
-assumption of continuity of changes or some knowledge of the
-attenuation coefficients of the structures. We do not make any
-temporal assumption in terms of time intervals such as in 4D CT
-scans. We use the current measurements from few-views and previous
-scans of the same object. A key idea in our work is the starting point
--- the new test volume is close to the space spanned by the
-eigenvectors of the multiple representative previously scanned
-objects.
+longitudinal studies. In contrast to the object prior-based studies mentioned
+above, we reconstruct the current test object without any assumption
+of continuity of changes or some knowledge of the attenuation
+coefficients of the structures. We do not make any temporal assumption
+in terms of time intervals -- prior scans could be months apart. We
+use the current measurements from few-views and previous scans of the
+same object. A key idea in our work is the starting point -- the new
+test volume is close to the space spanned by the eigenvectors of the
+multiple representative previously scanned objects.
 
 % We utilize the uniform global eigenspace prior presented
 % in~\cite{my_dicta_paper} which assume 
@@ -343,6 +359,8 @@ of the prior by estimating and imposing spatially-varying weights to
 the prior in order to reconstruct new structures accurately. This
 spatially-varying prior tunes the effect of the templates in different
 regions of the reconstruction.
+
+Fig.~\ref{fig:prior_overview} provides an overview.
 
  %Various forms of object priors have been used for reconstruction from limited views (`few-views'). In ~\cite{Van2014}, the time-varying region within an object is computed by modelling it as a B-spline.
 % \cite{PICCS} uses only a single template and enforces a uniform similarity between the current object's reconstruction and the single template. 
