@@ -325,7 +325,7 @@ specific object-properties for reconstruction. For example,
 in~\cite{Van2015}, the knowledge of the attenuation coefficient of the
 fluid is used as a prior for reconstructing its flow through
 gravel. In~\cite{Koen2020}, the changes across the sucessive scan
-volumes is assumed to be continuous, thus enabling the use of optical
+volumes are assumed to be continuous, thus enabling the use of optical
 flow to model the motion between corresponding voxels of different
 scan volumes. In another study~\cite{vincent2017}, changes between
 successive scans were modelled by affine deformation whose parameters
@@ -556,9 +556,9 @@ reconstructions are quantitatively compared using SSIM.\\
 %---------------------------------Uniform section---------------------
 \section{Method: uniform prior-based reconstruction}
 \label{sec:method_uniform_prior}
-Having presented the application, we first review the algorithm~\cite{my_dicta_paper} for a uniform (global) prior-based reconstruction. Principal Component Analysis (PCA) has been traditionally used to find the significant modes of (Gaussian corrupted) data. In this regard, it has been widely applied in the context of data compression. However, PCA can also be seen as a tool to provide an orthogonal basis to represent the space in which the test data could lie. This space is constructed from the available set of previously scanned objects which must cover a realistically representative range of structures. We first present the eigenspace-cum-CS prior-based reconstruction, which was shown~\cite{my_dicta_paper} to be better when compared to dictionary-based priors. %A preliminary version of this particular method was earlier presented in \cite{my_dicta_paper}. 
+Having presented the application, we first review the algorithm~\cite{my_dicta_paper} for a uniform (global) prior-based reconstruction. Principal Component Analysis (PCA) has been traditionally used to find the significant modes of (Gaussian corrupted) data. In this regard, it has been widely applied in the context of data compression. However, PCA can also be seen as a tool to provide an orthogonal basis to represent the space in which most of the test data could lie (except the new changes). This space is constructed from the available set of previously scanned objects which must cover a realistically representative range of structures. %, which was shown~\cite{my_dicta_paper} to be better when compared to dictionary-based priors. %A preliminary version of this particular method was earlier presented in \cite{my_dicta_paper}. 
 
-To begin with, when an object is scanned multiple times, a set of high quality reconstructions (i.e. reconstructions from a dense set of projection views) may be chosen as object-prior for the reconstruction of future scan volumes, which in turn, may be scanned using far fewer measurements. The eigenspace $E_{\text{high}}$ of the $L$ previously scanned objects $Q_1,Q_2,...,Q_L$ is pre-computed. Here, it is assumed that the test volume can be expressed as a sparse linear combination of the principal components (eigenvectors of the covariance matrix) obtained from a group of structurally similar volumes. Hence, the object-prior is represented by means of PCA. For the eigenspace to encompass a range of possible structures in the test slice, the object-prior must represent a wide structural range. Moreover, if these volumes are not aligned, then they must be first registered before computing the prior. The prior is built by computing the covariance matrix from the template set $\{Q_i\}_{i=1}^L$. \emph{The space spanned by the eigenvectors $\{\boldsymbol{V_k}\}_{k=1}^{L-1}$ (eigenspace) of the covariance matrix is the global prior and is assumed to contain any test slice that is similar, but not necessarily identical to the object-prior.}  We use all of the $L-1$ orthogonal eigenvectors as a basis to represent the unknown test volume. Let $\boldsymbol{\mu}$ denote the mean of the previously scanned objects, and $\boldsymbol{\alpha}$ the vector of eigen-coefficients of the test scan, of which $\alpha_k$ is the $k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed, the test is reconstructed by minimizing the following cost function:
+We first present the eigenspace-cum-CS prior-based reconstruction. To begin with, when an object is scanned multiple times, a set of high quality reconstructions (i.e. reconstructions from a dense set of projection views) may be chosen as object-prior for the reconstruction of future scan volumes, which in turn, may be scanned using far fewer measurements. The eigenspace $E_{\text{high}}$ of the $L$ previously scanned objects $Q_1,Q_2,...,Q_L$ is pre-computed. Here, it is assumed that the test volume can be expressed as a sparse linear combination of the principal components (eigenvectors of the covariance matrix) obtained from a group of structurally similar volumes. Hence, the object-prior is represented by means of PCA. For the eigenspace to encompass a range of possible structures in the test slice, the object-prior must represent a wide structural range. Moreover, if these volumes are not aligned, then they must be first registered before computing the prior. The prior is built by computing the covariance matrix from the template set $\{Q_i\}_{i=1}^L$. \emph{The space spanned by the eigenvectors $\{\boldsymbol{V_k}\}_{k=1}^{L-1}$ (eigenspace) of the covariance matrix is the global prior and is assumed to contain any test slice that is similar, but not necessarily identical to the object-prior.}  We use all of the $L-1$ orthogonal eigenvectors as a basis to represent the unknown test volume. Let $\boldsymbol{\mu}$ denote the mean of the previously scanned objects, and $\boldsymbol{\alpha}$ the vector of eigen-coefficients of the test scan, of which $\alpha_k$ is the $k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed, the test is reconstructed by minimizing the following cost function:
 \vspace{4mm}
  \begin{equation}
    \setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
@@ -588,13 +588,19 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
    code will be made available to the community.} scans of biological
  specimens in a longitudinal setting. These datasets in the form of
  \emph{raw cone-beam projection measurements} were acquired from a lab
- at the Australian National University (ANU). %We emphasize that in
- most of the literature on tomographic reconstruction, the results are
- shown on reconstruction from projections \emph{simulated} from 3D
- volumes. This is because most CT scanners do not reveal the raw
- projections, and instead output only the full reconstructed
- volumes. Moreover, the process of conversion from the projections to
- the full volumes is proprietary. \emph{Departing from this, we
+ at the Australian National University (ANU). Data from commercially
+ available CT machines is not suitable because most CT scanners do
+ not reveal the raw measurements, and instead output only the full
+ reconstructed volumes. Moreover, the process of conversion from the
+ projections to the full volumes is proprietary.
+ %We emphasize that in
+% most of the literature on tomographic reconstruction, the results are
+ %shown on reconstruction from projections \emph{simulated} from 3D
+ %volumes. This is because most CT scanners do not reveal the raw
+ %projections, and instead output only the full reconstructed
+ %volumes. Moreover, the process of conversion from the projections to
+ %the full volumes is proprietary.
+ \emph{Departing from this, we
    demonstrate reconstruction results from raw projection data.}
 In all figures in this section, `uniform prior' refers to optimizing Eq.~\ref{eq:spatially-varying_prior} with $\boldsymbol{W}(x,y,z)=1$.
 %----------------------------------------------------------
@@ -1297,7 +1303,7 @@ suited to applications where we wish to observe the intricate details
 of those new changes. This distinction in the techniques used has not
 been studied earlier in
 literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our
-knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sec.~\ref{sec:results}. We now discuss the need for registration between object-prior and the test, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
+knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior}. We now discuss the need for registration between object-prior and the test, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
 
 \begin{table}[!h]
   \centering
@@ -1307,7 +1313,7 @@ knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of
    & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior + l1-ls\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Spatially-Varying\\prior + l1-ls\end{tabular}} \\\hline
 %\textbf{\begin{tabular}[c]{@{}c@{}}Potato\\size:(150,150,100)\\45 views\end{tabular}}  & 5 sec. & 8 min.  & 54 min. & 53 min. \\ \hline
 \textbf{\begin{tabular}[c]{@{}c@{}}Okra\\size:(338,338,123)\\45 views\end{tabular}} & 6 sec. & 8 min.  & 25 min. & 60 min. \\ \hline
-\textbf{\begin{tabular}[c]{@{}c@{}}Sprouts\\size:(130,130,130)\\xx views\end{tabular}}  &  &   &  &  \\ \hline
+\textbf{\begin{tabular}[c]{@{}c@{}}Sprouts\\size:(130,130,130)\\xx views\end{tabular}}  & 6 sec. & 3 hrs. & 60 min. &  \\ \hline
 \end{tabular}
 \label{table:Computation_time_3D}
 \end{table}
