@@ -295,51 +295,8 @@ J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} \Psi\theta}- 
 
  \section{Related Work}
 \label{sec:related}
-The idea of using a reduced number of views is most pronounced in
-specialized applications. For example, in~\cite{Essam2015},
-sparsity-constrained optimization is presented for angiography. Here,
-the regions of interest are the vessels alone and they are highlighted
-by physically inserting a contrast agent, and therefore there is a
-inherent sharper contrast between the vessels and the background.  In
-other applications where the spatial-gradient of the underlying volume
-is known to be sparse, the `total variation' method, as used
-in~\cite{Li2015,Polak2017} can be applied.  In a more generalized
-application scenario, like the ones addressed in this paper, any
-information about the regions of interest is not known, and such
-techniques have limited applicability. 
-
-%  As can be seen
-% in the situatiowe will
-% later see in Figs.\ref{fig:object-prior_test_okra}
-% and~\ref{fig:object-prior_test_sprouts}, the spatial-gradient of many
-% datasets is not sparse.
-
-Most object-prior based reconstruction has been in the areas of
-dynamic CT and 4D-CT. In dynamic CT, the object being scanned
-undergoes changes between successive projection views and hence is not
-stationary even within a single complete scan. In contrast, in 4D-CT,
-a set of 3D CT scans are taken over short intervals of time, and the
-object undergoes changes between successive scans.  The reconstruction
-is then performed over the entire set generating several 3D
-volumes. ~\cite{PICCS} is one of the earliest work to establish the
-use of object-prior along with sparsity prior in dynamic CT, in an
-attempt to reduce the number of views. The limitation is the
-unchecked over-emphasis of the prior on the reconstruction of the test
-at hand. This limitation was later dealt with by applying very
-specific object-properties for reconstruction. For example,
-in~\cite{Van2015}, the knowledge of the attenuation coefficient of the
-fluid is used as a prior for reconstructing its flow through
-gravel. In~\cite{Koen2020}, the changes across the sucessive scan
-volumes are assumed to be continuous, thus enabling the use of optical
-flow to model the motion between corresponding voxels of different
-scan volumes. In another study~\cite{vincent2017}, changes between
-successive scans were modelled by affine deformation whose parameters
-were computed for motion-correction. Such a correction enables
-acquisition from fewer views than would have otherwise not been
-possible for reconstruction with adequate
-fidelity. In~\cite{daniil2015}, all the scan volumes are reconstructed
-together using spatio-temporal regularization.
-
+In this section, we survey the existing literature on tomographic reconstruction from undersampled measurements using object priors. In most cases, the object prior consists of an object reconstructed to high quality from a large number of projection angles. One of the earliest pieces of work in this area is the well-cited PICCS method~\cite{PICCS}, which enforces a robust-norm based similarity between the object to be reconstructed (called the `test' henceforth) and the object prior, in addition to a sparsity prior on the test. However in such a technique, there is no inherent mechanism to prevent the prior from overwhelming the current reconstruction, and choice of relative weights between the object and sparsity priors is difficult. A closely related method called PIRPLE was proposed in~\cite{pirple}, with additional steps to register the object prior and the test and a somewhat more flexible combination of data fidelity terms, sparsity prior and object prior. However, this method too has similar limitations as PICCS. In some pieces of work, the object prior is projected in the same angles as the current set of test measurements, and a set of projection differences is computed. These projection differences are essentially tomographic projections of the difference between the unknown test and the known object prior. Hence, a variety of reconstruction algorithms can be used to estimate such a difference image which can then be added to the object prior to yield the final estimate of the test. Such methods have been proposed in~\cite{Pourmorteza2015,Lee2012}. However, the reconstruction of the difference image will inherently contain artifacts due to a sparse set of projections, and these artifacts will appear in the final reconstruction as there is no mechanism to mitigate them (unlike the method that we propose). In some recent techniques such as~\cite{Marjolein2016}, additional knowledge regarding regions of most likely change between the test and object prior is assumed, and lower weights are assigned to the prior in those regions. However, this is not done in a data driven manner and relies on additional expert domain knowledge which may not be available or which may be infeasible to acquire. There exists a fairly large-sized body of literature for reconstruction of structurally changing objects. In such cases, it may be infeasible to gather a large number of projections at every time instant. Moreover, there is additional temporal redundancy available which can reduce the required sample complexity for good reconstruction, and at the same time, tracking structural changes across time is of paramount importance. Many interesting approaches for this have been proposed in~\cite{daniil2015,koen2020, Van2015,HaoGao,Van2014}. These approaches variously use 4D sparsifying transforms for exploiting spatio-temporal redundancy~\cite{daniil2015}, robust principal components analysis assuming that the object consists of a large static part (background) and a sparse moving part (foreground)~\cite{HaoGao}, optical flow computations between projections (at different time instances) of the dynamic nonrigid object~\cite{koen2020} with additional key-frame and residual modelling in~\cite{Guangming2019}, spline-based models for tracking the regions of change in an SIRT framework~\cite{Van2014}, or knowledge of fluid models (piecewise constant shapes of attenuation curves in the dynamic region) in an SIRT framework~\cite{HaoGao}. However all these techniques ~\cite{daniil2015,koen2020,Van2015,HaoGao,Van2014} essentially reconstruct all the different stages of the object simultaneously, and use the extra redundancy across time simultaneously. However, in the scenario of a longitudinal study (where projection measurements are acquired at instants that are several weeks apart) which we consider in this paper, such approaches are not feasible. A longitudinal study will necessarily require reconstruction results after acquisition of each set of measurements. 
+In this paper, we present a technique that makes use of multiple object priors, corresponding to high quality reconstructions of similar objects across time. We use these priors to improve the reconstruction of the test from largely undersampled measurements. In particular, we define the regions of change between the test and the eigenspace spanned by the previous high quality object priors in a purely data driven manner. Very importantly, our technique clearly differentiates between genuine structural changes and ``changes'' that appear due to undersampling artefacts. Since we use a statistical model with multiple object priors, we avoid the problem of selecting an appropriate single object prior unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and also make use of the additional information available in the multiple priors. 
 
 \section{Contributions}
 \label{sec:contributions}
@@ -395,15 +352,16 @@ Fig.~\ref{fig:prior_overview} provides an overview.
 
 In summary, the key contributions are
 \begin{itemize}
-\item We create and present new 3D biological datasets, and as seen in
-  Fig.~\ref{fig:story} demonstrate the use of object priors when very
-  few views are used. More results appear in
-  Section~\ref{sec:results_uniform_prior} and in the supplementary
-  material.  Our results consist of 3D reconstructions from real
-  cone-beam projections.
-  \item The scenarios where a uniform object prior is sufficient for
-    the application at hand, and the scenarios for which it will fail,
-    are demonstrated. This leads to the idea of a weights map
+\item We create new 3D biological datasets (Section~\ref{sec:datasets}) and
+  present results on real cone-beam projections. Our datasets and code
+  will be made available to the community.
+  \item As seen in Fig.~\ref{fig:story}, we demonstrate the use of
+    uniform priors when very few views are used. More results appear
+    in Section~\ref{sec:results_uniform_prior} and in the
+    supplementary material.
+  \item We discuss the scenarios where a uniform object prior is
+    sufficient for the application at hand, and the scenarios for
+    which it will fail . This leads to the idea of a weights map
     designed to depict the location and strength of new changes at
     every voxel. A novel algorithm is presented to build this map from
     sub-sampled measurements of the test and a set of high quality
@@ -415,7 +373,60 @@ In summary, the key contributions are
     longitudinal studies with data obtained in a clinical setting from
     a live teaching and
     research hospital 
- \end{itemize}
+\end{itemize}
+
+%-------------------------------Dataset----------------------------
+\section{Datasets}
+\label{sec:datasets}
+In this sections, we lay the details of all the datasets used in this work.
+\subsection{Real measurements of scanned volumes}
+These datasets in the form of raw cone-beam projection measurements were acquired from a lab
+ at the Australian National University (ANU). Data from commercially
+ available CT machines is not suitable because most CT scanners do
+ not reveal the raw measurements, and instead output only the full
+ reconstructed volumes. Moreover, the process of conversion from the
+ projections to the full volumes is proprietary. Departing from this, we
+ demonstrate reconstruction results (in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior} from the following raw projection data.\\
+ 
+\textbf{Okra:} This dataset is that of an Okra specimen consisting of its five
+scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements
+consisted of real circular cone-beam projections from 450 views, each of size
+336$\times$156. The corresponding size of the reconstructed volume is
+338$\times$338$\times$123. Prior to the first scan, two holes were
+drilled on the surface of the specimen. This was followed by four
+scans, each after introducing one new cut. The specimen was kept in
+the same position throughout the acquisitions. In cases where such an
+alignment is not present, all the template volumes must be pre-aligned
+before computing the eigenspace. The test must be registered to the
+object-prior after its preliminary pilot reconstruction. The ground
+truth consists of volumes reconstructed using the Feldkamp-Davis-Kress
+(FDK) algorithm~\cite{FDK} from the full set of 450 view
+projections. The test volume was reconstructed from a partial set of
+45 projections, i.e., $10\%$ of the projection views from which ground
+truth was reconstructed.\\
+
+\textbf{Potato:} This dataset consisted of four scans of the humble potato (Fig.~\ref{fig:object-prior_test_potato_A}). Measurements from each scan consisted of real circular cone-beam projections from 900 views, each of size 150$\times$150. The corresponding size of the reconstructed volume is 150$\times$150$\times$100. While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato.  Projections were obtained using circular cone beam geometry.  %Further, this alignment can be refined following every update of the reconstructed test volume.
+The ground truth consists of FDK reconstructions from the full set of acquired measurements from 900 projection views. The test volume was reconstructed using measurements from 45 projection views, i.e., $5\%$ of the projection views from which ground truth was reconstructed.
+\subsection{Simulated measurements from real-life reconstructed volumes}
+\textbf{Sprouts:} This 3D dataset, which was also obtained at ANU, consists of six reconstructed
+volumes corresponding to six scans of an in-vivo sprout specimen
+imaged at its various stages of growth
+(Fig.~\ref{fig:object-prior_test_sprouts}). Projections were generated
+from the given volume of size 130$\times$130$\times$130. The ground
+truth consists of FDK reconstructed volumes from a set of 1800 view
+projections. The test volume was reconstructed from partial set of 45
+projections, i.e., $2.5\%$ of the projection views from which ground
+truth was reconstructed.\\
+
+\textbf{Radio-frequency ablation:} We have used this dataset to
+illustrate an application where \textit{both} uniform and spatially-varying priors are
+useful. The data~\footnote{Source: Tata Memorial
+  Centre~\cite{tmh}, Parel, Mumbai.  This is the national
+  comprehensive centre for the prevention, treatment, education and
+  research in cancer, and is recognized as one of the leading cancer
+  centres in India.} consists of simulated parallel beam measurements of 2D slices
+of the organ (liver) at different stages of the scan. The details of this study are presented in the next section.
+
 
 %--------------------------------THM section-------------------------
 
@@ -424,11 +435,7 @@ In summary, the key contributions are
 Before diving into the details of the uniform and the
 spatially-varying prior methods, we first show how both the
 techniques can be applied to our advantage in a real-life medical
-longitudinal study. Here, our data~\footnote{Source: Tata Memorial
-  Centre~\cite{tmh}, Parel, Mumbai.  This is the national
-  comprehensive centre for the prevention, treatment, education and
-  research in cancer, and is recognized as one of the leading cancer
-  centres in India.} consists of successive scans of the liver taken
+longitudinal study. Here, our data consists of successive scans of the liver taken
 during a radio-frequency ablation procedure. In such a
 procedure~\cite{Dong2015}, the physician inserts a thin needle-like
 probe into the organ. Repeated CT scans of the patient need to be
@@ -591,15 +598,8 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  \label{sec:results_uniform_prior}
 
  
- The proposed method has been validated on new\footnote {These and our
-   code will be made available to the community.} scans of biological
- specimens in a longitudinal setting. These datasets in the form of
- \emph{raw cone-beam projection measurements} were acquired from a lab
- at the Australian National University (ANU). Data from commercially
- available CT machines is not suitable because most CT scanners do
- not reveal the raw measurements, and instead output only the full
- reconstructed volumes. Moreover, the process of conversion from the
- projections to the full volumes is proprietary.
+ The proposed method has been validated on new scans of biological
+ specimens in a longitudinal setting. 
  %We emphasize that in
 % most of the literature on tomographic reconstruction, the results are
  %shown on reconstruction from projections \emph{simulated} from 3D
@@ -607,37 +607,20 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  %projections, and instead output only the full reconstructed
  %volumes. Moreover, the process of conversion from the projections to
  %the full volumes is proprietary.
- \emph{Departing from this, we
-   demonstrate reconstruction results from raw projection data.}
+
 %In all figures in this section, `uniform prior' refers to optimizing Eq.~\ref{eq:spatially-varying_prior} with $\boldsymbol{W}(x,y,z)=1$.
 %----------------------------------------------------------
 %-------------------------------------------------
 \subsubsection{\textbf{Okra dataset}}
 \label{Sec:okra_uniform}
-Our first dataset is that of an Okra specimen consisting of its five
-scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements
-consisted of real cone-beam projections from 450 views, each of size
-336$\times$156. The corresponding size of the reconstructed volume is
-338$\times$338$\times$123. Prior to the first scan, two holes were
-drilled on the surface of the specimen. This was followed by four
-scans, each after introducing one new cut. The specimen was kept in
-the same position throughout the acquisitions. In cases where such an
-alignment is not present, all the template volumes must be pre-aligned
-before computing the eigenspace. The test must be registered to the
-object-prior after its preliminary pilot reconstruction. The ground
-truth consists of volumes reconstructed using the Feldkamp-Davis-Kress
-(FDK) algorithm~\cite{FDK} from the full set of 450 view
-projections. The test volume was reconstructed from a partial set of
-45 projections, i.e., $10\%$ of the projection views from which ground
-truth was reconstructed. The selected 3D ground truth of template
-volumes, the test volume as well as the 3D reconstructions can be seen
-in the supplementary material~\cite{supp_paper}. One of the slices of
-the reconstructed volumes is shown in
-Fig.~\ref{fig:okra_3D_results}. The red and green 3D RoI in the video
-and images show the regions where new changes are present. Based on
-the potato and the okra experiments, we see that our method is able to
-\emph{discover both} the presence of a new structure, as well as the
-absence of a structure.
+ One of the slices of the reconstructed volumes is shown in
+ Fig.~\ref{fig:okra_3D_results_uniform}. The SSIM values presented in
+ Table~\ref{table:okra_ssim_full_volume} show that the presence of a
+ unifrom object prior significantly improves the overall
+ reconstruction in comparison with the usage of sparsity prior alone.
+ The selected 3D ground truth of template volumes, the test volume as
+ well as the 3D reconstructions can be seen in the supplementary
+ material~\cite{supp_paper}.
 
 
 
@@ -699,14 +682,20 @@ absence of a structure.
 \end{tabular}
 \label{table:okra_ssim_full_volume}
 \end{table}
+%----------------------------------------------------
 \subsubsection{\textbf{Sprouts dataset}}
 \label{Sec:sprouts}
-The second dataset consists of six scans of an in vivo
-sprout specimen imaged at its various stages of growth
-(Fig.~\ref{fig:object-prior_test_sprouts}). Projections were generated from the given volume of size 130$\times$130$\times$130. In contrast to the scientific
-experiment performed for the case of the okra where we
-introduced man-made defects, the changes here are purely the work of
-nature.
+ In contrast to the scientific experiment performed for the case of
+ the okra where we introduced man-made defects, the changes here are
+ purely the work of nature. One of the slices of the reconstructed
+ volumes is shown in
+ Fig.~\ref{fig:sprouts_3D_results_uniform}. Table~\ref{table:sprouts_ssim_full_volume}
+ shows the SSIM of the full reconstructed volumes.  Here again, the
+ presence of a unifrom object prior significantly improves the overall
+ reconstruction in comparison with the usage of sparsity prior alone.
+ The selected 3D ground truth of template volumes, the test volume as
+ well as the 3D reconstructions can be seen in the supplementary
+ material~\cite{supp_paper}.
 %-------------------------sprouts data
 
 \begin{figure}[!h]
@@ -780,7 +769,7 @@ nature.
        regions) and (e) new information detected in the regions of
        interest. The reconstructed volumes can be viewed in the supplementary material
        ~\cite{supp_paper}.} 
-\label{fig:sprouts_3D_results}
+\label{fig:sprouts_3D_results_uniform}
 %\addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
 
@@ -792,7 +781,7 @@ nature.
                    & \textbf{\begin{tabular}[c]{@{}c@{}}ground\\truth\end{tabular}} & \textbf{FDK} & \textbf{l1-ls} & \textbf{\begin{tabular}[c]{@{}c@{}}Uniform\\prior + l1-ls\end{tabular}} \\ \hline
 \textbf{Full volume}   & 1 (ideal)                    & 0.91        & 0.82       & \textcolor{red}{0.95}                                                                                                                       \\ \hline
 \end{tabular}
-\label{table:sprouts_ssim}
+\label{table:sprouts_ssim_full_volume}
 \end{table}
 %----------------------------------------------------------------------
 \section{Spatially-Varying prior-based reconstruction}
@@ -1040,8 +1029,10 @@ tomographic data of biological and medical specimens. The results
 below demonstrate the advantage of the spatially-varying prior
 method over the uniform method.
 
-
-
+\subsubsection{\textbf{Okra dataset}}
+\label{Sec:okra_spatially_varying}
+The red and green 3D RoI in the video
+and images show the regions where new changes are present. 
 
 %----------------------------------------------------
 
@@ -1099,7 +1090,7 @@ method over the uniform method.
 
 
 \subsubsection{\textbf{Sprouts dataset}}
-\label{Sec:sprouts}
+\label{Sec:sprouts_spatially_varying}
  %-----------------------------sprouts 3D results
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.29\linewidth}
@@ -1168,10 +1159,7 @@ method over the uniform method.
 \end{tabular}
 \label{table:sprouts_ssim}
 \end{table}
-The ground truth consists of FDK reconstructed volumes from a set of
-1800 view projections. The test volume was reconstructed from partial
-set of 45 projections, i.e., $2.5\%$ of the projection views from which
-ground truth was reconstructed. The selected 3D ground truth of
+ The selected 3D ground truth of
 template volumes, test volume, as well as the 3D reconstructions are
 shown in the supplementary material~\cite{supp_paper}. One of the slices of the reconstructed
 volumes and its zoomed-in RoI are shown in
@@ -1331,9 +1319,8 @@ For spatially-varying prior, most of the computation time is used in the generat
 
 \subsection{Reconstruction of homogeneous data}
 \label{Sec:potato}
-While the design of the weights map in the proposed algorithm aims to combine the best of information from both the current measurements and the prior, we found FDK to be preferable when the test object has a simple, homogeneous structure without intricate details. One such dataset is the Potato dataset, the results on which are detailed here.\\
-This dataset consisted of four scans of the humble potato (Fig.~\ref{fig:object-prior_test_potato_A}). Measurements from each scan consisted of real cone-beam projections from 900 views, each of size 150$\times$150. The corresponding size of the reconstructed volume is 150$\times$150$\times$100. While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato.  Projections were obtained using circular cone beam geometry.  %Further, this alignment can be refined following every update of the reconstructed test volume.
-The ground truth consists of FDK reconstructions from the full set of acquired measurements from 900 projection views. The test volume was reconstructed using measurements from 45 projection views, i.e., $5\%$ of the projection views from which ground truth was reconstructed.  The selected 3D
+While the design of the weights map in the proposed algorithm aims to combine the best of information from both the current measurements and the prior, we found FDK to be preferable when the test object has a simple, homogeneous structure without intricate details. One such dataset is the Potato dataset.\\
+ The selected 3D
 ground truth of template volumes, test volume, as well as the 3D reconstructions are shown in the supplementary material~\cite{supp_paper}. Fig.~\ref{fig:potato_3D_results_A} shows a slice from the reconstructed 3D volume. We observe that our method reconstructs new structures while simultaneously reducing streak artefacts.\\ %The new regions detected by different reconstruction methods are shown in Fig.~\ref{fig:weights_map_2Dpotato}. The lower intensities denote new regions which were assigned lower weights. This ensures that the new regions are reconstructed using projection measurements alone, avoiding erroneous influence of the prior.
 Table~\ref{table:potato_ssim} shows the Structure Similarity Index (SSIM) of the reconstructed new regions using various methods. We observe that the FDK performs very well for smaller RoI; as the RoIs get bigger, the FDK reconstructions have poor SSIM due to strong subsampling artefacts. In contrast, the results from l1-ls and our method progressively improve when compared to FDK as the RoIs get bigger. Hence, in practice, one may choose FDK for the case of simple, homogeneous dataset with smaller RoI,  and prefer spatially-varying prior-based reconstruction when the dataset is complex and RoIs are larger.
 %---------------------------------------
@@ -1550,9 +1537,9 @@ described in the supplementary material~\cite{supp_paper}.
 \label{sec:conclusions}
 This work deals with the effective use of priors for tomographic
 reconstruction in longitudinal studies. We show that we can either use
-the uniform prior method or the spatially-varying prior method
-to our advantage, depending on our goal. We establish the context
-under which these methods can be used, as outlined in
+the uniform prior method or the spatially-varying prior method to our
+advantage, depending on our goal. We establish the context under which
+these methods can be used, as outlined in
 Fig.~\ref{fig:prior_overview}. When we wish to approximately know the
 location of new changes, we apply an uniform prior because it is fast
 and sufficient for the task at hand. We also choose a smaller number
@@ -1563,15 +1550,18 @@ order to capture more information. We further combine this with the
 somewhat slower but more accurate technique of reconstruction-- the
 spatially-varying prior-based method. This method ensures that the
 reconstruction of localized new information in the data is not
-affected by the priors. We have thus improved the state of the art by
-detecting these regions of change and assigning low prior weights
-wherever necessary. The probability of presence of a `new region' is
-enhanced considerably by a novel combination of different
-reconstruction techniques.  We have validated our technique on medical
-2D and real, biological 3D datasets for longitudinal studies. The
-method is also largely robust to the number of previously scanned
-objects used. We urge the reader to see the videos of reconstructed
-volumes in the supplementary material~\cite{supp_paper}.
+affected by the priors. Based on the potato and the okra experiments,
+we see that our method is able to \emph{discover both} the presence of
+a new structure, as well as the absence of a structure. We have thus
+improved the state of the art by detecting these regions of change and
+assigning low prior weights wherever necessary. The probability of
+presence of a `new region' is enhanced considerably by a novel
+combination of different reconstruction techniques.  We have validated
+our technique on medical 2D and real, biological 3D datasets for
+longitudinal studies. The method is also largely robust to the number
+of previously scanned objects used. We urge the reader to see the
+videos of reconstructed volumes in the supplementary
+material~\cite{supp_paper}.
 %Our method has been shown to make the best use of prior
 %only when needed, thus detecting new changes of the test
 %data. 
