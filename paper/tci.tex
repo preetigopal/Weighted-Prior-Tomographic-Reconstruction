@@ -192,7 +192,7 @@ sufficient measurements, reconstruction using the conventional
 filtered backprojection (FBP) suffices, as seen in
 Fig.~\ref{fig:story} (first column, 600 views). The figure shows the
 ground truth image (260$\times$260) of naturally growing sprouts at the top
-left (the details of the dataset is postponed to
+left (the details of this dataset is postponed to
 Section~\ref{sec:results_uniform_prior}).
 
 However, in the last decade, reconstruction from reduced views has
@@ -225,46 +225,47 @@ J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} \Psi\theta}- 
  \begin{figure}[t]
 \centering
 	\includegraphics[width=0.45\textwidth]{../images/story/story.png}
-        \caption{Illustration of the use of various priors as the
-          number of views reduces. For extremely large number of views
-          (600 views), the FBP reconstruction (first column) is of
-          very good quality (Structural Similarity Index Metric,
-          SSIM=0.92). As the number of views become limited (100
-          views), the reconstruction using sparsity prior (middle
-          column) is better both visually and quantitatively than FBP
-          (SSIM of 0.90 vs 0.83). If the number of views is
-          drastically reduced (30 views), the presence of both
-          sparsity prior and object prior improves the reconstruction
-          (SSIM = 0.85) when compared to presence of only sparsity
-          prior (SSIM = 0.82) or no prior (SSIM = 0.69). In all cases,
-          the ground truth (260x260) appears in the top left.}
+        \caption{Illustration of the use of various priors in the
+          reconstruction as the number of views reduces. In all cases,
+          the ground truth (260$\times$260) appears in the top left.
+          For extremely large number of views (600 views), the FBP
+          reconstruction (first column) is of very good quality
+          (Structural Similarity Index Metric, SSIM=0.92). As the
+          number of views become limited (100 views), the
+          reconstruction using sparsity prior (middle column) is
+          better both visually and quantitatively than FBP (SSIM of
+          0.90 vs 0.83). If the number of views is drastically reduced
+          (30 views), the presence of both sparsity prior and object
+          prior improves the reconstruction (SSIM=0.85) when compared
+          to presence of only sparsity prior (SSIM=0.82) or no prior
+          (SSIM=0.69).}
  \label{fig:story}
  \end{figure} 
 
- When the number of views is significantly reduced, the sparsity prior
- alone is not sufficient.  In such cases additional information
- specific to the object being scanned (i.e., object prior) is useful
- in further improving the reconstruction.  While this has been done in
- the context of dynamic CT-scans (as discussed in
+ When the number of views is significantly reduced (this paper), the
+ sparsity prior alone is not sufficient.  In such cases additional
+ information specific to the object being scanned (i.e., object prior)
+ is useful in further improving the reconstruction.  While this has
+ been done in the context of dynamic CT-scans (as discussed in
  Section~\ref{sec:related}), in this paper we use a set $S$ of
- previous scans of the same object that is more appropriate in a
- longitudinal context. Specifically, longitudinal studies here refers
- to the acquisition of sequential CT scans of the same subject to
- track time-evolving changes within the subject's interior. As seen in
- Fig.~\ref{fig:story} (last column, 30 views) our method uses the
- prior scans \emph{uniformly} by creating an eigenspace representation
- (Section~\ref{sec:method_uniform_prior}).
+ previous scans of the same object. This is relevant in a longitudinal
+ context: the acquisition of sequential CT scans of the same subject
+ in order to track time-evolving changes within the subject's
+ interior. As seen in Fig.~\ref{fig:story} (last column, 30 views) our
+ method uses the prior scans \emph{uniformly} by creating an
+ eigenspace representation (Section~\ref{sec:method_uniform_prior}).
 
  However, with the use of such an object prior, a new challenge
- emerges. The prior set S may potentially overwhelm the necessary
- details, or since several prior scans are available, finding the
- right prior may be an issue. We therefore seek an algorithm that
- estimates the location and magnitude of new changes in the (unknown)
- test. As we show in Section~\ref{sec:method_spatially_varying_prior},
- this eventually prevents the prior from adversely affecting the
+ emerges. The prior set $S$ may potentially overwhelm the necessary
+ details; when several prior scans are available, finding the right
+ prior is an issue. We therefore seek an algorithm that estimates the
+ location and magnitude of new changes in the (unknown) test. As we
+ show in Section~\ref{sec:method_spatially_varying_prior}, this
+ eventually prevents the prior from adversely affecting the
  reconstruction of new regions in the test. We refer to this method as
- a \textit{spatially-varying} prior-based reconstruction
- routine, that still uses \textit{all} the previous scans in the set $S$.
+ a \textit{spatially-varying} prior-based reconstruction routine, that
+ still uses \textit{all} the previous scans in the set $S$, without
+ using simply the prior scan, or endeavoring to find the ``right'' prior.
 
 
  This paper is organized as follows. After discussing related work in
