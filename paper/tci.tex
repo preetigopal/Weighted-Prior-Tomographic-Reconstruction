@@ -390,7 +390,7 @@ These datasets in the form of raw cone-beam projection measurements were acquire
  demonstrate reconstruction results (in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior} from the following raw projection data.\\
 
  \textbf{Okra:} This dataset is that of an Okra specimen consisting of its five
-scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements
+scans (Figure~\ref{fig:object-prior_test_okra}). The measurements
 consisted of real circular cone-beam projections from 450 views, each of size
 336$\times$156. The corresponding size of the reconstructed volume is
 338$\times$338$\times$123. Prior to the first scan, two holes were
@@ -441,7 +441,7 @@ truth was reconstructed.\\
 \end{figure}
 %----------------------------------------------------
 
-\textbf{Potato:} This dataset consisted of four scans of the humble potato (Fig.~\ref{fig:object-prior_test_potato_A}). Measurements from each scan consisted of real circular cone-beam projections from 900 views, each of size 150$\times$150. The corresponding size of the reconstructed volume is 150$\times$150$\times$100. While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato.  Projections were obtained using circular cone beam geometry.  %Further, this alignment can be refined following every update of the reconstructed test volume.
+\textbf{Potato:} This dataset consisted of four scans of the humble potato (Figure~\ref{fig:object-prior_test_potato_A}). Measurements from each scan consisted of real circular cone-beam projections from 900 views, each of size 150$\times$150. The corresponding size of the reconstructed volume is 150$\times$150$\times$100. While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato.  Projections were obtained using circular cone beam geometry.  %Further, this alignment can be refined following every update of the reconstructed test volume.
 The ground truth consists of FDK reconstructions from the full set of acquired measurements from 900 projection views. The test volume was reconstructed using measurements from 45 projection views, i.e., $5\%$ of the projection views from which ground truth was reconstructed.
 %---------------------------------------
 \begin{figure}[!h]
@@ -476,7 +476,7 @@ The ground truth consists of FDK reconstructions from the full set of acquired m
 \textbf{Sprouts:} This 3D dataset, which was also obtained at ANU, consists of six reconstructed
 volumes corresponding to six scans of an in-vivo sprout specimen
 imaged at its various stages of growth
-(Fig.~\ref{fig:object-prior_test_sprouts}). Projections were generated
+(Figure~\ref{fig:object-prior_test_sprouts}). Projections were generated
 from the given volume of size 130$\times$130$\times$130. The ground
 truth consists of FDK reconstructed volumes from a set of 1800 view
 projections. The test volume was reconstructed from partial set of 45
@@ -525,7 +525,7 @@ truth was reconstructed.\\
 \addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
 
-\textbf{Radio-frequency ablation:} We have used this dataset to
+\textbf{Radio-frequency ablation:} We have used this dataset (Figure~\ref{fig:RFA2_test_object-prior} to
 illustrate an application where \textit{both} uniform and spatially-varying priors are
 useful. The data~\footnote{Source: Tata Memorial
   Centre~\cite{tmh}, Parel, Mumbai.  This is the national
@@ -1054,15 +1054,21 @@ computing weights-maps for all 3D reconstructions.
 \section{Results: Reconstruction by spatially-varying prior}
 \label{sec:results_spatially_varying_prior}
 
-The proposed method has been validated on 2D and 3D synthetic and real
-tomographic data of biological and medical specimens. The results
-below demonstrate the advantage of the spatially-varying prior
-method over the uniform method.
+%The proposed method has been validated on 2D and 3D synthetic and real
+%tomographic data of biological and medical specimens.
+The results below show the advantage of spatially-varying prior over uniform prior while reconstructing details of the new changes within the object.
 
 \subsubsection{\textbf{Okra dataset}}
 \label{Sec:okra_spatially_varying}
-The red and green 3D RoI in the video
-and images show the regions where new changes are present. 
+One of the slices from the reconstructed volumes 
+is shown in Figure.~\ref{fig:okra_3D_results}. The red and green 3D
+RoI in the video and images show the regions where new changes are
+present. The zoomed-in images around the major region of change (red
+RoI) is shown in Figure~\ref{fig:okra_zoomed_3D_results}. As in the
+test, the reconstruction by spatially-varying method shows the absence
+of the deformity and better removal of sub-sampling artefacts when
+compared to FDK and l1-ls. This is also seen in the SSIM values in
+Table~\ref{table:okra_ssim}.
 
 %----------------------------------------------------
 
@@ -1198,11 +1204,24 @@ Figs.~\ref{fig:sprouts_3D_results} and
 exposition, the red region of interest (RoI) has been culled out from
 7 consecutive slices in the 3D volume to indicate new structures;
 other changes can be viewed in the video. Tables~\ref{table:okra_ssim}
-and \ref{table:sprouts_ssim} show the improvement in the Structure
-Similarity Index (SSIM) of the reconstructed new regions as compared
+and \ref{table:sprouts_ssim} show the improvement in SSIM of the reconstructed new regions as compared
 to other methods.
 
-\subsection{\textbf{More results on CT-guided radio-frequency ablation data}}
+%--------------------------------------------------------------------------
+
+
+\section{Discussion}
+\label{sec:discussion}
+The presented uniform prior-based algorithm is suited to applications
+where we wish to detect the location of new changes in an object over
+time, and the presented spatially-varying prior-based algorithm is
+suited to applications where we wish to observe the intricate details
+of those new changes. This distinction in the techniques used has not
+been studied earlier in
+literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our
+knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior}. We now discuss computation times, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
+
+\subsection{\textbf{Realistic imaging protocol}}
 
 %-------------------- RFA 2 new protocol
 \begin{figure}[!h]
@@ -1316,21 +1335,7 @@ Slice t=8 & During, after ablation & 120 & Spatially-Varying \\ \hline
 \end{tabular}\hspace*{-1cm}
 \label{tab:realistic_imaging_protocol}
 \end{table}
-
-%--------------------------------------------------------------------------
-
-
-\section{Discussion}
-\label{sec:discussion}
-The presented uniform prior-based algorithm is suited to applications
-where we wish to detect the location of new changes in an object over
-time, and the presented spatially-varying prior-based algorithm is
-suited to applications where we wish to observe the intricate details
-of those new changes. This distinction in the techniques used has not
-been studied earlier in
-literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our
-knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior}. We now discuss computation times, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
-
+%-----------------------------------------
 \begin{table}[!h]
   \centering
 \caption{Computation time for reconstruction of volumes using various methods. The configuration of the system used was x86\_64 architecture, 62GB RAM, 12-core AMD 3.8GHz processor, with Nvidia GeForce RTX 2080 Ti GPU.}
