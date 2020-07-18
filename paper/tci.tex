@@ -388,8 +388,8 @@ These datasets in the form of raw cone-beam projection measurements were acquire
  reconstructed volumes. Moreover, the process of conversion from the
  projections to the full volumes is proprietary. Departing from this, we
  demonstrate reconstruction results (in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior} from the following raw projection data.\\
- 
-\textbf{Okra:} This dataset is that of an Okra specimen consisting of its five
+
+ \textbf{Okra:} This dataset is that of an Okra specimen consisting of its five
 scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements
 consisted of real circular cone-beam projections from 450 views, each of size
 336$\times$156. The corresponding size of the reconstructed volume is
@@ -405,9 +405,73 @@ truth consists of volumes reconstructed using the Feldkamp-Davis-Kress
 projections. The test volume was reconstructed from a partial set of
 45 projections, i.e., $10\%$ of the projection views from which ground
 truth was reconstructed.\\
+ %--------------------------------okra data-------------------------------
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_1.png}
+\captionsetup{labelformat=empty}       
+ \caption{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/templateCropped_4.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.176\linewidth}
+        \fcolorbox{yellow}{yellow}{\includegraphics[width=\textwidth]{../images/okra/testCropped.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+     \caption{Okra 3D dataset: One slice each from the previously scanned objects (the
+       first four from the left), and one from the test volume
+       (extreme right). In the regions marked in red and green, while
+       all slices have deformities, the test
+       has none.}
+\label{fig:object-prior_test_okra}
+\end{figure}
+%----------------------------------------------------
 
 \textbf{Potato:} This dataset consisted of four scans of the humble potato (Fig.~\ref{fig:object-prior_test_potato_A}). Measurements from each scan consisted of real circular cone-beam projections from 900 views, each of size 150$\times$150. The corresponding size of the reconstructed volume is 150$\times$150$\times$100. While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato.  Projections were obtained using circular cone beam geometry.  %Further, this alignment can be refined following every update of the reconstructed test volume.
 The ground truth consists of FDK reconstructions from the full set of acquired measurements from 900 projection views. The test volume was reconstructed using measurements from 45 projection views, i.e., $5\%$ of the projection views from which ground truth was reconstructed.
+%---------------------------------------
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_1.png}
+\captionsetup{labelformat=empty}       
+ \caption{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.235\linewidth}
+        \fcolorbox{blue}{blue}{\includegraphics[width=\textwidth]{../images/potato/testIm_green.png}}
+\captionsetup{labelformat=empty}
+\caption{}
+\label{fig:potato3D_test}
+     \end{subfigure}
+      \caption{Potato 3D dataset: One slice (slice-A) each from the previously scanned objects (the first three from left) and a slice from the test 
+        volume (extreme right). Notice the appearance of the fourth
+        hole in the test slice. }
+\label{fig:object-prior_test_potato_A}
+\end{figure}
+
 \subsection{Simulated measurements from real-life reconstructed volumes}
 \textbf{Sprouts:} This 3D dataset, which was also obtained at ANU, consists of six reconstructed
 volumes corresponding to six scans of an in-vivo sprout specimen
@@ -418,6 +482,48 @@ truth consists of FDK reconstructed volumes from a set of 1800 view
 projections. The test volume was reconstructed from partial set of 45
 projections, i.e., $2.5\%$ of the projection views from which ground
 truth was reconstructed.\\
+%-------------------------sprouts data
+
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_1.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+    \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}\\
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_4.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/sprouts/template_5.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.29\linewidth}
+        \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+      \caption{Sprouts 3D dataset: One slice each from the previously scanned objects (the first five from left) and a slice from the test (extreme
+        right).}
+\label{fig:object-prior_test_sprouts}
+\addtolength{\textfloatsep}{-0.8cm}
+\end{figure}
 
 \textbf{Radio-frequency ablation:} We have used this dataset to
 illustrate an application where \textit{both} uniform and spatially-varying priors are
@@ -427,32 +533,6 @@ useful. The data~\footnote{Source: Tata Memorial
   research in cancer, and is recognized as one of the leading cancer
   centres in India.} consists of simulated parallel beam measurements of 2D slices
 of the organ (liver) at different stages of the scan. The details of this study are presented in the next section.
-
-
-%--------------------------------THM section-------------------------
-
-\section{Application: Reconstruction for CT-guided radio-ablation study}
-\label{sec:tmh}
-Before diving into the details of the uniform and the
-spatially-varying prior methods, we first show how both the
-techniques can be applied to our advantage in a real-life medical
-longitudinal study. Here, our data consists of successive scans of the liver taken
-during a radio-frequency ablation procedure. In such a
-procedure~\cite{Dong2015}, the physician inserts a thin needle-like
-probe into the organ. Repeated CT scans of the patient need to be
-acquired in order to track the movement of the needle and to ensure
-that it is reaching the appropriate target tumor. Once the needle hits
-the tumor, a high-frequency electric current is passed through the tip
-of the probe and this burns the malignant tumor (ablation). The scan
-at this ablation stage must also reveal accurate details of the
-changes within. In this context, we classify the goal of any of our
-reconstruction techniques into two categories: 
-\begin{enumerate}
-\item To track the position of the needle in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
-\item To accurately observe the new changes amidst a relatively well reconstructed background after the needle touches the tumor.%Later, when the probe is proximal to or touches the tumor, our goal is to observe details of tumor ablation while simultaneously reducing sub-sampling artefacts. In this case, we propose to capture measurements from a slightly higher number of views (`moderate-view' imaging) to acquire more information, and use a spatially-varying prior-based reconstruction. The spatially-varying technique moderates the effect of the prior in the reconstruction of new changes in the object being scanned.
-\end{enumerate} 
-
-
 %--------------------------Results on TMH data--------------------------
 %------------------RFA 2 data
 \begin{figure}[h!]
@@ -499,6 +579,32 @@ reconstruction techniques into two categories:
      \caption{Radio-frequency ablation dataset: One of the slices (512$\times$512) from each of the 8 scan volumes of a longitudinal study dataset of the liver. Note that in volumes (a) through (g), the needle (shown in red in (f)) approaches the target tumor. (h) the organ after the ablation: this slice is displayed on a separate intensity scale to enable proper viewing of the region marked in green that shows the after-effects of ablating the tumor.} 
 \label{fig:RFA2_test_object-prior}
 \end{figure}
+
+%--------------------------------THM section-------------------------
+
+\section{Application: Reconstruction for CT-guided radio-ablation study}
+\label{sec:tmh}
+Before diving into the details of the uniform and the
+spatially-varying prior methods, we first show how both the
+techniques can be applied to our advantage in a real-life medical
+longitudinal study. Here, our data consists of successive scans of the liver taken
+during a radio-frequency ablation procedure. In such a
+procedure~\cite{Dong2015}, the physician inserts a thin needle-like
+probe into the organ. Repeated CT scans of the patient need to be
+acquired in order to track the movement of the needle and to ensure
+that it is reaching the appropriate target tumor. Once the needle hits
+the tumor, a high-frequency electric current is passed through the tip
+of the probe and this burns the malignant tumor (ablation). The scan
+at this ablation stage must also reveal accurate details of the
+changes within. In this context, we classify the goal of any of our
+reconstruction techniques into two categories: 
+\begin{enumerate}
+\item To track the position of the needle in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
+\item To accurately observe the new changes amidst a relatively well reconstructed background after the needle touches the tumor.%Later, when the probe is proximal to or touches the tumor, our goal is to observe details of tumor ablation while simultaneously reducing sub-sampling artefacts. In this case, we propose to capture measurements from a slightly higher number of views (`moderate-view' imaging) to acquire more information, and use a spatially-varying prior-based reconstruction. The spatially-varying technique moderates the effect of the prior in the reconstruction of new changes in the object being scanned.
+\end{enumerate} 
+
+
+
 
 %--------------------RFA 2 few views
 \begin{figure}[!h]
@@ -625,42 +731,6 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
 
 
 
- %--------------------------------okra data-------------------------------
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_1.png}
-\captionsetup{labelformat=empty}       
- \caption{}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_2.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_3.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/templateCropped_4.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.176\linewidth}
-        \fcolorbox{yellow}{yellow}{\includegraphics[width=\textwidth]{../images/okra/test.png}}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-     \caption{Okra 3D dataset: One slice each from the previously scanned objects (the
-       first four from the left), and one from the test volume
-       (extreme right). In the regions marked in red and green, while
-       all slices have deformities, the test
-       has none.}
-\label{fig:object-prior_test_okra}
-\end{figure}
-%----------------------------------------------------
-
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.185\columnwidth]{../images/okra/test.png}}}\hfill
@@ -697,48 +767,7 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
  The selected 3D ground truth of template volumes, the test volume as
  well as the 3D reconstructions can be seen in the supplementary
  material~\cite{supp_paper}.
-%-------------------------sprouts data
 
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_1.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-    \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_2.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_3.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}\\
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_4.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/template_5.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.29\linewidth}
-        \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-      \caption{Sprouts 3D dataset: One slice each from the previously scanned objects (the first five from left) and a slice from the test (extreme
-        right).}
-\label{fig:object-prior_test_sprouts}
-\addtolength{\textfloatsep}{-0.8cm}
-\end{figure}
  %-----------------------------sprouts 3D results
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.29\linewidth}
@@ -894,6 +923,7 @@ solving Eq.~\ref{eq:spatially-varying_prior} were robust over a wide range of $k
 %-------------------------------------------
 
 \textbf{Motivation for the use of multiple types of eigenspaces for the computation of weights:}
+
 %-----------------------------potato data
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.24\linewidth}
@@ -922,7 +952,6 @@ solving Eq.~\ref{eq:spatially-varying_prior} were robust over a wide range of $k
         hole in the test slice. }
 \label{fig:object-prior_test_potato_A1}
 \end{figure}
-
 %-----------------------------potato 2D weights
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.24\linewidth}
@@ -1324,34 +1353,7 @@ While the design of the weights map in the proposed algorithm aims to combine th
  The selected 3D
 ground truth of template volumes, test volume, as well as the 3D reconstructions are shown in the supplementary material~\cite{supp_paper}. Fig.~\ref{fig:potato_3D_results_A} shows a slice from the reconstructed 3D volume. We observe that our method reconstructs new structures while simultaneously reducing streak artefacts.\\ %The new regions detected by different reconstruction methods are shown in Fig.~\ref{fig:weights_map_2Dpotato}. The lower intensities denote new regions which were assigned lower weights. This ensures that the new regions are reconstructed using projection measurements alone, avoiding erroneous influence of the prior.
 Table~\ref{table:potato_ssim} shows the Structure Similarity Index (SSIM) of the reconstructed new regions using various methods. We observe that the FDK performs very well for smaller RoI; as the RoIs get bigger, the FDK reconstructions have poor SSIM due to strong subsampling artefacts. In contrast, the results from l1-ls and our method progressively improve when compared to FDK as the RoIs get bigger. Hence, in practice, one may choose FDK for the case of simple, homogeneous dataset with smaller RoI,  and prefer spatially-varying prior-based reconstruction when the dataset is complex and RoIs are larger.
-%---------------------------------------
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/potato/template_1.png}
-\captionsetup{labelformat=empty}       
- \caption{}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/potato/template_2.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/potato/template_3.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.235\linewidth}
-        \fcolorbox{blue}{blue}{\includegraphics[width=\textwidth]{../images/potato/testIm_green.png}}
-\captionsetup{labelformat=empty}
-\caption{}
-\label{fig:potato3D_test}
-     \end{subfigure}
-      \caption{Potato 3D dataset: One slice (slice-A) each from the previously scanned objects (the first three from left) and a slice from the test 
-        volume (extreme right). Notice the appearance of the fourth
-        hole in the test slice. }
-\label{fig:object-prior_test_potato_A}
-\end{figure}
+
 
 %--------potato reconstruction--------------------------------------------------
 \begin{figure}[!h]
