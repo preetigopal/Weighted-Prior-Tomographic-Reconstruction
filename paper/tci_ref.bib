@@ -54,6 +54,13 @@ year = "2020",
 author = "Koen Ruymbeek and Wim Vanroose",
 }
 
+@article{Marjolein2016,
+title = "Improving the reconstruction of dynamic processes by including prior knowledge",
+journal = "HD-Tomo-Days, Abstracts.",
+year = "2016",
+author = "Marjolein Heyndrickx and Thomas De Schryver and Manuel Dierick and Matthieu Boone and Tom Bultreys and Veerle Cnudde and Luc Van Hoorebeke",
+}
+
 
 @ARTICLE{Hakka2019,
 author={J. {Hakkarainen} and Z. {Purisha} and A. {Solonen} and S. {Siltanen}},
@@ -96,6 +103,24 @@ number={3},
 pages={447-458},
 ISSN={2573-0436},
 month={Sep.},}
+
+@article{Guangming2019,
+author = {Zang, Guangming and Idoughi, Ramzi and Tao, Ran and Lubineau, Gilles and Wonka, Peter and Heidrich, Wolfgang},
+title = {Warp-and-Project Tomography for Rapidly Deforming Objects},
+year = {2019},
+issue_date = {July 2019},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {38},
+number = {4},
+journal = {ACM Trans. Graph.},
+month = jul,
+articleno = {86},
+numpages = {13},
+keywords = {X-ray computed tomography, deformation capture, 4D reconstruction}
+}
+  
+
 
 
 @ARTICLE{Dong2015, 
@@ -158,8 +183,6 @@ pages = "97 - 106",
 year = "2015",
 issn = "0010-4825",
 author = "Li Liu and Weikai Lin and Mingwu Jin",
-keywords = "Computed tomography, Iterative reconstruction, Total variation, Automatic parameter tuning, ART",
-abstract = "In this paper, we propose two reconstruction algorithms for sparse-view X-ray computed tomography (CT). Treating the reconstruction problems as data fidelity constrained total variation (TV) minimization, both algorithms adapt the alternate two-stage strategy: projection onto convex sets (POCS) for data fidelity and non-negativity constraints and steepest descent for TV minimization. The novelty of this work is to determine iterative parameters automatically from data, thus avoiding tedious manual parameter tuning. In TV minimization, the step sizes of steepest descent are adaptively adjusted according to the difference from POCS update in either the projection domain or the image domain, while the step size of algebraic reconstruction technique (ART) in POCS is determined based on the data noise level. In addition, projection errors are used to compare with the error bound to decide whether to perform ART so as to reduce computational costs. The performance of the proposed methods is studied and evaluated using both simulated and physical phantom data. Our methods with automatic parameter tuning achieve similar, if not better, reconstruction performance compared to a representative two-stage algorithm."
 }
 
 @article{geyer2015,
@@ -170,7 +193,6 @@ volume = {276},
 number = {2},
 pages = {339-357},
 year = {2015},
-abstract = { Owing to recent advances in computing power, iterative reconstruction (IR) algorithms have become a clinically viable option in computed tomographic (CT) imaging. Substantial evidence is accumulating about the advantages of IR algorithms over established analytical methods, such as filtered back projection. IR improves image quality through cyclic image processing. Although all available solutions share the common mechanism of artifact reduction and/or potential for radiation dose savings, chiefly due to image noise suppression, the magnitude of these effects depends on the specific IR algorithm. In the first section of this contribution, the technical bases of IR are briefly reviewed and the currently available algorithms released by the major CT manufacturers are described. In the second part, the current status of their clinical implementation is surveyed. Regardless of the applied IR algorithm, the available evidence attests to the substantial potential of IR algorithms for overcoming traditional limitations in CT imaging.© RSNA, 2015 }
 }
 
 @article {kilic2011,
@@ -181,8 +203,6 @@ abstract = { Owing to recent advances in computing power, iterative reconstructi
 	pages = {1578--1582},
 	year = {2011},
 	publisher = {American Journal of Neuroradiology},
-	abstract = {BACKGROUND AND PURPOSE: While CT has found wide use in medical practice, it is also a substantial source of radiation exposure and is associated with an increased lifetime risk of cancer. There is an urgent need for new approaches to reduce the radiation dose in CT. In this regard, ASIR is an alternative method to FBP. We assessed the effect of ASIR on dose reduction in adult head CT. MATERIALS AND METHODS: We retrospectively evaluated a sample of 149 adult head CT examinations that were divided into 2 groups, STD and LD. We lowered the tube current and used ASIR in the LD group. SNR and CNR were analyzed. Dose parameters were recorded while subjective image noise, sharpness, diagnostic acceptability, and artifacts were graded. The Student t test, the Mann-Whitney U test, and κ statistics were used for statistical analyses. RESULTS: We achieved a dose reduction of 31\% in the LD group (STD, 2.3 {\textpm} 0.1 mSv; LD, 1.6 {\textpm} 0.1 mSv; P \&lt; .001). There was no significant difference in the noise measured in the air between the 2 comparison groups (P = .273). Noise in the CSF was higher in the STD group (P \&lt; .001), while the noise in the WM was higher in the LD group (P \&lt; .001). Differences in the CNR between groups were insignificant, but the STD group displayed better SNR values. There was no significant difference in the modal scores of diagnostic acceptability (P = .062) and the artifacts (P = .148) between the 2 groups. Better scores for subjective image noise (P \&lt; .001) and sharpness (P = .04) were observed in the STD group. CONCLUSIONS: ASIR appears to be useful in reducing the dose in adult head CT examinations. While the effect of ASIR on noise reduction observed in the present study of head CT is less than that reported previously in abdomen and chest CT, these findings encourage further prospective studies in larger patient samples. ASIRadaptive statistical iterative reconstructionCNRcontrast-to-noise ratioCTDICT dose indexCTDIvolvolume CT dose indexCTnCT numberDLPdose-length productEDeffective doseFBPfiltered back-projectionGMgray matterLDlow doseSNRsignal-to-noise ratioSTDstandard doseWMwhite matter},
-	issn = {0195-6108},
 	journal = {American Journal of Neuroradiology}
 }
 
@@ -578,6 +598,14 @@ year={2005},
 volume={3429}, 
 pages={79–91}, 
 } 
+
+@article{Pourmorteza2015,
+author={Pourmorteza, A. and Dang, H. and Siewerdsen, J. H. and Stayman, J. W. }, 
+journal={International Meeting on Fully Three-Dimensional Image Reconstruction in Radiology and Nuclear Medicine}, 
+title={Reconstruction of difference using prior images and a penalized-likelihood framework}, 
+year = {2015},
+pages={252–257}
+}
 
 @conference{RadonToMojette,
 author={Recur, B.and Desbarats,P. and Domenger, J.P.}, 
@@ -992,6 +1020,17 @@ month={Dec},
 volume={1}, 
 number={4}, 
 pages={606-617}, 
+}
+
+@journal{Lee2012, 
+author={Lee, Junghoon and Stayman, J Webster and Otake, Yoshito and Schafer, Sebastian and Zbijewski, Wojciech and Khanna, A Jay and Prince, Jerry L and Siewerdsen, Jeffrey H}, 
+journal={Physics in medicine and biology}, 
+title={Volume-of-change cone-beam {CT} for image-guided surgery}, 
+year={2012}, 
+month={Aug}, 
+volume={57}, 
+number={15}, 
+pages={4969-89}, 
 }
 
 
