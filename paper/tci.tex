@@ -382,34 +382,41 @@ In summary, the key contributions are
 %-------------------------------Dataset----------------------------
 \section{Datasets}
 \label{sec:datasets}
-In this sections, we lay the details of all the datasets used in this work.
-\subsection{Real measurements of scanned volumes}
-These datasets in the form of raw cone-beam projection measurements were acquired from a lab
- at the Australian National University (ANU). Data from commercially
+In this section, we lay the details of all the real and simulated
+datasets created and used for this work. We will make these available to the community.
+The first 3 datasets: Okra, Potato and Sprouts were acquired from the Australian National University (ANU). We wish to emphasize that data from commercially
  available CT machines is not suitable because most CT scanners do
  not reveal the raw measurements, and instead output only the full
  reconstructed volumes. Moreover, the process of conversion from the
  projections to the full volumes is proprietary. Departing from this, we
- demonstrate reconstruction results (in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior} from the following raw projection data.\\
+ demonstrate reconstruction results (in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior} from the following datasets.\\
 
  \textbf{Okra:} This dataset is that of an Okra specimen consisting of its five
-scans (Fig.~\ref{fig:object-prior_test_okra}). The measurements
-consisted of real circular cone-beam projections from 450 views, each of size
-336$\times$156. The corresponding size of the reconstructed volume is
-338$\times$338$\times$123. Prior to the first scan, two holes were
+scans (Fig.~\ref{fig:object-prior_test_okra}). Prior to the first scan, two cuts were
 drilled on the surface of the specimen. This was followed by four
 scans, each after introducing one new cut. The specimen was kept in
-the same position throughout the acquisitions. In cases where such an
-alignment is not present, all the template volumes must be pre-aligned
-before computing the eigenspace. The test must be registered to the
-object-prior after its preliminary pilot reconstruction. The ground
-truth consists of volumes reconstructed using the Feldkamp-Davis-Kress
-(FDK) algorithm~\cite{FDK} from the full set of 450 view
-projections. The test volume was reconstructed from a partial set of
-45 projections, i.e., $10\%$ of the projection views from which ground
-truth was reconstructed.\\
+the same position throughout the acquisitions.The measurements
+consisted of real circular cone-beam projections from 450 views, each of size
+336$\times$156. 
+%In cases where such an
+%alignment is not present, all the template volumes must be pre-aligned
+%before computing the eigenspace. The test must be registered to the
+%object-prior after its preliminary pilot reconstruction.
+
+In our experiments, the first volume was assumed to be the test while
+the rest were used to build the object-prior. The ground truth
+consists of volumes of size 338$\times$338$\times$123 reconstructed
+using the Feldkamp-Davis-Kress (FDK) algorithm~\cite{FDK} from the
+full set of 450 view projections.
+\\
  %--------------------------------okra data-------------------------------
-\begin{figure}[!h]
+\begin{figure}[!h]  
+    \begin{subfigure}[b]{0.176\linewidth}
+        \fcolorbox{white}{blue}{\includegraphics[width=\textwidth]{../images/okra/test_marked.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+    \end{subfigure}
+    \quad
     \begin{subfigure}[b]{0.18\linewidth}
         \includegraphics[width=\textwidth]{../images/okra/template1_marked.png}
 \captionsetup{labelformat=empty}       
@@ -430,22 +437,15 @@ truth was reconstructed.\\
 \captionsetup{labelformat=empty}
         \caption{}
      \end{subfigure}
-    \begin{subfigure}[b]{0.176\linewidth}
-        \fcolorbox{blue}{blue}{\includegraphics[width=\textwidth]{../images/okra/test_marked.png}}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-     \caption{Okra 3D dataset: One slice each from the previously scanned objects (the
-       first four from the left), and one from the test volume
-       (extreme right). In the regions marked in red and green, while
-       all slices have deformities, the test
-       has none.}
+     \caption{Okra 3D dataset: One slice each from the each of the scanned volumes. The first one is used as the test while the rest are used to build the object-prior. Notice that in the regions marked in red and green boxes, while all slices have deformities, the test has none.}
 \label{fig:object-prior_test_okra}
 \end{figure}
 %----------------------------------------------------
 
-\textbf{Potato:} This dataset consisted of four scans of the humble potato (Fig.~\ref{fig:object-prior_test_potato_A}). Measurements from each scan consisted of real circular cone-beam projections from 900 views, each of size 150$\times$150. The corresponding size of the reconstructed volume is 150$\times$150$\times$100. While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato.  Projections were obtained using circular cone beam geometry.  %Further, this alignment can be refined following every update of the reconstructed test volume.
-The ground truth consists of FDK reconstructions from the full set of acquired measurements from 900 projection views. The test volume was reconstructed using measurements from 45 projection views, i.e., $5\%$ of the projection views from which ground truth was reconstructed.
+\textbf{Potato:} This dataset consisted of four scans of the humble potato (Fig.~\ref{fig:object-prior_test_potato_A}). While the first scan was taken of the undistorted potato, subsequent scans were taken of the same specimen, each time after drilling a new hole halfway into the potato. Measurements from each scan consisted of real circular cone-beam projections from 900 views, each of size 150$\times$150. %Further, this alignment can be refined following every update of the reconstructed test volume.
+
+In our experiments, the first 3 volumes were used to build the object-prior and the
+last volume was used as the test. The ground truth consists of volumes of size 150$\times$150$\times$100 reconstructed using FDK from the full set of 900 projection views. 
 %---------------------------------------
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.24\linewidth}
@@ -475,16 +475,20 @@ The ground truth consists of FDK reconstructions from the full set of acquired m
 \label{fig:object-prior_test_potato_A}
 \end{figure}
 
-\subsection{Simulated measurements from real-life reconstructed volumes}
-\textbf{Sprouts:} This 3D dataset, which was also obtained at ANU, consists of six reconstructed
-volumes corresponding to six scans of an in-vivo sprout specimen
-imaged at its various stages of growth
-(Fig.~\ref{fig:object-prior_test_sprouts}). Projections were generated
-from the given volume of size 130$\times$130$\times$130. The ground
-truth consists of FDK reconstructed volumes from a set of 1800 view
-projections. The test volume was reconstructed from partial set of 45
-projections, i.e., $2.5\%$ of the projection views from which ground
-truth was reconstructed.\\
+%\subsection{Simulated measurements from real-life reconstructed volumes}
+\textbf{Sprouts:} This 3D dataset, which was also obtained at ANU,
+consists of six reconstructed volumes corresponding to six scans of an
+in-vivo sprout specimen imaged at its various stages of growth
+(Fig.~\ref{fig:object-prior_test_sprouts}).  In contrast to the
+scientific experiment performed for the case of the okra and potato
+where we introduced man-made defects, the changes here are purely the
+work of nature.
+
+In our experiments, the first 5 volumes were used to build the object-prior and the
+last volume was used as the test. The ground truth consists of FDK reconstructed
+volumes of size 130$\times$130$\times$130 from a set of 1800 view
+projections. For the test, cone-beam projections were generated from
+the test volume. \\
 %-------------------------sprouts data
 
 \begin{figure}[!h]
@@ -528,14 +532,28 @@ truth was reconstructed.\\
 \addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
 
-\textbf{Radio-frequency ablation:} We have used this dataset (Fig.~\ref{fig:RFA2_test_object-prior} to
-illustrate an application where \textit{both} uniform and spatially-varying priors are
-useful. The data~\footnote{Source: Tata Memorial
-  Centre~\cite{tmh}, Parel, Mumbai.  This is the national
-  comprehensive centre for the prevention, treatment, education and
-  research in cancer, and is recognized as one of the leading cancer
-  centres in India.} consists of simulated parallel beam measurements of 2D slices
-of the organ (liver) at different stages of the scan. The details of this study are presented in the next section.
+\textbf{Liver:} %We have used this dataset
+ %to illustrate an application
+%where \textit{both} uniform and spatially-varying priors are
+%useful.
+This data was sourced from Tata Memorial Centre~\cite{tmh} in 
+  Parel, Mumbai.  This is the national comprehensive centre for the
+  prevention, treatment, education and research in cancer, and is
+  recognized as one of the leading cancer centres in India. The dataset (Fig.~\ref{fig:RFA2_test_object-prior}) consists
+of parallel beam measurements that are generated from 2D slices of the
+organ (liver) acquired at different stages of a radio-frequency
+ablation study. In such a procedure~\cite{Dong2015}, the physician
+inserts a thin needle-like probe into the organ. Repeated CT scans of
+the patient are acquired in order to track the movement of the
+needle and to ensure that it is reaching the appropriate target
+tumor. Once the needle hits the tumor, a high-frequency electric
+current is passed through the tip of the probe and this burns the
+malignant tumor (ablation). The aim of the scan at this ablation stage is to
+reveal accurate details of the changes within. 
+
+In our experiments using this dataset, we demonstrate the usefulness of \textit{both}
+uniform prior and spatially varying prior. For the first case, we choose the first 6 slices to build the object prior and use slice 7 as the test. For the latter case, we choose the first
+7 slices to build the object prior and use slice 8 as the test.
 %--------------------------Results on TMH data--------------------------
 %------------------RFA 2 data
 \begin{figure}[h!]
@@ -588,18 +606,10 @@ of the organ (liver) at different stages of the scan. The details of this study 
 \section{Application: Reconstruction for CT-guided radio-ablation study}
 \label{sec:tmh}
 Before diving into the details of the uniform and the
-spatially-varying prior methods, we first show how both the
+spatially-varying prior methods, we first show how \textit{both} the
 techniques can be applied to our advantage in a real-life medical
 longitudinal study. Here, our data consists of successive scans of the liver taken
-during a radio-frequency ablation procedure. In such a
-procedure~\cite{Dong2015}, the physician inserts a thin needle-like
-probe into the organ. Repeated CT scans of the patient need to be
-acquired in order to track the movement of the needle and to ensure
-that it is reaching the appropriate target tumor. Once the needle hits
-the tumor, a high-frequency electric current is passed through the tip
-of the probe and this burns the malignant tumor (ablation). The scan
-at this ablation stage must also reveal accurate details of the
-changes within. In this context, we classify the goal of any of our
+during a radio-frequency ablation procedure described in Sec.~\ref{sec:datasets}. In this context, we classify the goal of any of our
 reconstruction techniques into two categories: 
 \begin{enumerate}
 \item To track the position of the needle in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
@@ -615,8 +625,8 @@ reconstruction techniques into two categories:
 \subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/very_few_views/colorTestIm.png}}}\hfill
 \subcaptionbox{FBP}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/fbp.png}}\hfill
 \subcaptionbox{l1-ls}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/cs.png}}\hfill
-\subcaptionbox{Proposed\\ method: uniform prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/plain_pca.png}}
-\caption[Representative results-1]{\textbf{Goal: Track new changes.}\small{ Reconstruction of slice 7 (`test') of Fig.~\ref{fig:RFA2_test_object-prior} from only 90 views, using (b) FBP and no prior resulting in streaks, SSIM $= 0.48$ (c) l1-ls resulting in blurred bone structures, SSIM $=0.35$ and (d) uniform prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks, SSIM $=0.55$. The region enclosed in red rectangle is our RoI as it contains both the new position of the needle and some background. All SSIM values are computed for this RoI.}}
+\subcaptionbox{Uniform prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/plain_pca.png}}
+\caption[Representative results-1]{\textbf{Goal: Track new changes.}\small{ Reconstruction of slice 7 (`test') of Fig.~\ref{fig:RFA2_test_object-prior} from only 90 views, using (b) FBP and no prior resulting in streaks, SSIM $= 0.48$ (c) l1-ls resulting in blurred bone structures, SSIM $=0.35$ and (d) uniform prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks, SSIM $=0.55$. The region enclosed in red rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background. All SSIM values are computed for this RoI.}}
 \label{fig:RFA2_very_few_views}
 \end{figure}
 
@@ -627,10 +637,10 @@ reconstruction techniques into two categories:
 \subcaptionbox{Test}{\fcolorbox{white}{blue}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/few_views/colorTestIm.png}}}\hfill
 \subcaptionbox{FBP}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/fbp.png}}\hfill
 \subcaptionbox{l1-ls}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/cs_dct.png}}\hfill
-\subcaptionbox{Proposed\\ method: uniform\\ prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/plain_pca.png}}
-\subcaptionbox{Proposed\\ method: spatially-varying prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/weighted_pca_all_methods_kk_0_01.png}}
+\subcaptionbox{Uniform prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/plain_pca.png}}
+\subcaptionbox{Spatially\\varying prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/few_views/weighted_pca_all_methods_kk_0_01.png}}
 \subcaptionbox{Weights map}{\includegraphics[width=0.275\columnwidth]{../images/tmh/RFA2/few_views/weights_colormap.png}}
-\caption[Representative results-2]{\textbf{Goal: Observe details of new changes.} Reconstruction of slice 8 of Fig.~\ref{fig:RFA2_test_object-prior} from 120 views, using (b) FBP with SSIM $= 0.50$ (c) l1-ls with SSIM $=0.46$ and (d) uniform prior, with SSIM $=0.51$ (\emph{notice dominance of the prior: a prominent residual shadow of the needle which was present in the object-prior, but not present in the test image}), and (e) spatially-varying prior with SSIM $=0.56$ (\emph{notice that the dominance of the prior is significantly controlled}). The region enclosed in green rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background. The SSIM is computed in this RoI. (f) shows the computed weights map (defined later in the paper) used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}
+\caption[Representative results-2]{\textbf{Goal: Observe details of new changes.} Reconstruction of slice 8 of Fig.~\ref{fig:RFA2_test_object-prior} from 120 views, using (b) FBP with SSIM $= 0.50$ (c) l1-ls with SSIM $=0.46$ and (d) uniform prior, with SSIM $=0.51$ (\emph{notice dominance of the prior: a prominent residual shadow of the needle which was present in the object-prior, but not present in the test image}), and (e) spatially-varying prior with SSIM $=0.56$ (\emph{notice that the dominance of the prior is significantly controlled}). The region enclosed in green rectangle is our RoI as it contains both the new position of the needle and some background. The SSIM is computed in this RoI. (f) shows the computed weights map (defined later in the paper) used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}
 \label{fig:RFA2_few_views}
 \end{figure}
 
@@ -659,10 +669,12 @@ The dataset from this longitudinal medical study consists of 8 scans
 taken during the ablation procedure. We demonstrate our method for 2D
 reconstruction by choosing a single slice from each of the 8 volumes
 as our dataset. Note that all these 8 slices are located at the
-\emph{same} index~\footnote{The notion of~\textit{same index} (slice
-  number corresponding to the same depth) makes sense in the context,
-  because in such problems, the different scans are aligned with each
-  other.} within each of the respective
+\emph{same} index (slice number corresponding to the same
+depth) %~\footnote{The notion of~\textit{same index} (slice  number
+%corresponding to the same depth) makes sense in the context, because
+%in such problems, the different scans are aligned with each
+%other.}
+within each of the respective
 volumes. Fig.~\ref{fig:RFA2_test_object-prior} shows the chosen set of
 2D slices (each of size 512$\times$512) from the different
 volumes. Observe that the needle is seen in all of the first 7 slices
@@ -721,8 +733,11 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
 %In all figures in this section, `uniform prior' refers to optimizing Eq.~\ref{eq:spatially-varying_prior} with $\boldsymbol{W}(x,y,z)=1$.
 %----------------------------------------------------------
 %-------------------------------------------------
-\subsubsection{\textbf{Okra dataset}}
+\subsubsection{\textbf{Okra}}
 \label{Sec:okra_uniform}
+The test volume was reconstructed from a partial set of
+45 projections, i.e., $10\%$ of the projection views from which ground
+truth was reconstructed.
  One of the slices of the reconstructed volumes is shown in
  Fig.~\ref{fig:okra_3D_results_uniform}. The SSIM values presented in
  Table~\ref{table:okra_ssim_full_volume} show that the presence of a
@@ -757,11 +772,12 @@ Note that $\boldsymbol{\theta}$ is solved for using the basis pursuit CS solver~
 \label{table:okra_ssim_full_volume}
 \end{table}
 %----------------------------------------------------
-\subsubsection{\textbf{Sprouts dataset}}
+\subsubsection{\textbf{Sprouts}}
 \label{Sec:sprouts}
- In contrast to the scientific experiment performed for the case of
- the okra where we introduced man-made defects, the changes here are
- purely the work of nature. One of the slices of the reconstructed
+The test volume was reconstructed from partial set of 45
+projections, i.e., $2.5\%$ of the projection views from which ground
+truth was reconstructed.
+One of the slices of the reconstructed
  volumes is shown in
  Fig.~\ref{fig:sprouts_3D_results_uniform}. Table~\ref{table:sprouts_ssim_full_volume}
  shows the SSIM of the full reconstructed volumes.  Here again, the
@@ -841,7 +857,7 @@ The key to our method is the discovery of a diagonal weights
  \\
  
 \textbf{Computation of weights matrix $\boldsymbol{W}$:}
-Since the test volume (referred to as $\boldsymbol{x}$) is unknown to
+Since the test is unknown to
 begin with, it is not possible to decipher the precise regions in
 $\boldsymbol{x}$ that are different from all the previously scanned
 objects (`object-prior'). We start with $X^{\text{fdk}}$, the initial
@@ -1031,8 +1047,7 @@ independent of the type of artifact. Hence, we use a combination of
 different reconstruction techniques to generate different types of
 eigenspaces and combine information from all of them to compute
 weights. To illustrate the benefit of this method, we first performed
-2D reconstruction of a test slice from the potato dataset (please
-refer Sec.~\ref{Sec:potato} for details of the dataset)
+2D reconstruction of a test slice from the potato dataset.
 Fig.~\ref{fig:object-prior_test_potato_A1} shows the test and template
 slices. Fig.~\ref{fig:weights_map_2Dpotato} shows the weights-maps
 generated using Eq.~\ref{eq:weightsEq} by various reconstruction
@@ -1061,7 +1076,7 @@ computing weights-maps for all 3D reconstructions.
 %tomographic data of biological and medical specimens.
 The results below show the advantage of spatially-varying prior over uniform prior while reconstructing details of the new changes within the object.
 
-\subsubsection{\textbf{Okra dataset}}
+\subsubsection{\textbf{Okra}}
 \label{Sec:okra_spatially_varying}
 One of the slices from the reconstructed volumes 
 is shown in Fig.~\ref{fig:okra_3D_results}. The red and green 3D
@@ -1128,7 +1143,7 @@ Table~\ref{table:okra_ssim}.
 
 
 
-\subsubsection{\textbf{Sprouts dataset}}
+\subsubsection{\textbf{Sprouts}}
 \label{Sec:sprouts_spatially_varying}
  %-----------------------------sprouts 3D results
 \begin{figure}[!h]
@@ -1359,7 +1374,7 @@ For spatially-varying prior, most of the computation time is used in the generat
 \subsection{Reconstruction of homogeneous data}
 \label{Sec:potato}
 While the design of the weights map in the proposed algorithm aims to combine the best of information from both the current measurements and the prior, we found FDK to be preferable when the test object has a simple, homogeneous structure without intricate details. One such dataset is the Potato dataset.\\
- The selected 3D
+The test volume was reconstructed using measurements from 45 projection views, i.e., $5\%$ of the projection views from which ground truth was reconstructed. The selected 3D
 ground truth of template volumes, test volume, as well as the 3D reconstructions are shown in the supplementary material~\cite{supp_paper}. Fig.~\ref{fig:potato_3D_results_A} shows a slice from the reconstructed 3D volume. We observe that our method reconstructs new structures while simultaneously reducing streak artefacts.\\ %The new regions detected by different reconstruction methods are shown in Fig.~\ref{fig:weights_map_2Dpotato}. The lower intensities denote new regions which were assigned lower weights. This ensures that the new regions are reconstructed using projection measurements alone, avoiding erroneous influence of the prior.
 Table~\ref{table:potato_ssim} shows the Structure Similarity Index (SSIM) of the reconstructed new regions using various methods. We observe that the FDK performs very well for smaller RoI; as the RoIs get bigger, the FDK reconstructions have poor SSIM due to strong subsampling artefacts. In contrast, the results from l1-ls and our method progressively improve when compared to FDK as the RoIs get bigger. Hence, in practice, one may choose FDK for the case of simple, homogeneous dataset with smaller RoI,  and prefer spatially-varying prior-based reconstruction when the dataset is complex and RoIs are larger.
 
