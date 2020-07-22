@@ -13,24 +13,6 @@ This supplementary material consists of details of the optimization routine used
 
 \tableofcontents
 \newpage
-\section{\textbf{Patch-based techniques}}
-\label{sec:patch_based}
-Here we present a comparison~\cite{my_dicta_paper} of the performance of the aforementioned PCA-based global prior with a prior that is based on construction of patch-wise dictionaries. In both cases, the reconstruction routine is based on typical CS techniques. The well-known K-SVD algorithm \cite{Aharon2006} was chosen for construction of patch-based dictionaries. For this, patches were extracted from each of the template volumes, from which an overcomplete dictionary was obtained. The basic aim of the K-SVD algorithm (or any overcomplete dictionary learning technique) is the compact linear representation of all these patches using the dictionary columns. Let $\boldsymbol{D}$ denote the dictionary learned, $N_p$ the total number of patches, and $\boldsymbol{H_i}$ the operator to extract the $i^{\textrm{th}}$ patch from the intermediate reconstructed slice/volume. Then, once $\boldsymbol{D}$ is computed in an earlier `training phase', each new test slice (or test volume) can be reconstructed by optimizing a cost function such as the one below:
-\begin{multline}
-J_2(\boldsymbol{\theta},\{\boldsymbol{\alpha_i}\}_{i=1}^{N_p}) = \lVert\boldsymbol{\mathcal{R}\Upsilon\theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \\ \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\lVert \boldsymbol{H_i\Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2 +\frac{\lambda_3}{ N_p}\sum_{i=1}^{N_p}\lVert\boldsymbol{\alpha_i}\rVert_1.
-\label{Eq:main_patchBased}
-\end{multline}
-The reconstruction proceeds in an alternating manner, first by minimization of Eq.~\ref{Eq:primaryObj_patchBased} and then by minimization of Eq.~\ref{Eq:alpha_patchBased}. For both these, the solver in~\cite{l1ls} is used. For the former case, the cost function reduces to:
-\begin{equation}
-J_{\boldsymbol{\alpha}}(\boldsymbol{\theta}) = \lVert \boldsymbol{\mathcal{R} \Upsilon \theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\rVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2.
-\label{Eq:primaryObj_patchBased}
-\end{equation}
-For each $i \in \{1,...,N_p\}$, the cost function reduces to:
-\begin{equation}
-J_{\boldsymbol{\theta}}(\boldsymbol{\alpha}_i) =  \lVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D\alpha_i}\rVert_2^2  + \frac{\lambda_3}{\lambda_2}\lVert\boldsymbol{\alpha_i}\rVert_1.
-\label{Eq:alpha_patchBased}
-\end{equation}
-This summarizes the comparison with patch-based methods.
 %--------------------------------------------------------------------------
 \section{An alternate method to compute weights-map}
 The problem of recovering the unknown data $\boldsymbol{x}$ from its measurements falls under the broad category of inverse problems. In almost all such cases, the measurement model is known. However, a direct analytical inverse solution does not exist in most cases because of the enormous size of the matrix modelling the measurement process. The complexity is further increased when insufficient number of measurements are taken leading to an ill-posed problem. In such circumstances, iterative schemes are used to solve for $\boldsymbol{x}$ by minimizing a cost function. 
@@ -113,242 +95,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \end{itemize}
 
 \newpage
-\section{2D reconstruction results on colon CT dataset}
 
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/template1.png}
-        \caption{template 1}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/template2.png}
-        \caption{template 2}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/template3.png}
-        \caption{template 3}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/template4.png}
-        \caption{template 4}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/template5.png}
-        \caption{template 5}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/testIm.png}
-        \caption{test image}
-     \end{subfigure}
-      \caption{2D object-prior (referred to as `templates' here)  and test slice of colon CT dataset. The region in red shows the synthetic new region added to the test slice.}
-\label{fig:joint}
-\end{figure}
-
-%--------------------------------2D Colon results----------------------------
-
-\newpage
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/testIm.png}
-        \caption{Test image}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/60_angles/fbp.png}
-        \caption{FBP}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/60_angles/cs_dct.png}
-        \caption{CS-DCT}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/60_angles/plain_pca.png}
-        \caption{unselective prior+cs}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/colon/60_angles/weighted_pca5.png}
-       \caption{our method}
-     \end{subfigure}
-      \caption{Reconstruction of colon CT: (b) has many streak artefacts (c) slightly blurred (d) Inaccurate reconstruction of new region (corresponding to the red RoI) (d) new region accurately detected while simultaneously removing streak artefacts.}
-\label{fig:joint}
-\end{figure}
-
-
-%-----------------------------Sprouts : data--------------------------
-\newpage
-\section{2D reconstruction for different projection views}
-
-\textbf{2D Sprouts dataset}
-
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/template1.png}
-        \caption{template 1}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/template2.png}
-        \caption{template 2}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/template3.png}
-        \caption{template 3}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/template4.png}
-        \caption{template 4}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/template5.png}
-        \caption{template 5}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/colorTestIm.png}
-        \caption{test image}
-     \end{subfigure}
-      \caption{Sprouts data: CT of different stages of sprouts growing in a jar. The templates refer to previously scanned volumes that form the `object-prior'.}
-\label{fig:joint}
-\end{figure}
-
-%-----------------------------Sprouts (19 angles)--------------------------
-\newpage
-\subsection{Reconstruction from 19 projection views}
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/colorTestIm.png}
-        \caption{Test image}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/19_angles/1/fbp.png}
-        \caption{FBP}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/19_angles/1/cs_dct.png}
-        \caption{CS-DCT}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/19_angles/1/cs_wavelet.png}
-        \caption{CS-wavelet}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/19_angles/1/plain_pca.png}
-        \caption{unselective prior+cs}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/19_angles/1/weighted_pca5.png}
-       \caption{our method}
-     \end{subfigure}
-      \caption{Reconstruction of sprouts [260 x 260] image from measurements obtained by $10\%$ sampling (19 projection views).}
-\label{fig:joint}
-\end{figure}
-
-%-----------------------------Sprouts (66 angles)--------------------------
-\newpage
-\subsection{Reconstruction from 66 projection views}
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/colorTestIm.png}
-        \caption{Test image}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/55_angles/1/fbp.png}
-        \caption{FBP}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/55_angles/1/cs_dct.png}
-        \caption{CS-DCT}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/55_angles/1/cs_wavelet.png}
-        \caption{CS-wavelet}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/55_angles/1/plain_pca.png}
-        \caption{unselective prior+cs}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/55_angles/1/weighted_pca5.png}
-        \caption{our method}
-     \end{subfigure}
-     \caption{Reconstruction of sprouts [260 x 260] image from measurements obtained by $30\%$ sampling (55 projection views).} 
-\label{fig:joint}
-\end{figure}
-
-%-----------------------------Sprouts (110 angles)--------------------------
-\newpage
-\subsection{Reconstruction from 110 projection views}
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/colorTestIm.png}
-        \caption{Test image}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/92_angles/1/fbp.png}
-        \caption{FBP}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/92_angles/1/cs_dct.png}
-        \caption{CS-DCT}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/92_angles/1/cs_wavelet.png}
-        \caption{CS-wavelet}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/92_angles/1/plain_pca.png}
-        \caption{unselective prior}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/92_angles/1/weighted_pca5.png}
-        \caption{our method}
-     \end{subfigure}
-     \caption{Reconstruction of sprouts [260 x 260] image from measurements obtained by $50\%$ sampling (92 projection views).} 
-\label{fig:joint}
-\end{figure}
-
-%-----------------------------Sprouts (154 angles)--------------------------
-\newpage
-\subsection{Reconstruction from 154 projection views}
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/colorTestIm.png}
-        \caption{Test image}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/154_angles/1/fbp.png}
-        \caption{FBP}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/154_angles/1/cs_dct.png}
-        \caption{CS-DCT}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/154_angles/1/cs_wavelet.png}
-        \caption{CS-wavelet}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/154_angles/1/plain_pca.png}
-        \caption{prior unselective+cs}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/supplementary/2D_sprouts/154_angles/1/weighted_pca5.png}
-        \caption{our method}
-     \end{subfigure}
-     \caption{Reconstruction of sprouts [260 x 260] image from measurements obtained by $83\%$ sampling (154 projection views).} 
-\label{fig:joint}
-\end{figure}
-\newpage
 %--------------------------BIG images: TMH results
 \section{Bigger images for reconstruction results shown in main paper}
 \subsection{Liver}
@@ -403,34 +150,33 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \newpage
 
 %------------------------------------Bigger images for Sprouts------------------
-\textbf{Sprouts:}
-
+\subsection{Sprouts}
 \begin{figure}[!h]
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.38\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
 %\captionsetup{labelformat=empty}
         \caption{Test}
      \end{subfigure}
 \quad
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.38\linewidth}
         \includegraphics[width=\textwidth]{../images/sprouts/fdkIm.png}
 %\captionsetup{labelformat=empty}
         \caption{FDK}
     \end{subfigure}
 \quad
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.38\linewidth}
         \includegraphics[width=\textwidth]{../images/sprouts/csIm.png}
 %\captionsetup{labelformat=empty}
         \caption{l1-ls}
-     \end{subfigure}\\
+     \end{subfigure}
 \quad
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.38\linewidth}
         \includegraphics[width=\textwidth]{../images/sprouts/plainPriorIm.png}
 %\captionsetup{labelformat=empty}
         \caption{Uniform\\ Prior}
      \end{subfigure}
 \quad
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.38\linewidth}
         \includegraphics[width=\textwidth]{../images/sprouts/weightedPriorIm.png}
 %\captionsetup{labelformat=empty}
         \caption{Spatially-Varying\\ prior}
@@ -490,7 +236,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \newpage
 
 %--------------------------------Bigger results for Okra------------------------
-\textbf{Okra:}
+\subsection{Okra}
 
 \begin{figure}[!h]
 \centering
@@ -550,7 +296,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \newpage
 
 %----------------------------------Comparison with Literature------------------------
-\section{Detecting new changes directly in the measurements}
+\section{Comparison with literature: detecting new changes directly in the measurements}
 Sec.2 of the main paper (`Related work') contrasts the spatially-varying technique  with other prior based techniques in literature. Here we present a 2D reconstruction  result (of the test shown in Figure.~\ref{fig:comparisonLit_dataset}) to compare our method with~\cite{Lee2012}, in which the new changes are directly detected in the measurement space by computing the difference between the measurements of the test and the corresponding simulated measurements of the template. This difference-volume is then reconstructed and then fused (added to) with the original high quality template. However, in the above method, the sub-sampling artefacts present in the difference-volume gets carried over to the final reconstructed image. This is shown in Figure~\ref{fig:comparisonLit_results}. A quantitative comparison over the region of interest is shown in Table~\ref{tab:comparisonLit}.
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.4\linewidth}
@@ -612,7 +358,133 @@ Sec.2 of the main paper (`Related work') contrasts the spatially-varying techniq
   \end{tabular}
   \label{tab:comparisonLit}
 \end{table}
+\newpage
+%-----------------------------------Blurred results (CS)
+\section{Blurred reconstruction under limited views}
 
+When the number of views is large, the reconstruction using CS (l1-ls) is indeed good, as shown below in Fig~\ref{fig:cs_blurred_48_views}. For the CS reconstructions shown below, we have tuned the lambda1 values (Figs.~\ref{fig:ssim_rmse_48_views},~\ref{fig:ssim_rmse_24_views},~\ref{fig:ssim_rmse_12_views}) and selected the one with maximum SSIM. 
+
+
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/48_views/testIm.png}
+%\captionsetup{labelformat=empty}
+        \caption{Test}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/48_views/result_FBP.png}
+%\captionsetup{labelformat=empty}
+        \caption{FDK}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/48_views/result_CS_lambda0_0.40.png}
+%\captionsetup{labelformat=empty}
+        \caption{l1-ls}
+    \end{subfigure}
+    %\captionsetup{labelformat=empty}
+     \caption{Reconstruction of potato test slice (150$\times$150) from 48 views. The lambda1 for l1-ls reconstruction was chosen to be the optimal value of 0.4 here.} 
+\label{fig:cs_blurred_48_views}
+%\addtolength{\textfloatsep}{-0.8cm}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+       \includegraphics[width=0.9\columnwidth]{../images/potato/2D/cs_blurred_results/SSIM_RMSE_48_angles.png}
+%\captionsetup{labelformat=empty}
+\caption{SSIM and RMSE for reconstructionn from 48 views for varying levels of $\lambda1$. The optimal value of 0.4 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_48_views}}
+\label{fig:ssim_rmse_48_views}
+\end{figure}
+\newpage
+
+However, when the number of views decreases, the reconstruction using CS (LASSO) is blurred, but with the benefit of suppressed artefacts that are otherwise present in FBP reconstruction. This is illustrated in Figs.~\ref{fig:cs_blurred_24_views} and~\ref{fig:cs_blurred_12_views}.
+
+
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/24_views/testIm.png}
+%\captionsetup{labelformat=empty}
+        \caption{Test}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/24_views/result_FBP.png}
+%\captionsetup{labelformat=empty}
+        \caption{FDK}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/24_views/result_CS_lambda0_2.00.png}
+%\captionsetup{labelformat=empty}
+        \caption{l1-ls}
+    \end{subfigure}
+    %\captionsetup{labelformat=empty}
+     \caption{Reconstruction of potato test slice (150$\times$150) from 24 views. The lambda1 for l1-ls reconstruction was chosen to be the optimal value of 2 here.} 
+\label{fig:cs_blurred_24_views}
+%\addtolength{\textfloatsep}{-0.8cm}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+       \includegraphics[width=\columnwidth]{../images/potato/2D/cs_blurred_results/SSIM_RMSE_24_angles.png}
+%\captionsetup{labelformat=empty}
+\caption{SSIM and RMSE for reconstructionn from 24 views for varying levels of $\lambda1$. The optimal value of 2 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_24_views}}
+\label{fig:ssim_rmse_24_views}
+\end{figure}
+\newpage
+
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/12_views/testIm.png}
+%\captionsetup{labelformat=empty}
+        \caption{Test}
+     \end{subfigure}
+\quad
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/12_views/result_FBP.png}
+%\captionsetup{labelformat=empty}
+        \caption{FDK}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/2D/cs_blurred_results/12_views/result_CS_lambda0_3.00.png}
+%\captionsetup{labelformat=empty}
+        \caption{l1-ls}
+    \end{subfigure}
+    %\captionsetup{labelformat=empty}
+     \caption{Reconstruction of potato test slice (150$\times$150) from 12 views. The lambda1 for l1-ls reconstruction was chosen to be the optimal value of 3 here.} 
+\label{fig:cs_blurred_12_views}
+%\addtolength{\textfloatsep}{-0.8cm}
+\end{figure}
+As seen here, the reconstruction by CS (LASSO) is indeed blurred when the number of views is very less. The iterative reconstruction was run until convergence (epsilon = 0.001).
+The plots below show the SSIM and RMSE values for varying values of lambda1 for the CS (LASSO) reconstructions of the above test image.
+
+\begin{figure}[!h]
+\centering
+       \includegraphics[width=\columnwidth]{../images/potato/2D/cs_blurred_results/SSIM_RMSE_12_angles.png}
+%\captionsetup{labelformat=empty}
+\caption{SSIM and RMSE for reconstructionn from 12 views for varying levels of $\lambda1$. The optimal value of 3 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_12_views}}
+\label{fig:ssim_rmse_12_views}
+\end{figure}
+\newpage
+%----------------------------Patch-based methods
+\section{\textbf{Patch-based techniques}}
+\label{sec:patch_based}
+Here we present a comparison~\cite{my_dicta_paper} of the performance of the aforementioned PCA-based global prior with a prior that is based on construction of patch-wise dictionaries. In both cases, the reconstruction routine is based on typical CS techniques. The well-known K-SVD algorithm \cite{Aharon2006} was chosen for construction of patch-based dictionaries. For this, patches were extracted from each of the template volumes, from which an overcomplete dictionary was obtained. The basic aim of the K-SVD algorithm (or any overcomplete dictionary learning technique) is the compact linear representation of all these patches using the dictionary columns. Let $\boldsymbol{D}$ denote the dictionary learned, $N_p$ the total number of patches, and $\boldsymbol{H_i}$ the operator to extract the $i^{\textrm{th}}$ patch from the intermediate reconstructed slice/volume. Then, once $\boldsymbol{D}$ is computed in an earlier `training phase', each new test slice (or test volume) can be reconstructed by optimizing a cost function such as the one below:
+\begin{multline}
+J_2(\boldsymbol{\theta},\{\boldsymbol{\alpha_i}\}_{i=1}^{N_p}) = \lVert\boldsymbol{\mathcal{R}\Upsilon\theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \\ \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\lVert \boldsymbol{H_i\Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2 +\frac{\lambda_3}{ N_p}\sum_{i=1}^{N_p}\lVert\boldsymbol{\alpha_i}\rVert_1.
+\label{Eq:main_patchBased}
+\end{multline}
+The reconstruction proceeds in an alternating manner, first by minimization of Eq.~\ref{Eq:primaryObj_patchBased} and then by minimization of Eq.~\ref{Eq:alpha_patchBased}. For both these, the solver in~\cite{l1ls} is used. For the former case, the cost function reduces to:
+\begin{equation}
+J_{\boldsymbol{\alpha}}(\boldsymbol{\theta}) = \lVert \boldsymbol{\mathcal{R} \Upsilon \theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\rVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2.
+\label{Eq:primaryObj_patchBased}
+\end{equation}
+For each $i \in \{1,...,N_p\}$, the cost function reduces to:
+\begin{equation}
+J_{\boldsymbol{\theta}}(\boldsymbol{\alpha}_i) =  \lVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D\alpha_i}\rVert_2^2  + \frac{\lambda_3}{\lambda_2}\lVert\boldsymbol{\alpha_i}\rVert_1.
+\label{Eq:alpha_patchBased}
+\end{equation}
+This summarizes the comparison with patch-based methods.
+\newpage
 \bibliography{tci_ref}
 \end{document}
 
