@@ -358,8 +358,173 @@ Beside this, I only have minor comments:\\
  
 \textbf{ Response:} Accepted. This has been corrected.      
 
+\section{Response to Reviewer 3}
+(We have numbered these comments as R3-Cx, and italicized for clarity)
+
+\textcolor{blue}{\textit{This paper extends an existing algorithm for reconstructing longitudinal tomographic data with a reduced number of projections, by adding a weight map that determines how much to weigh a specific term in the cost function for each voxel of the reconstructed image. The authors give an explanation of the approach, and show results for both simulated and experimental data. Although the proposed approach seems mathematically sound, the paper itself has several significant issues that make it difficult to assess whether the approach actually improves on existing work. }}\\
+
+\textcolor{blue}{\textbf{R3-C1:}\textit{ Most importantly, results are compared with only a single existing method that is specifically designed for low-angle tomography (compressed sensing), and the results of that method seem sub-optimal (at least, it does not match my experience with both applying such methods myself and published results of such methods). }}
+
+\textbf{ Response:} The results of the (compared, CS) method are sub-optimal because of a significantly fewer number of views.  We show  (see R3-C7) that if we increase the number of views, CS actually does very well, as expected, and as mentioned by the reviewer.
+
+We have compared our 2D reconstructions with many other iterative techniques such as SIRT, SART and ART, as seen in Fig. 12 (Figure.8). Earlier we had not included the SSIM values,  and these now appear in Tab. 3.  In addition, we have now performed a 2D reconstruction to compare our method with [3] (please see Sec. 7 of our supplementary material.)\\
+
+\textcolor{blue}{\textbf{R3-C2:}\textit{ Since no details are given about the method that is compared with (what function does in optimize?}}
+
+\textbf{ Response:} In our submitted paper, we had compared our method to the the standard filtered back projection (written as FBP in Figure 1), and CS sensing using l1-ls (e.g. Line 33, Column 2, Page 4). The function optimized was given in Equation 8. We agree that we should have mentioned this earlier in the description, and this has been taken care of in the revised document. 
+
+Of the many other prior-based techniques, we have now discussed  below how we contrast with them in Sec.2 (`Related work'). In addition, we have now performed a 2D reconstruction to compare our method with [3]. In [3], the new changes are directly detected in the measurement space by computing the difference between the measurements of the test and the corresponding simulated measurements of the template. This difference-volume is then reconstructed and then fused (added to) with the original high quality template.
+However, in the above method, the sub-sampling artefacts present in the difference-volume gets carried over to the final reconstructed image. This can be seen in the visual results (and quantitative comparison) in Sec. 7 of our supplementary material.\\
 
 
+\textcolor{blue}{\textbf{R3-C3:}\textit{ what were the parameters? how were these chosen?), the experimental results in the paper give very little information to the reader.}}
+
+\textbf{ Response:} Details of the parameters and their tuning were earlier discussed in Section 5B. $\lambda_1$ was set equal to 1 in all datasets (as observed by R1, and line 53, page 9, column 2).  THis was done by visual inspection for one of the dataset and used elsewhere as is. We had earlier mentioned that we are using DCT in Page 6 (right column, line 58). 
+
+For greater clarity, we have now explicitly mentioned the DCT bases right at the beginning on page 1 Section 1 (Introduction, below Eq.1).  Further, we have now tuned $\lambda_1$ (as per R1's suggestions) to maximize SSIM of the whole reconstructed test-volume for l1-ls reconstruction of each dataset. Once the value was chosen, we retained the same $\lambda_1$ value for uniform prior and spatially-varying prior as well. However, this has only marginally improved the reconstructions over our previous ones in the earlier manuscript. Here below, we present the changes in the accuracies due to tuning of $\lambda_1$ in Tables~\ref{tab:sprouts_revised_ssim}, and~\ref{tab:okra_revised_ssim}.
+
+The new visual results and SSIM values are in Figs. 13, 15 and 19, and in Tables 4, 5 and 8. 
+
+
+\begin{table}[!h]
+  \caption{Old and revised SSIM (within red RoI) for 3D sprouts dataset}
+  \label{tab:sprouts_revised_ssim}
+\begin{tabular}{|l|l|l|}
+\hline
+ & \textbf{Earlier reported SSIM} & \textbf{Revised SSIM} \\ \hline
+\textbf{l1-ls} & 0.84 & 0.86 \\ \hline
+\textbf{Uniform prior} & 0.83 & 0.83 \\ \hline
+\textbf{Spatially varying prior} & 0.88 & 0.88 \\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[!h]
+  \caption{Old and revised SSIM (within red RoI) for 3D okra dataset}
+  \label{tab:okra_revised_ssim}
+\begin{tabular}{|l|l|l|}
+\hline
+ & \textbf{Earlier reported SSIM} & \textbf{Revised SSIM} \\ \hline
+\textbf{l1-ls} & 0.83 & 0.84 \\ \hline
+\textbf{Uniform prior} & 0.85 & 0.85 \\ \hline
+\textbf{Spatially varying prior} & 0.88 & 0.88 \\ \hline
+\end{tabular}
+\end{table}
+
+\textcolor{blue}{\textbf{R3-C4:}\textit{ To address these issues, a large amount of changes would be required in the paper (not only in the experiments, but also throughout the paper, since the performance of compressed sensing methods is one of the main motivations of introducing a new approach). Other issues are present in the paper as well (see below for more detailed comments). Therefore, I unfortunately have to recommend rejection of the current manuscript.}}
+
+\textbf{Response:} We have now made changes as per this comment and those of the Associate Editor; the details of these are given in our individual responses to the comments. In addition, here we wish to state that the performance of compressed sensing is not one of the main motivations of the paper. The use of uniform and spatially-varying object-priors in a longitudinal setting is the main contribution of this paper and these techniques are independent of the sparsity-prior (CS) being used, i.e., object-specific prior can be imposed even when $\lambda1$, the weight of sparsity prior, is set to $0$.  The success of our method on a real-life dataset in a clinical setting is a testament to our methods.\\
+
+%\textbf{Detailed Comments}
+
+\textcolor{blue}{\textbf{R3-C5:}\textit{ The comparisons with existing methods in the current manuscript are insufficient to support the conclusions made in the paper. My main concerns are: - The authors only compare with a single method specific to reconstructing tomographic images from a low number of projections (which they call compressed sensing). However, this topic is highly studied, and there are many methods available for this. The paper would be improved by including results from more methods, for example dictionary learning, total variation minimization, algebraic techniques (DART etcetera), or even simply SIRT with a nonnegativity constraint.}}
+
+\textbf{Response:} This comment is similar to R3-C4. The main aim of our paper is the usage of an object-prior along with a weights map for reconstruction from highly undersampled projections in a longitudinal study. When the number of views is extremely small, then undersampling artifacts will affect any baseline method, be it SIRT, CS, ART or any other. However incorporation of object priors will significantly help to mitigate those artifacts.
+In Fig.12 (Figure 8), we had earlier shown a visual comparison of 2D reconstructions of one of the datasets (potato) by all of the following methods: FBP, CS with DCT as sparsity prior, CS with Haar as sparsity prior, ART, SART, SIRT and our weighted prior method.
+We have now also included a quantitative comparison of the accuracy of these results in Tab. 3 of the new manuscript.\\
+
+\textcolor{blue}{\textbf{R3-C6:}\textit{ No details are given about the CS method that was compared with. What type of sparsity did the method assume? What objective function did it minimize? What parameters did the authors choose? How were those parameters chosen? How many iterations were used to minimize the objective function? Without this information, the comparison does not have much information, and therefore can't be used to support the conclusions made in the paper.}}
+
+\textbf{Response:} This is similar to R3-C3. We had earlier mentioned that we are using DCT in Page 6 (right column, line 58). For greater clarity, we have now mentioned this in Section 1 (Introduction, below Eq.1).
+The objective function minimized while using l1-ls (CS) optimization is now introduced in Eq.1. This is the same as Eq. 6,  with $\lambda_2 = 0$.
+Details of parameter selection is now in Section 9-B.
+In our earlier submission, $\lambda_1$ and $\lambda_2$ values were chosen by reconstructing the test volume by sweeping through a range of values and selecting the set of values that gave a reasonable visual quality. The same value (=1) was retained for all datasets. In the current version of the paper, we have now tuned $lambda_1$ (as per R1's suggestions) to maximize SSIM of the whole reconstructed test volume for l1-ls reconstruction of each dataset. This value was retained for uniform and spatially-varying prior based reconstruction as well. $\lambda_2$ was chosen clairvoyantly,  i.e., based on the value that gave the best visual results on the test.\\
+
+\textcolor{blue}{\textbf{R3-C7:}\textit{ Based on my experience with reconstructing tomographic data from few projections, I would expect the CS results to look \_much\_ better than what is presented in the paper. As an example, in Fig 10, based on the results of the FDK algorithm, I would expect any reasonable iterative method with regularization (CS or otherwise) to produce fairly accurate results. I'm not sure what the cause of this is, because no details about the used CS method are given (see point above). Looking at the images (and other images from iterative methods given by the authors), it seems like the methods have not converged yet, but there could be other causes.}}
+
+\textbf{Response:} The methods have indeed converged. Also mention that the perceived quality of reconstruction results using any technique can be quite subjective, and also dependent on the structure of the image as well as the number of projection views. In order to demonstrate this, we show the quality of reconstructions by CS for a varying number of views in Sec. 8 of our supplementary material. In this paper, we are considering a very small number of views.  
+What is the cause: When the number of views is large, the reconstruction using CS (l1-ls) is indeed good. However, when the number of views decreases, the reconstruction using CS (LASSO) is blurred, but with the benefit of suppressed artefacts that are otherwise present in FBP reconstruction. This is illustrated in Sec. 8 of our supplementary material.      
+For the 3D reconstructions shown in the updated paper, the $\lambda_1$ value is now chosen by performing l1-ls reconstructions for a wide range of values and then selecting the one that maximizes SSIM.
+We also observe that the optimal $\lambda_1$ value is different for each set of views. Hence, an accurate selection of $\lambda_1$ for every dataset and for every set of views may be impractical depending on the application constraints.\\
+
+\textcolor{blue}{\textbf{R3-C8:}\textit{ Related to the previous point, in several results it seems that FDK actually gives the most `accurate' reconstruction for the object. For example, in Fig 10 the shape of the leftmost void is changed by the proposed method, and in Fig 12 the shape of the seeds (?) is not well reconstructed by the proposed method. This should be discussed in the manuscript.}}
+    
+\textbf{Response:}  Although the shape of the left-most void (now in the green RoI of Fig.19 of the updated paper) is slightly bigger than it should be, the results of our method is better than that of FDK and this is reflected in the SSIM values of the new Table 8. In practice, the reconstruction of the new regions is dependent on the noise (false-positives) present in the weights-map.  We have optimally selected the hyperparameter `k' to minimize the noise in the weights-map. 
+In order to evaluate the accuracy of our reconstruction of the seeds in Figure 12 of old manuscript (Fig.13 of current manuscript), we have enlarged the green RoI to include the seeds as well (See Fig. 13-a), and have presented the SSIM on this RoI in Table 4. The SSIM value in the green RoI (which includes the seeds) is the highest for our method. We note that the results of Fig.13 have been updated after tuning for $\lambda_1$. Having said that, even for the results presented in our earlier manuscript, the accuracy for our reconstruction in the area of seeds is the highest.
+The SSIM values for the old 3D okra results over the RoI covering seeds are:\\
+FDK: 0.81\\
+L1-ls:0.82\\
+Uniform prior: 0.76\\
+Spatially-varying prior: 0.84 \\
+In all our results, we wanted to quantitatively measure the structural accuracy of the reconstructions. Hence, we have chosen SSIM (with the following factors: 0.1 for accuracy in intensity, 0.2 for accuracy in contrast, and 0.7 for accuracy in shape). Hence, the SSIM values give a close interpretation of the results in addition to the visual inspection. \\
+
+\textcolor{blue}{\textbf{R3-C9:}\textit{There exist methods that are relevant to the current work, since they use a similar approach. For example, ``Region-based iterative reconstruction of structurally changing objects in CT'' uses a similar approach in which image regions that change between scans are detected and reconstructed with a weaker `similarity' prior than other regions. A discussion of such methods should be included in the manuscript, and, ideally, direct comparisons should be included to show how the proposed method compares with them.}}
+
+\textbf{Response:} Among the methods in literature that detect new changes, many assume specific object-properties suitable for the application at hand.  For example, in~\cite{Van2015}, the knowledge of the attenuation coefficient of the fluid is used as a prior for reconstructing its flow through gravel. In~\cite{koen2020}, the changes across the successive scan volumes are assumed to be continuous, thus enabling the use of optical flow to model the motion between corresponding voxels of different scan volumes. In another study~\cite{vincent2017}, changes between successive scans were modelled by affine deformation whose parameters were computed for motion-correction. Such a correction enables acquisition from fewer views than would have otherwise not been possible for reconstruction with adequate fidelity. In~\cite{daniil2015}, all the scan volumes are reconstructed together using spatio-temporal regularization. 
+In~\cite{Van2014} (``Region-based iterative reconstruction of structurally changing objects in CT''), spline-based models are applied for tracking the regions of change in a SIRT framework. However, their method essentially reconstructs from all the different scans of the object simultaneously, and uses the extra redundancy across time simultaneously. In contrast to this, we propose a technique to utilize pre-reconstructed object-priors that are available in longitudinal studies. (In longitudinal studies, each scan must be reconstructed as soon as it is imaged, with the possible use of reconstructed volumes from previous scans.) 
+We have now discussed this in Sec.2 (`Related Work') of our paper.
+In addition, we have now performed a 2D reconstruction to compare our method with [3]. This has been discussed in our response to \textbf{R3-C2}.\\
+
+\textcolor{blue}{\textbf{R3-C10:}\textit{ Related to the previous point, this type of data seems well suited for data-driven techniques (e.g. deep learning) that have become very popular in recent years. Many papers exist that use deep learning for improving tomographic reconstruction from a low number of projections. It would be useful to include a comparison with a deep learning method, and, at the very least, discuss the possibility of using deep learning in this context.}}
+    
+\textbf{Response:} Deep learning techniques typically require large amounts of data. However, any given longitudinal study will allow for a very limited amount of data.. Moreover, there will be major generalization errors in deep learning based techniques for direct tomographic reconstruction, and in a clinical setting, we believe, current deep learning methods need to evolve further.\\
+
+\textcolor{blue}{\textbf{R3-C11:}\textit{The discussion of hyperparameter sensitivity is not very detailed. It is important to show how reconstruction change when adjusting these paremeters (for example, what happens if $\lambda_1$ is set to 0?). In the current manuscript, the authors simply give a range of values that worked for them, but this is not very informative since it depends critically on the scaling of the data, which we don't know.}}
+
+\textbf{Response:} The effect of the hyperparameter k on the weights-map and final reconstruction was earlier shown Figures. 17 and 18 (Fig. 20 and 21). These figures show that the selection of k decides the sensitivity to noise (false positives) in the weights-map. The range of k values deal with the extreme cases of very less amount of noise (Figure 17-a ,Fig. 20-a) upto high levels of false positives at the expense of not missing any true positive. (Figure. 17-l, Fig. 20-l).\\
+
+\textcolor{blue}{\textbf{R3-C12:}\textit{ A discussion about computational costs (time, memory) should be included in the paper. Since most of the shown results are for quite small images, I'm worried that the approach might not scale well to the large image sizes that are common in high-resolution tomography.   }}
+
+\textbf{Response:} While the reconstruction accuracy was measured in the (small) regions of new changes, all reconstructions were performed for the full object volume. 
+
+We have now presented the computation time of the 3D reconstructions in Table 7 of the paper. 
+For spatially-varying prior, most of the computation time is used in the generation of low-quality eigen-space by reconstructing  each of the templates using CS and FDK. This process cannot be performed offline as it involves applying the same imaging geometry used for scanning the test. We had performed these reconstructions sequentially. Ideally, these reconstructions must be performed parallely on different machines to significantly reduce the computation time.\\
+
+\textcolor{blue}{\textbf{R3-C13:}\textit{ How does measurement noise influence results? Typically, in low-dose settings, significant noise is present in tomographic data. Does the method work well with such noisy images? This should be discussed and ideally results should be shown.}}
+
+\textbf{Response:} In this work, we do not consider low-dose settings. Here, we have used standard-dose radiation and hence the Poisson noise (that is present in low-dose measurements) is minimal here. We observed this consistently in all the real datasets which we experimented with. The only significant reconstruction artefacts are the ones due to insufficient views, and we have focussed on removing these alone, whilst preserving the new changes.
+For the case of low-dose imaging, we have presented a few reconstruction techniques in~\cite{gopal2019low}.\\
+
+\textcolor{blue}{\textbf{R3-C14:}\textit{The paper includes several statements that are either false or not well supported. Examples include:    - `Fig. 1 shows that although CS removes the artefacts created due to subsampling, its reconstruction is blurred.' This is a very broad statement about the performance of an entire group of methods (CS), for which giving only a single image without any details is not enough support by far.}}
+
+\textbf{Response:} We wish to point out that our inference about CS reconstructions being blurred on undersampled data has been earlier pointed out in the published work~\cite{PICCS} in Page 4, line 22.  We again reiterate this here that the reconstruction using CS is of good quality (as proven in literature) when the number of views is large. However, when the number of views is limited, the optimizer (with optimal lambda) indeed blurs the overall reconstruction in an attempt to remove the sub-sampling artefacts. We have now demonstrated this in our response to \textbf{R3-C7}.
+
+However, for greater clarity about our comments on CS, we have retracted the generic statement from our earlier Introduction section. (``Fig. 1 shows that although CS removes the artefacts created due to subsampling, its reconstruction is blurred.''). Insead, since we have used a particular optimizer of the CS family, namely the l1-regularized least squares (l1-ls), we have now rephrased the term `CS'  with `l1-ls' wherever appropriate in the paper.\\
+
+
+\textcolor{blue}{\textbf{R3-C15:}\textit{ `which is an important issue that has so far been overlooked in the literature on tomography' -- this is again very broad, and there are actually papers that do address this issue (see above).}}
+
+\textbf{Response:} Agreed. We have now retracted this statement from the paper. However, we have now explained (in Section 2- `Related work') how our work contrasts with the other existing methods that detect new regions. More details are in our response to R3-C21.\\
+ 
+\textcolor{blue}{\textbf{R3-C16:}\textit{ `which was shown [23] to be better when compared to dictionary-based priors.' -- better in which respect? Currently, this strong statement is only supported by a paper that is written by the same authors -- more papers should probably be included to support this.}}
+
+\textbf{Response:} Since the main aim of our paper is to modulate the influence of priors, and not the comparison of global-priors with dictionary-priors, we have retracted this statement without any major impact in the readability of the paper. \\
+
+\textcolor{blue}{\textbf{R3-C17:}\textit{ `convergence of this optimization is guaranteed by the monotone convergence theorem' -- I think a reference is useful here.}}
+
+\textbf{Response:} The relevant reference is ~\cite{monotone} and is now included in the paper.\\
+
+\textcolor{blue}{\textbf{R3-C18:}\textit{ `we emphasize that in most of the literature on tomographic reconstruction, the results are shown on reconstruction from projections simulated from 3D volumes'. This is simply not true: there are \_many\_ papers on tomographic reconstruction that include comparisons using real (raw) data, especially outside the medical context. In fact, many of such datasets are publicly available, and are regularly used to compare methods.}}
+
+\textbf{Response:} Our statement was based on papers which had used either phantoms or dynamic CT data. For example, In papers such as~\cite{pirple}, the dataset consisted of measurements corresponding to a lung-phantom; validation was not performed on a dataset of a real lung CT. In~\cite{Hakka2019}, the dynamic dataset consisted of face emoji phantoms and simulations from an already available reconstructed lung volume. After surveying literature again, we have now found papers that have used real data. Hence,  we have now retracted our earlier statement about literature and have mentioned instead the general scenario: ``Data from commercially available CT machines is not suitable because most CT scanners do not reveal the raw measurements, and instead output only the full reconstructed volumes. Moreover, the process of conversion from the  projections to the full volumes is proprietary.'' \\
+
+\textcolor{blue}{\textbf{R3-C19:}\textit{ It is not really clear from the paper what the main contributions are compared with existing work. I think this is mainly caused by the structure of the paper, which is not really clear for me. For example, the `Contributions' section includes, for a large part, a description of one of the experimental applications of the method -- I don't understand this inclusion. It would be better to clearly state here the contribution of this paper compared with existing methods. Also, for me the fact that some results are given before the explanation of the method is confusing -- for me it would be clearer to have all experiments in a single section. Furthermore, Schematic 1 was not clear to me while reading the paper, since at that point terms like `old regions' and `pilot reconstruction' are not introduced. All these unclarities made it difficult to assess what is novel in the paper.}}
+
+\textbf{Response:} We have now re-organized the structure of the paper into the following well-differentiated sections:
+\begin{itemize}
+  
+\item Introduction, 
+\item related work (to compare this work with similar papers in literature), 
+\item contributions, 
+\item application (on a longitudinal medical data), 
+\item uniform prior, 
+\item results: uniform prior (including comparison with results from FDK and l1-ls), 
+spatially-varying prior, 
+\item results: spatially varying prior (including comparison with results from FDK, l1-ls and uniform prior), 
+\item discussions (to discuss parameter tuning and limitations of our work), and 
+  conclusions.
+  \end{itemize}
+For greater clarity, we have now removed Schematic 1 from the paper; We have  ensured that the rest of the paper can be followed without it.
+
+\textcolor{blue}{\textbf{R3-C20:}\textit{ The mathematical notation is not always clear: for example, the authors define `y = Rx' while later minimizing `||Rx-y||', which, given the mathematical definition, should always be zero. Of course, I understand what the authors mean here, but I think it is important to be clear with the mathematical description to avoid any confusion.}}
+
+
+\textbf{Response:} In order to be clear with the description, we have now rewritten Sec.1 (Introduction). All the variables are now introduced in paragraph 2 and 3 of Page 1 of the paper.\\
+
+\textcolor{blue}{\textbf{R3-C21:}\textit{ It seems that the weight map approach proposed by the authors is novel in this context. However, related methods exist that also try to predict the image regions where change is happening and improve reconstructions using this information. These methods are not discussed in the paper (or compared with), making it difficult to assess the novelty properly.}}
+
+\textbf{Response:} Among the methods in literature that detect new changes, many assume specific object-properties suitable for the application at hand.  For example, in~\cite{Van2015}, the knowledge of the attenuation coefficient of the fluid is used as a prior for reconstructing its flow through gravel. In~\cite{koen2020}, the changes across the successive scan volumes are assumed to be continuous, thus enabling the use of optical flow to model the motion between corresponding voxels of different scan volumes. In another study~\cite{vincent2017}, changes between successive scans were modelled by affine deformation whose parameters were computed for motion-correction. Such a correction enables acquisition from fewer views than would have otherwise not been possible for reconstruction with adequate fidelity. In~\cite{daniil2015}, all the scan volumes are reconstructed together using spatio-temporal regularization. We have now discussed this in Sec.2 (`Related Work') of our paper.
+In addition, we have now performed a 2D reconstruction to compare our method with~\cite{Lee2012}. This has been discussed in our response to \textbf{R3-C2}.\\
 
 \bibliography{tci_ref}
 \end{document}
