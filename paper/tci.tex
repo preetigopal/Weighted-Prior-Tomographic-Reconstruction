@@ -147,10 +147,6 @@ Limited-view tomographic reconstruction, compressed sensing, priors, longitudina
 \end{IEEEkeywords}
 
 
-
-
-
-
 % For peer review papers, you can put extra information on the cover
 % page as needed:
 % \ifCLASSOPTIONpeerreview
@@ -298,9 +294,115 @@ J_{\text{CS}}(\boldsymbol{\theta}) = \lVert\boldsymbol{\mathcal{R} \Psi\theta}- 
 %(2) there is the key issue of the choice of \textit{a particular} previously scanned object as template among the many previously acquired scans
 
  \section{Related Work}
-\label{sec:related}
-In this section, we survey the existing literature on tomographic reconstruction from undersampled measurements using object priors. In most cases, the object prior consists of an object reconstructed to high quality from a large number of projection angles. One of the earliest pieces of work in this area is the well-cited PICCS method~\cite{PICCS}, which enforces a robust-norm based similarity between the test and the object prior, in addition to a sparsity prior on the test. However in such a technique, there is no inherent mechanism to prevent the prior from overwhelming the current reconstruction, and choice of relative weights between the object and sparsity priors is difficult. A closely related method called PIRPLE was proposed in~\cite{pirple}, with additional steps to register the object prior and the test and a somewhat more flexible combination of data fidelity terms, sparsity prior and object prior. However, this method too has similar limitations as PICCS. In some pieces of work, the object prior is projected in the same angles as the current set of test measurements, and a set of projection differences is computed. These projection differences are essentially tomographic projections of the difference between the unknown test and the known object prior. Hence, a variety of reconstruction algorithms can be used to estimate such a difference image which can then be added to the object prior to yield the final estimate of the test. Such methods have been proposed in~\cite{Pourmorteza2015,Lee2012}. However, the reconstruction of the difference image will inherently contain artifacts due to a sparse set of projections, and these artifacts will appear in the final reconstruction as there is no mechanism to mitigate them (unlike the method that we propose). This can be seen in Sec.7 of our supplementary material~\cite{supp_paper}, where we have compared our method with~\cite{Lee2012}. In some recent techniques such as~\cite{Marjolein2016}, additional knowledge regarding regions of most likely change between the test and object prior is assumed, and lower weights are assigned to the prior in those regions. However, this is not done in a data driven manner and relies on additional expert domain knowledge which may not be available or which may be infeasible to acquire. There exists a fairly large-sized body of literature for reconstruction of structurally changing objects. In such cases, it may be infeasible to gather a large number of projections at every time instant. Moreover, there is additional temporal redundancy available which can reduce the required sample complexity for good reconstruction, and at the same time, tracking structural changes across time is of paramount importance. Many interesting approaches for this have been proposed in~\cite{daniil2015,koen2020, Van2015,HaoGao,Van2014}. These approaches variously use 4D sparsifying transforms for exploiting spatio-temporal redundancy~\cite{daniil2015}, robust principal components analysis assuming that the object consists of a large static part (background) and a sparse moving part (foreground)~\cite{HaoGao}, optical flow computations between projections (at different time instances) of the dynamic nonrigid object~\cite{koen2020} with additional key-frame and residual modelling in~\cite{Guangming2019}, spline-based models for tracking the regions of change in an SIRT framework~\cite{Van2014}, or knowledge of fluid models (piecewise constant shapes of attenuation curves in the dynamic region) in an SIRT framework~\cite{HaoGao}. However, all these techniques~\cite{daniil2015,koen2020,Van2015,HaoGao,Van2014} essentially reconstruct all the different stages of the object simultaneously, and use the extra redundancy across time simultaneously. In the scenario of a longitudinal study (where projection measurements are acquired at instants that are several weeks apart) which we consider in this paper, such approaches are not feasible. A longitudinal study will necessarily require reconstruction results after acquisition of each set of measurements. 
-In this paper, we present a technique that makes use of multiple object priors, corresponding to high quality reconstructions of similar objects across time. We use these priors to improve the reconstruction of the test from largely undersampled measurements. In particular, we define the regions of change between the test and the eigenspace spanned by the previous high quality object priors in a purely data driven manner. Very importantly, our technique clearly differentiates between genuine structural changes and ``changes'' that appear due to undersampling artefacts.  Besides this, since we use a statistical model with multiple object priors, we avoid the problem of selecting an appropriate single object prior unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and also make use of the additional information available in the multiple priors. 
+ \label{sec:related}
+ The idea of using a reduced number of views is most pronounced in
+specialized applications. For example, in~\cite{Essam2015},
+sparsity-constrained optimization is presented for angiography. Here,
+the regions of interest are the vessels alone and they are highlighted
+by physically inserting a contrast agent, and therefore there is an
+inherent sharper contrast between the vessels and the background.  In
+other applications where the spatial-gradient of the underlying volume
+is known to be sparse, the `total variation' method, as used
+in~\cite{Li2015,Polak2017}, can be applied.  In a more generalized
+application scenario, like the ones addressed in this paper, any
+information about the regions of interest is not known, and such
+techniques have limited applicability. 
+
+%  As can be seen
+% in the situatiowe will
+% later see in Figs.\ref{fig:object-prior_test_okra}
+% and~\ref{fig:object-prior_test_sprouts}, the spatial-gradient of many
+% datasets is not sparse.
+
+Most object-prior based reconstruction have been in the areas of
+dynamic CT and 4D-CT. %In dynamic CT, the object being scanned
+%undergoes changes between successive projection views and hence is not
+%stationary even within a single complete scan. In contrast, in 4D-CT,
+%a set of 3D CT scans are taken over short intervals of time, and the
+%object undergoes changes between successive scans.  The reconstruction
+%is then performed over the entire set generating several 3D
+%volumes.
+%In most scenarios, the object-prior
+The object-prior usually consists of an object
+reconstructed to high quality from a large number of projection
+angles. One of the earliest pieces of work in this area is the
+well-cited PICCS method~\cite{PICCS} for dynamic CT, which enforces a robust-norm
+based similarity between the test and the object prior,
+in addition to a sparsity prior on the test. The limitation is the
+unchecked over-emphasis of the prior on the reconstruction of the test
+at hand. A closely related method called PIRPLE was proposed
+in~\cite{pirple}, with additional steps to register the object prior
+and the test and a somewhat more flexible combination of data fidelity
+terms, sparsity prior and object prior. However, this method too has
+similar limitations as PICCS.
+
+In order to prevent the object-prior from overwhelming the
+reconstruction of test, few other approaches have either estimated the
+motion between the object-prior and the test or have applied very
+specific object-properties for identifying the new changes in the
+test.  Examples for the former include~\cite{koen2020}, where the
+changes across the sucessive scan volumes are assumed to be
+continuous, thus enabling the use of optical flow to model the motion
+between corresponding voxels of different scan volumes. In another
+study~\cite{vincent2017}, changes between successive scans were
+modelled by affine deformation whose parameters were computed for
+motion-correction, which inturn enables acquisition from fewer
+views. In~\cite{daniil2015}, all the scan volumes are reconstructed
+together using spatio-temporal regularization. Here again, the
+inherent assumption is the continuity across volumes in space or
+time. The methods that use object-specific knowledge
+are~\cite{Van2015} and~\cite{Marjolein2016}.  In~\cite{Van2015}, the
+knowledge of the attenuation coefficient of the fluid is used as a
+prior for reconstructing its flow through gravel. However, this relies
+on additional expert domain knowledge which may not be available or
+which may be infeasible to acquire.
+
+Other approaches variously use robust principal components
+analysis assuming that the object consists of a large static part
+(background) and a sparse moving part (foreground)~\cite{HaoGao},
+spline-based models for tracking the regions of change in an SIRT
+framework~\cite{Van2014}. However, all these
+techniques~\cite{daniil2015,koen2020,Van2015,HaoGao,Van2014}
+essentially reconstruct all the different stages of the object
+simultaneously, and use the extra redundancy across time
+simultaneously. In the scenario of a longitudinal study (where
+projection measurements are acquired at instants that are several
+weeks apart) which we consider in this paper, such approaches are not
+feasible. A longitudinal study will necessarily require reconstruction
+results after acquisition of each set of measurements
+
+There exists methods for estimating the new changes (in the test)
+directly in the projection space. In such techniques, the object prior
+is projected in the same set of views as the current set of test
+measurements, and a set of projection differences is computed. These
+projection differences are essentially tomographic projections of the
+difference between the unknown test and the known object prior. Hence,
+a variety of reconstruction algorithms can be used to estimate such a
+difference image which can then be added to the object prior to yield
+the final estimate of the test. Such methods have been proposed
+in~\cite{Pourmorteza2015,Lee2012}. However, the reconstruction of the
+difference image will inherently contain sub-sampling artefacts, and
+these artefacts will appear in the final reconstruction as there is no
+mechanism to mitigate them (unlike the method that we propose). This
+can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
+where we have compared our method with~\cite{Lee2012}.
+
+In this paper, we present a technique that makes use of multiple
+object priors, corresponding to high quality reconstructions of
+similar objects across time. We use these priors to improve the
+reconstruction of the test from largely undersampled measurements. In
+particular, we define the regions of change between the test and the
+eigenspace spanned by the previous high quality object priors in a
+purely data driven manner. Very importantly, our technique clearly
+differentiates between genuine structural changes and ``changes'' that
+appear due to undersampling artefacts.  Besides this, since we use a
+statistical model with multiple object priors, we avoid the problem of
+selecting an appropriate single object prior
+unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
+also make use of the additional information available in the multiple
+priors.
+ 
+%-------------------------------------------------------------------
 
 \section{Contributions}
 \label{sec:contributions}
@@ -966,7 +1068,7 @@ solving Eq.~\ref{eq:spatially-varying_prior} were robust over a wide range of $k
         \caption{}
 \label{fig:potato_test}
      \end{subfigure}
-      \caption{Potato dataset: One slice (slice-A) each from the previously scanned objects (the first three from left) and a slice from the test 
+      \caption{Potato dataset: One slice each from the previously scanned objects (the first three from left) and a slice from the test 
         volume (extreme right). Notice the appearance of the fourth
         hole in the test slice. }
 \label{fig:object-prior_test_potato_A1}
