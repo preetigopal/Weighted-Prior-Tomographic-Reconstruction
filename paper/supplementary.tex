@@ -4,103 +4,117 @@
 \bibliographystyle{IEEEtran}
 \usepackage{caption}
 \usepackage{subcaption}
+%\usepackage{geometry}
 \usepackage[colorlinks=true]{hyperref}
-\title{Supplemental material for `Eliminating prior-bias from sparse-projection
+\title{Supplemental material for `Eliminating object prior-bias from sparse-projection
 tomographic reconstructions'}
 \begin{document}
 \maketitle
-This supplementary material consists of details of the optimization routine used in our method, links to view our 3D reconstructions and results of 2D reconstructions for different projection views.
+%This supplementary material consists of details of the optimization routine used in our method, links to view our 3D reconstructions and results of 2D reconstructions for different projection views.
 
 \tableofcontents
 \newpage
 %--------------------------------------------------------------------------
 \section{An alternate method to compute weights-map}
-The problem of recovering the unknown data $\boldsymbol{x}$ from its measurements falls under the broad category of inverse problems. In almost all such cases, the measurement model is known. However, a direct analytical inverse solution does not exist in most cases because of the enormous size of the matrix modelling the measurement process. The complexity is further increased when insufficient number of measurements are taken leading to an ill-posed problem. In such circumstances, iterative schemes are used to solve for $\boldsymbol{x}$ by minimizing a cost function. 
+The value of $k$ (discussed in Sec.10(C) of the main paper) is typically dependent on the number of false positives the system can allow in exchange for the detection of more true positives (regions of new changes). It is this choice and not the particular type of dataset that affects the selection of $k$. In our work, the chosen $k$ corresponds to the one that gives minimal tolerance to false positives.\\
 
-A simple cost function $E_\text{model}$ would minimise any difference between the measurements of the data and the imaging model:
+However, in case one wishes to completely avoid the use of this hyper-parameter, one can construct a binary weights-map using an alternate method described below.
 
-\begin{equation}
-E_\text{model} = \lVert\boldsymbol{\Phi x- y}\rVert_2^2.
-\end{equation}
-where $\boldsymbol{y}$ denotes the acquired measurements of $\boldsymbol{x}$ under an imaging model $\boldsymbol{\Phi}$. In our 3D reconstructions, $\boldsymbol{\Phi}$ denotes cone-beam projection model. In the case of sparse measurements (measurements from significantly few projection views), some known information of the underlying unknown data is imposed in order to get its better estimate. The Compressive Sensing is one such method that exploits the fact that most naturally occurring data are sparse under some mathematical transform. The cost function is now given by
+\begin{enumerate}
+\item For the purposes of training, treat one of the previously scanned images as test.
+\item Annotate the region of differences between the test and all of the previously scanned images based on domain knowledge.
+\item Compute the difference between the pilot reconstruction of the test and its projection onto the eigenspace. Let this spatial map be called `error map'.
+\item Train a Support Vector Machine (SVM) model to classify patches of this error-map image into one of the two categories: new changes present, new changes absent.
+\item Once the trained SVM model is obtained, it can be applied to generate binary weights-map for new test images in the same longitudinal study.
+\item Once the binary weights-map $\boldsymbol{W_b}$ is obtained, the prior and the pilot can be stitched by $\boldsymbol{R} = \boldsymbol{W_b}(\rm{Pilot}) + (1-\boldsymbol{W_b})(\rm{Prior})$. Fig.~\ref{fig:okra_svm} shows results of this method on 2D okra dataset.
 
-\begin{equation}
-E_\text{CS} = \lVert\boldsymbol{\Phi x- y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1
-\end{equation}
-Here $\boldsymbol{\theta}$ are the unknown sparse coefficients of $\boldsymbol{x}$. In order to further improve the reconstruction, we can use information available from the scans of similar volumes in the past. Such methods are known as `\emph{prior}-based methods'. 
-
-For our reconstruction, the cost function $E$ includes a third term enforcing weighted similarity between the reconstructed volume and pre-computed prior.
+  Alternatively, these binary weights can also be used in the optimization loop in Eq.~\ref{Eq:main} (corresponding to Eq.~6 in the main paper), although this approach has not been pursued here. 
 
 \begin{equation}
-  E(\boldsymbol{\theta},\boldsymbol{\alpha}) = \lVert\boldsymbol{\Phi x- y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 +\lambda_2\lVert\boldsymbol{W}(\boldsymbol{x} - (\boldsymbol{\mu} + \sum_{i}\boldsymbol{V_i}\alpha_i))\rVert_2^2
-\label{eq:weighted_prior}
+%   \setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
+%\setlength{\abovedisplayskip}{-2pt} \setlength{\abovedisplayshortskip}{-2pt}
+J_3(\boldsymbol{\theta},\boldsymbol{\alpha}) = \lVert\boldsymbol{\mathcal{R} x}-\boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 +\lambda_2\lVert\boldsymbol{W_b}(\boldsymbol{x} - (\boldsymbol{\mu} + \sum_{k}\boldsymbol{V_k}\alpha_k))\rVert_2^2.
+\label{Eq:main}
 \end{equation}
-\newpage
 
+\end{enumerate} 
 
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/template_1.png}
 
-\textbf{Building the prior:}\\
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/template_2.png}
 
-We now describe the method used to build the prior. We begin with, it is assumed that the test volume can be expressed as a compact linear combination of the principal components extracted from a set of similar volumes (called here as `object-prior'). Hence, the prior is built using Principal Component Analysis (PCA), which has been a widely used technique to represent data in terms of its significant modes or directions of variation. \\
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/template_3.png}
 
-First, a set of representative 3D volumes is chosen as object-prior. These volumes must represent a wide range in anatomy, in order to contribute to an eigenspace that can encompass a range of possible test slice anatomy. If these volumes are not aligned, then they must be first registered before computing the prior. The prior is built by computing the covariance matrix $C$ from the template set $\{Q_i\}$, as shown in Eq.~\ref{eq:PCA}, The space spanned by the eigenvectors $\boldsymbol{\{V_i\}}$ (eigenspace) of the covariance matrix is the global prior and is assumed to contain any test slice that is similar, but not necessarily identical to the object-prior. The covariance matrix is given by:
- \begin{equation}
-\begin{split}
-  C  & = \frac{1}{N-1}\sum_{i=1}^N(Q_i - \mu)(Q_i - \mu)^{T}\\
-\end{split}
-\label{eq:PCA}
-\end{equation}
-where $\mu$ denotes the mean of all previously scanned volumes $\{Q_i\}$ and $L$ denotes the number of previously scanned volumes chosen. The eigenvalue decomposition of $C$ will give $L$ orthogonal eigen vectors. We use all of the $L$ eigenvectors as a basis to represent the unknown test volume.  \\
+        \caption{}
+     \end{subfigure}
+     \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/testIm.png}
 
-\textbf{Minimizing the Cost function}\\
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/weights.png}
 
-We minimize the cost specified in Eqn.~\ref{eq:weighted_prior} by alternately solving for $\boldsymbol{\alpha}$ and $\boldsymbol{\theta}$
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/detectedInlier.png}
 
-\begin{equation}
-E_{\boldsymbol{\alpha}}(\boldsymbol{\theta}) = ||\Phi\Psi\boldsymbol{\theta}- y||_2^2  + \lambda_1||\boldsymbol{\theta}||_1+\lambda_2||\Psi\boldsymbol{\theta} - (\mu + \sum_{i}V_i\alpha_i)||_2^2
-\label{Eq:primaryObj}
-\end{equation}
-\begin{equation}
-E_{\boldsymbol\theta}(\boldsymbol{\alpha}) = ||\Psi\boldsymbol{\theta} - (\mu + \sum_{i}V_i\alpha_i)||_2^2
-\label{Eq:alpha1}
-\end{equation}
-Eq.~\ref{Eq:alpha1} leads to the following closed form update for $\alpha$:
-\begin{equation}
-\boldsymbol{\alpha} = \boldsymbol{V}^T(\Psi\boldsymbol{\theta} - \mu)
-\label{Eq:alpha}
-\end{equation}
-An optimal value of $\lambda_2$ is empirically chosen \textit{a priori}, based on the reconstructions of one of the template slices.
+        \caption{}
+    \end{subfigure}    
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/result_pilot.png}
 
+        \caption{}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[b]{0.31\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/resultStitched_svm.png}
 
+        \caption{}
+     \end{subfigure}
+   % \begin{subfigure}[b]{0.19\linewidth}
+   %     \includegraphics[width=\textwidth]{images/low_dose_prior/svm_method/prior.png}
+
+    %    \caption{}
+    % \end{subfigure}
+     \caption[Selecting $k$]{Using an alternate approach to generate (binary) weights map. (a)-(c) the images used as object-prior, (d) the test (310$\times$310). Measurements along $60$ views were taken. (e) error-map showing new regions, (f) detected binary weights map showing regions of new changes, (g) pilot, (h) final reconstruction with pilot in the new regions, and prior in the other regions. } %(h) prior, which is obtained by projecting the pilot onto the eigenspace computed from the templates, 
+\label{fig:okra_svm}
+\end{figure}
+\clearpage
 %--------------------------------Links to videos-------------------------------------------------
 \newpage
 \section{Links to view our 3D reconstructions}
-
-Please refer to the following videos to view the 3D datasets and reconstruction results referred in our paper:
+The 3D reconstructions, corresponding to the images shown in Figs.~14,~16 and 19 in the main paper, can be better visualized in the form of a video. Hence, please refer to the following videos to view the 3D datasets and reconstruction results:
 
 \begin{itemize}
-\item \textbf{Okra groundtruth:} \\ \url{https://www.dropbox.com/s/gn3fk3ev7s7tup0/GroundTruth.mp4?dl=0}\\
-	The first four images correspond to the four template volumes and the last (right-most) image corresponds to the test volume.
-\item \textbf{Okra 3D reconstruction results:} \\ \url{https://www.dropbox.com/s/o7vga1kjzcayjmt/Reconstruction.mp4?dl=0}\\
-       The order of images from left to right correspond to the test volume, FDK reconstruction, CS reconstruction, unselective prior + CS reconstruction, and our reconstruction. 
-\item \textbf{Potato groundtruth:} \\ \url{https://www.dropbox.com/s/whwu3th4ozr96k1/GroundTruth.mp4?dl=0}\\
-	The first three images correspond to the three template volumes and the last (right-most) image corresponds to the test volume.
-\item \textbf{Potato 3D reconstruction results:}\\  \url{https://www.dropbox.com/s/k41qg1kwrry9rwp/Reconstruction.mp4?dl=0}\\
-       The order of images from left to right correspond to the test volume, FDK reconstruction, CS reconstruction, unselective prior + CS reconstruction, and our reconstruction.
-\item \textbf{Sprouts groundtruth:} \\ \url{https://www.dropbox.com/s/0d7jbojscbx4ciz/GroundTruth.mp4?dl=0}\\
-	The first five images correspond to the five template volumes and the last (right-most) image corresponds to the test volume.
-\item \textbf{Sprouts 3D reconstruction results:}\\  \url{https://www.dropbox.com/s/o3jmsa4dwtd8a6l/Reconstruction.mp4?dl=0}\\
-       The order of images from left to right correspond to the test volume, FDK reconstruction, CS reconstruction, unselective prior + CS reconstruction, and our reconstruction.
+\item \textbf{Okra:} \\
 
+  \url{https://www.dropbox.com/sh/x3yjfzsc5633d1t/AAAaVOXvTbc06a2DomPO1kSna?dl=0}\\
+\item \textbf{Potato:} \\
+
+  \url{https://www.dropbox.com/sh/6mja5uh8fa2h0fc/AAA2h4VsLxAiXcEIhmTlM1xha?dl=0}\\
+\item \textbf{Sprouts:}\\
+
+  \url{https://www.dropbox.com/sh/qtgeyckvbxiaz3s/AADhR2zRUUN4qXSXraErcqSea?dl=0}\\
 \end{itemize}
 
 \newpage
 
 %--------------------------BIG images: TMH results
-\section{Bigger images for reconstruction results shown in main paper}
+\section{Larger images for reconstruction results}
+All the images shown in the main paper are displayed in small size due to space constraints. This restricts visualization of the structural details within them. Therefore, we present each of those images in large size here in order to view their internal structures with better clarity. 
 \subsection{Liver}
 %-------RFA2 moderate views
-\textbf{Goal: Observe details of new changes}
+%\textbf{Goal: Observe details of new changes}
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{white}{blue}{\includegraphics[width=0.49\columnwidth]{../images/tmh/RFA2/few_views/colorTestIm.png}}}\hfill
@@ -112,7 +126,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \end{figure}
 \newpage
 
-\textbf{Test image Figure~\ref{fig:RFA2_few_views_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Test image in Figure~\ref{fig:RFA2_few_views_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
 \centering
 \includegraphics[width=1.2\columnwidth]{../images/tmh/RFA2/few_views/colorTestIm.png}
@@ -121,7 +135,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \label{fig:RFA2_few_views_bigger}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:RFA2_few_views_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:RFA2_few_views_biggerIm}   is shown in large size for better clarity.}\\
 \begin{figure}[!h]
 \centering
 \includegraphics[width=1.2\columnwidth]{../images/tmh/RFA2/few_views/fbp.png}
@@ -130,7 +144,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \label{fig:RFA2_few_views_bigger}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:RFA2_few_views_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:RFA2_few_views_biggerIm}   is shown in large size for better clarity.}\\
 \begin{figure}[!h]
 \centering
 \includegraphics[width=1.2\columnwidth]{../images/tmh/RFA2/few_views/cs_dct.png}
@@ -139,7 +153,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \label{fig:RFA2_few_views_bigger}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:RFA2_few_views_biggerIm} is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:RFA2_few_views_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
 \centering
 \includegraphics[width=1.2\columnwidth]{../images/tmh/RFA2/few_views/weighted_pca_all_methods_kk_0_01.png}
@@ -189,7 +203,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \end{figure}
 
 \newpage
-\textbf{Test image of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Test image of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
     \begin{subfigure}[b]{\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/testIm_red.png}}
@@ -198,7 +212,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
      \end{subfigure}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
     \begin{subfigure}[b]{\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/fdkIm.png}}
@@ -207,7 +221,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
      \end{subfigure}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
     \begin{subfigure}[b]{\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/csIm.png}}
@@ -216,7 +230,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
      \end{subfigure}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
     \begin{subfigure}[b]{\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/plainPriorIm.png}}
@@ -225,7 +239,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
      \end{subfigure}
 \end{figure}
 \newpage
-\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}\\
+\textbf{Reconstruction result of Figure~\ref{fig:sprouts_3D_results_biggerIm}  is shown in large size for better clarity.}\\
 \begin{figure}[!h]
     \begin{subfigure}[b]{\linewidth}
         \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/weightedPriorIm.png}}
@@ -249,7 +263,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \label{fig:okra_3D_results_biggerIm}
 \end{figure}
 \newpage
-\textbf{Test image of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}
+\textbf{Test image of Figure~\ref{fig:okra_3D_results_biggerIm}   is shown in large size for better clarity.}
 \begin{figure}[!h]
 \centering
        \includegraphics[width=0.5\columnwidth]{../images/okra/testCropped.png}
@@ -258,7 +272,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \end{figure}
 \newpage
 
-\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}
+\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in large size for better clarity.}
 \begin{figure}[!h]
 \centering
        \includegraphics[width=0.5\columnwidth]{../images/okra/fdk_cropped.png}
@@ -267,7 +281,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \end{figure}
 \newpage
 
-\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}
+\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}   is shown in large size for better clarity.}
 \begin{figure}[!h]
 \centering
        \includegraphics[width=0.5\columnwidth]{../images/okra/cs_cropped.png}
@@ -277,7 +291,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \newpage
 
 
-\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}
+\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in large size for better clarity.}
 \begin{figure}[!h]
 \centering
        \includegraphics[width=0.5\columnwidth]{../images/okra/pca_cropped.png}
@@ -286,7 +300,7 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \end{figure}
 \newpage
 
-\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}  is shown in larger display here  again for better clarity.}
+\textbf{Reconstruction result of Figure~\ref{fig:okra_3D_results_biggerIm}   is shown in large size for better clarity.}
 \begin{figure}[!h]
 \centering
        \includegraphics[width=0.5\columnwidth]{../images/okra/prior_weighted_cropped.png}
@@ -296,7 +310,8 @@ Please refer to the following videos to view the 3D datasets and reconstruction 
 \newpage
 
 %----------------------------------Comparison with Literature------------------------
-\section{Comparison with literature: detecting new changes directly in the measurements}
+\section{Detecting new changes directly in the measurements}
+
 Sec.2 of the main paper (`Related work') contrasts the spatially-varying technique  with other prior based techniques in literature. Here we present a 2D reconstruction  result (of the test shown in Figure.~\ref{fig:comparisonLit_dataset}) to compare our method with~\cite{Lee2012}, in which the new changes are directly detected in the measurement space by computing the difference between the measurements of the test and the corresponding simulated measurements of the template. This difference-volume is then reconstructed and then fused (added to) with the original high quality template. However, in the above method, the sub-sampling artefacts present in the difference-volume gets carried over to the final reconstructed image. This is shown in Figure~\ref{fig:comparisonLit_results}. A quantitative comparison over the region of interest is shown in Table~\ref{tab:comparisonLit}.
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.4\linewidth}
@@ -362,7 +377,9 @@ Sec.2 of the main paper (`Related work') contrasts the spatially-varying techniq
 %-----------------------------------Blurred results (CS)
 \section{Blurred reconstruction under limited views}
 
-When the number of views is large, the reconstruction using CS (l1-ls) is indeed good, as shown below in Fig~\ref{fig:cs_blurred_48_views}. For the CS reconstructions shown below, we have tuned the lambda1 values (Figs.~\ref{fig:ssim_rmse_48_views},~\ref{fig:ssim_rmse_24_views},~\ref{fig:ssim_rmse_12_views}) and selected the one with maximum SSIM. 
+The l1-ls reconstructions shown in the main paper (for example, in Figs.~14(c),~16(c) and 19(c)), appear to be blurred. Here, we discuss the reason for this observation by reconstructing an image from varying number of views using l1-ls (Eq.1 in the main paper).\\
+
+When the number of views is large, the reconstruction using l1-ls is indeed good, as shown below in Fig~\ref{fig:cs_blurred_48_views}. For the reconstructions shown below, we have tuned the $\lambda_1$ values (Figs.~\ref{fig:ssim_rmse_48_views},~\ref{fig:ssim_rmse_24_views},~\ref{fig:ssim_rmse_12_views}) and selected the one with maximum SSIM. 
 
 
 \begin{figure}[!h]
@@ -383,7 +400,7 @@ When the number of views is large, the reconstruction using CS (l1-ls) is indeed
         \caption{l1-ls}
     \end{subfigure}
     %\captionsetup{labelformat=empty}
-     \caption{Reconstruction of potato test slice (150$\times$150) from 48 views. The lambda1 for l1-ls reconstruction was chosen to be the optimal value of 0.4 here.} 
+     \caption{Reconstruction of potato test slice (150$\times$150) from 48 views. The $\lambda_1$ for l1-ls reconstruction was chosen to be the optimal value of 0.4 here.} 
 \label{fig:cs_blurred_48_views}
 %\addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
@@ -392,12 +409,12 @@ When the number of views is large, the reconstruction using CS (l1-ls) is indeed
 \centering
        \includegraphics[width=0.9\columnwidth]{../images/potato/2D/cs_blurred_results/SSIM_RMSE_48_angles.png}
 %\captionsetup{labelformat=empty}
-\caption{SSIM and RMSE for reconstructionn from 48 views for varying levels of $\lambda1$. The optimal value of 0.4 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_48_views}}
+\caption{SSIM and RMSE for reconstruction from 48 views for varying levels of $\lambda_1$. The optimal value of 0.4 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_48_views}}
 \label{fig:ssim_rmse_48_views}
 \end{figure}
 \newpage
 
-However, when the number of views decreases, the reconstruction using CS (LASSO) is blurred, but with the benefit of suppressed artefacts that are otherwise present in FBP reconstruction. This is illustrated in Figs.~\ref{fig:cs_blurred_24_views} and~\ref{fig:cs_blurred_12_views}.
+However, when the number of views decreases, the reconstruction using l1-ls is blurred, but with the benefit of suppressed artefacts that are otherwise present in FBP reconstruction. This is illustrated in Figs.~\ref{fig:cs_blurred_24_views} and~\ref{fig:cs_blurred_12_views}.
 
 
 \begin{figure}[!h]
@@ -418,7 +435,7 @@ However, when the number of views decreases, the reconstruction using CS (LASSO)
         \caption{l1-ls}
     \end{subfigure}
     %\captionsetup{labelformat=empty}
-     \caption{Reconstruction of potato test slice (150$\times$150) from 24 views. The lambda1 for l1-ls reconstruction was chosen to be the optimal value of 2 here.} 
+     \caption{Reconstruction of potato test slice (150$\times$150) from 24 views. The $\lambda_1$ for l1-ls reconstruction was chosen to be the optimal value of 2 here.} 
 \label{fig:cs_blurred_24_views}
 %\addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
@@ -427,7 +444,7 @@ However, when the number of views decreases, the reconstruction using CS (LASSO)
 \centering
        \includegraphics[width=\columnwidth]{../images/potato/2D/cs_blurred_results/SSIM_RMSE_24_angles.png}
 %\captionsetup{labelformat=empty}
-\caption{SSIM and RMSE for reconstructionn from 24 views for varying levels of $\lambda1$. The optimal value of 2 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_24_views}}
+\caption{SSIM and RMSE for reconstruction from 24 views for varying levels of $\lambda_1$. The optimal value of 2 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_24_views}}
 \label{fig:ssim_rmse_24_views}
 \end{figure}
 \newpage
@@ -450,40 +467,20 @@ However, when the number of views decreases, the reconstruction using CS (LASSO)
         \caption{l1-ls}
     \end{subfigure}
     %\captionsetup{labelformat=empty}
-     \caption{Reconstruction of potato test slice (150$\times$150) from 12 views. The lambda1 for l1-ls reconstruction was chosen to be the optimal value of 3 here.} 
+     \caption{Reconstruction of potato test slice (150$\times$150) from 12 views. The $\lambda_1$ for l1-ls reconstruction was chosen to be the optimal value of 3 here.} 
 \label{fig:cs_blurred_12_views}
 %\addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
-As seen here, the reconstruction by CS (LASSO) is indeed blurred when the number of views is very less. The iterative reconstruction was run until convergence (epsilon = 0.001).
-The plots below show the SSIM and RMSE values for varying values of lambda1 for the CS (LASSO) reconstructions of the above test image.
+As seen here, the reconstruction by l1-ls is indeed blurred when the number of views is very less. The iterative reconstruction was run until convergence (epsilon = 0.001).
+%The plots below show the SSIM and RMSE values for varying values of lambda1 for the CS (LASSO) reconstructions of the above test image.
 
 \begin{figure}[!h]
 \centering
        \includegraphics[width=\columnwidth]{../images/potato/2D/cs_blurred_results/SSIM_RMSE_12_angles.png}
 %\captionsetup{labelformat=empty}
-\caption{SSIM and RMSE for reconstructionn from 12 views for varying levels of $\lambda1$. The optimal value of 3 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_12_views}}
+\caption{SSIM and RMSE for reconstruction from 12 views for varying levels of $\lambda_1$. The optimal value of 3 was chosen to obtain the reconstruction shown in Fig.~\ref{fig:cs_blurred_12_views}}
 \label{fig:ssim_rmse_12_views}
 \end{figure}
-\newpage
-%----------------------------Patch-based methods
-\section{\textbf{Patch-based techniques}}
-\label{sec:patch_based}
-Here we present a comparison~\cite{my_dicta_paper} of the performance of the aforementioned PCA-based global prior with a prior that is based on construction of patch-wise dictionaries. In both cases, the reconstruction routine is based on typical CS techniques. The well-known K-SVD algorithm \cite{Aharon2006} was chosen for construction of patch-based dictionaries. For this, patches were extracted from each of the template volumes, from which an overcomplete dictionary was obtained. The basic aim of the K-SVD algorithm (or any overcomplete dictionary learning technique) is the compact linear representation of all these patches using the dictionary columns. Let $\boldsymbol{D}$ denote the dictionary learned, $N_p$ the total number of patches, and $\boldsymbol{H_i}$ the operator to extract the $i^{\textrm{th}}$ patch from the intermediate reconstructed slice/volume. Then, once $\boldsymbol{D}$ is computed in an earlier `training phase', each new test slice (or test volume) can be reconstructed by optimizing a cost function such as the one below:
-\begin{multline}
-J_2(\boldsymbol{\theta},\{\boldsymbol{\alpha_i}\}_{i=1}^{N_p}) = \lVert\boldsymbol{\mathcal{R}\Upsilon\theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \\ \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\lVert \boldsymbol{H_i\Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2 +\frac{\lambda_3}{ N_p}\sum_{i=1}^{N_p}\lVert\boldsymbol{\alpha_i}\rVert_1.
-\label{Eq:main_patchBased}
-\end{multline}
-The reconstruction proceeds in an alternating manner, first by minimization of Eq.~\ref{Eq:primaryObj_patchBased} and then by minimization of Eq.~\ref{Eq:alpha_patchBased}. For both these, the solver in~\cite{l1ls} is used. For the former case, the cost function reduces to:
-\begin{equation}
-J_{\boldsymbol{\alpha}}(\boldsymbol{\theta}) = \lVert \boldsymbol{\mathcal{R} \Upsilon \theta}- \boldsymbol{y}\rVert_2^2  + \lambda_1\lVert\boldsymbol{\theta}\rVert_1 + \frac{\lambda_2}{N_p}\sum_{i=1}^{N_p}\rVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D \alpha_i}\rVert_2^2.
-\label{Eq:primaryObj_patchBased}
-\end{equation}
-For each $i \in \{1,...,N_p\}$, the cost function reduces to:
-\begin{equation}
-J_{\boldsymbol{\theta}}(\boldsymbol{\alpha}_i) =  \lVert \boldsymbol{H_i \Upsilon \theta}-\boldsymbol{D\alpha_i}\rVert_2^2  + \frac{\lambda_3}{\lambda_2}\lVert\boldsymbol{\alpha_i}\rVert_1.
-\label{Eq:alpha_patchBased}
-\end{equation}
-This summarizes the comparison with patch-based methods.
 \newpage
 \bibliography{tci_ref}
 \end{document}
