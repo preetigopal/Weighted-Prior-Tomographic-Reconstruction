@@ -718,9 +718,10 @@ longitudinal study. Here, our data consists of successive scans of the liver tak
 during a radio-frequency ablation procedure as described in Sec.~\ref{sec:datasets}. In this context, we classify the goal of any of our
 reconstruction techniques into two categories: 
 \begin{enumerate}
-\item To track the position of the needle in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
-\item To accurately observe the new changes amidst a relatively well reconstructed background after the needle touches the tumor.%Later, when the probe is proximal to or touches the tumor, our goal is to observe details of tumor ablation while simultaneously reducing sub-sampling artefacts. In this case, we propose to capture measurements from a slightly higher number of views (`moderate-view' imaging) to acquire more information, and use a spatially-varying prior-based reconstruction. The spatially-varying technique moderates the effect of the prior in the reconstruction of new changes in the object being scanned.
-\end{enumerate} 
+\item to track the position of the needle, and% in a relatively well-reconstructed background.%Initially, when our goal is to only track the location of the probe while simultaneously reducing sub-sampling artefacts, we advocate capturing measurements from a small number of views (`few-view' imaging) and using uniform prior based reconstruction.
+\item to accurately observe the new changes when the needle touches the tumor,%Later, when the probe is proximal to or touches the tumor, our goal is to observe details of tumor ablation while simultaneously reducing sub-sampling artefacts. In this case, we propose to capture measurements from a slightly higher number of views (`moderate-view' imaging) to acquire more information, and use a spatially-varying prior-based reconstruction. The spatially-varying technique moderates the effect of the prior in the reconstruction of new changes in the object being scanned.
+\end{enumerate}
+while simultaneously reducing the sub-sampling artefacts.
 %Here, we demonstrate the combined use of l1-ls (CS) with the object
 %prior, in two flavors: the vanilla (uniform) and spatially-varying
 %prior-based reconstruction.
@@ -773,7 +774,7 @@ reconstructions are quantitatively compared using SSIM.
 \subcaptionbox{Weights map}{\includegraphics[width=0.275\columnwidth]{../images/tmh/RFA2/few_views/weights_colormap.png}}
 \caption[Representative results-2]{\textbf{Goal: Observe details of new changes.} Reconstruction of slice 8 of Fig.~\ref{fig:RFA2_test_object-prior} from 120 views, using (b) FBP with SSIM=0.50 (c) l1-ls with SSIM=0.46 and (d) uniform prior, with SSIM=0.51 (\emph{notice dominance of the prior: a prominent residual shadow of the needle which was present in the object-prior, but not present in the test image}), and (e) spatially-varying prior with SSIM=0.56 (\emph{notice that the dominance of the prior is significantly controlled}). The region enclosed in green rectangle is our RoI as it contains both the new position of the needle and some background. The SSIM is computed in this RoI. (f) shows the computed weights map (defined later in the paper) used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}
 \label{fig:RFA2_few_views}
- \vspace{-10mm}
+ \vspace{-9mm}
 \end{figure}
  
 %---------------------------------Uniform section---------------------
@@ -1322,7 +1323,7 @@ to other methods.
 
 \section{Discussion}
 \label{sec:discussion}
-In this section, we discuss the following:  a) an alternative imaging and reconstruction protocol for longitudinal studies, b) results on homogeneous dataset, and (c) tuning of the parameters used.
+In this section, we discuss the following:  a) an alternate imaging and reconstruction protocol for longitudinal studies, b) results on homogeneous dataset, and (c) tuning of the parameters used.
 %The presented uniform prior-based algorithm is suited to applications
 %where we wish to detect the location of new changes in an object over
 %time, and the presented spatially-varying prior-based algorithm is
@@ -1332,7 +1333,7 @@ In this section, we discuss the following:  a) an alternative imaging and recons
 %literature~\cite{geyer2015,PICCS,Ali2018,Tan2017} to the best of our
 %knowledge. Even though methods such as~\cite{Hakka2019} offer the flexibility of using multiple templates, the very important issue of these templates overwhelming the current reconstruction has been largely ignored. We have presented a principled method of tackling this particular issue via our weights map. We not only estimate the location of new changes, but also compute their intensities. This information is then used to modulate the strength of the prior during the reconstruction of the test. Our results consist of 3D reconstructions from real cone-beam projections of two datasets, and both 3D and 2D reconstructions from cone-beam and parallel beam projections respectively. In each case, we have compared our results with those from standard back-projection algorithms~\cite{Pan2009} (FDK in case of 3D and FBP incase of 2D), and Compressed Sensing~\cite{Donoho,introCS} based reconstructions. An in-depth analysis of each of the results is presented in Sections~\ref{sec:results_uniform_prior} and~\ref{sec:results_spatially_varying_prior}. We now discuss computation times, the method that suits best when the data is homogeneous, and the effect of hyper-parameters on our reconstructions.
 
-\subsection{\textbf{An alternative imaging and reconstruction protocol}}
+\subsection{\textbf{An alternate imaging and reconstruction protocol}}
 %In all our previous results, we had assumed that in a longitudinal study of $n$ scans, the first $n-1$ scans are images with sufficient views and their high-quality reconstructions are used as templates. The $n^{th}$ scan alone is imaged with few-views and reconstructed using our method.
 Earlier in Sec.~\ref{sec:tmh}, we discussed that the imaging protocols fell under two categories depending on the final goal (tracking or observing details): very few-view imaging and moderate view imaging. In both cases, the templates used were of high-quality. However, in a realistic scenario,  we may prefer to gradually increase from few-view to moderate views as the probe gradually approaches the tumor site. For the reconstruction of $n^{\textrm{th}}$ slice i.e., slice imaged at time $t=n$, the few-view reconstructions of the previously acquired slices can be used as templates. However, the first scan must always be taken with large number of views because it acts as a reference template to start with. Table.~\ref{tab:realistic_imaging_protocol} summarizes this protocol for the dataset of Fig~\ref{fig:RFA2_test_object-prior}, and Fig.~\ref{fig:RFA2_new_protocol} shows the reconstructions when this realistic protocol is used.
 
