@@ -229,7 +229,7 @@ LASSO solution is described by one that minimizes
 
  \begin{figure}[t]
 \centering
-	\includegraphics[width=0.45\textwidth]{../images/story/story.png}
+	\includegraphics[width=0.45\textwidth]{../images/story/post_TCI/story.png}
         \caption{Illustration of the use of various priors in 
           reconstruction as the number of views reduces. In all cases,
           the ground truth (260$\times$260) appears in the top left.
@@ -742,11 +742,11 @@ reconstructions are quantitatively compared using SSIM.
 %--------------------RFA 2 few views
 \begin{figure}[!h]
 \centering
-\subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/very_few_views/colorTestIm.png}}}\hfill
-\subcaptionbox{FBP}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/fbp.png}}\hfill
-\subcaptionbox{TV}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/tv_lambdaTV_0.036.png}}\hfill
-\subcaptionbox{Spatially\\varying prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
-\subcaptionbox{Weights map}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/very_few_views/weightsIm_kk_30_lambda_prior_1.100000.png}}
+\subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/colorTestIm.png}}}\hfill
+\subcaptionbox{FBP}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/fbp.png}}\hfill
+\subcaptionbox{TV}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/tv_lambdaTV_0.036.png}}\hfill
+\subcaptionbox{Spatially\\varying prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
+\subcaptionbox{Weights map}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weightsIm_kk_30_lambda_prior_1.100000.png}}
 \caption{\small{ Reconstruction of `test' (slice 7) from Fig.~\ref{fig:RFA2_test_object-prior} from only 30 views, using (b) FBP and no prior resulting in streaks, SSIM=0.73 (c) TV resulting in blurred bone structures, SSIM=0.91 and (d) spatially varying object-prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks, SSIM=0.95. The region enclosed in red rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background. All SSIM values are computed for this RoI. (e) shows the computed weights map (defined later in the paper) used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}}
 \label{fig:RFA2_very_few_views}
 \end{figure}
@@ -1093,11 +1093,11 @@ Table~\ref{table:okra_ssim}.
 
 \begin{figure}[!h]
 \centering
-\subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/48_views/input_roi.png}}}
-\subcaptionbox{FBP, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/48_views/FBP_cropped.png}}
-\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/48_views/TV_cropped.png}}
+\subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/input_roi.png}}}
+\subcaptionbox{FBP, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/FBP_cropped.png}}
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/TV_cropped.png}}
 %\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
-\subcaptionbox{Spatially-Varying\\ prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/48_views/weighted_prior_cropped.png}}
+\subcaptionbox{Spatially-Varying\\ prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/weighted_prior_cropped.png}}
 \caption{Reconstruction of 2D okra from 48 projection views
    (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. The 3D reconstructed volumes can be viewed  in the supplementary material ~\cite{supp_paper}.}
 \label{fig:okra_3D_results}
@@ -1107,11 +1107,11 @@ Table~\ref{table:okra_ssim}.
 
 \begin{figure}[!h]
 \centering
-\subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.29\columnwidth]{../images/sprouts/post_TCI/20_views/testIm.png}}}
-\subcaptionbox{FDK, no prior}{\includegraphics[width=0.3\columnwidth]{../images/sprouts/post_TCI/20_views/fbp.png}}
-\subcaptionbox{TV, no prior}{\includegraphics[width=0.3\columnwidth]{../images/sprouts/post_TCI/20_views/tv_lambdaTV_0.100.png}}
+\subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.29\columnwidth]{../images/sprouts/post_TCI/2D/20_views/testIm_roi.png}}}
+\subcaptionbox{FDK, no prior}{\includegraphics[width=0.3\columnwidth]{../images/sprouts/post_TCI/2D/20_views/fbp.png}}
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.3\columnwidth]{../images/sprouts/post_TCI/2D/20_views/tv_lambdaTV_0.100.png}}
 %\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
-\subcaptionbox{Spatially-Varying\\ prior}{\includegraphics[width=0.3\columnwidth]{../images/sprouts/post_TCI/20_views/weighted_prior_kk_30_lambda_prior_2.100000.png}}
+\subcaptionbox{Spatially-Varying\\ prior}{\includegraphics[width=0.3\columnwidth]{../images/sprouts/post_TCI/2D/20_views/weighted_prior_kk_30_lambda_prior_2.100000.png}}
 \caption{Reconstruction of 2D sprouts from 20 projection views
    (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. The 3D reconstructed volumes can be viewed  in the supplementary material ~\cite{supp_paper}.}
 \label{fig:sprouts3D_results}
@@ -1140,42 +1140,6 @@ Table~\ref{table:okra_ssim}.
 \subsubsection{\textbf{Sprouts}}
 \label{Sec:sprouts_spatially_varying}
  %-----------------------------sprouts 3D results
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.29\linewidth}
-        \fcolorbox{green}{green}{\includegraphics[width=\textwidth]{../images/sprouts/post_TCI/20_views/testIm.png}}
-%\captionsetup{labelformat=empty}
-        \caption{Test}
-     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/post_TCI/20_views/fbp.png}
-%\captionsetup{labelformat=empty}
-        \caption{FDK, no prior}
-    \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/post_TCI/20_views/tv_lambdaTV_0.100.png}
-%\captionsetup{labelformat=empty}
-        \caption{TV, no prior}
-     \end{subfigure}\\
-%\quad
-%    \begin{subfigure}[b]{0.3\linewidth}
-%        \includegraphics[width=\textwidth]{../images/sprouts/plainPriorIm.png}
-%\captionsetup{labelformat=empty}
-%        \caption{Uniform\\ Prior}
-%     \end{subfigure}
-\quad
-    \begin{subfigure}[b]{0.3\linewidth}
-        \includegraphics[width=\textwidth]{../images/sprouts/post_TCI/20_views/weighted_prior_kk_30_lambda_prior_2.100000.png}
-%\captionsetup{labelformat=empty}
-        \caption{Spatially-Varying\\ prior}
-    \end{subfigure}
-    %\quad
-     \caption{Reconstruction of 2D sprouts from 20 projection views
-   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. The 3D reconstructed volumes can be viewed  in the supplementary material ~\cite{supp_paper}.} 
-\label{fig:sprouts_3D_results}
-%\addtolength{\textfloatsep}{-0.8cm}
-\end{figure}
 
 %--------------------------------------------------------------
 \begin{table}[!h]
@@ -1187,8 +1151,8 @@ Table~\ref{table:okra_ssim}.
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
 \textbf{\begin{tabular}[c]{@{}c@{}}Spatially Varying\\prior +
-    TV\end{tabular}} \\ \hline \textbf{2D} & 0
-& 0 & \textcolor{red}{0} \\ \hline \textbf{3D} & 0.67 & 0.73 & \textcolor{red}{0.82}
+    TV\end{tabular}} \\ \hline \textbf{2D} & 0.67
+& 0.82 & \textcolor{red}{0.86} \\ \hline \textbf{3D} & 0.67 & 0.73 & \textcolor{red}{0.82}
 \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
@@ -1318,51 +1282,51 @@ described in the supplementary material~\cite{supp_paper}.
 
 \begin{figure}[h]
     \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_5_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_5_lambda_prior_0.700000.png}
         \caption{k=5}
      \end{subfigure}     
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_10_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_10_lambda_prior_0.700000.png}
         \caption{k=10}
      \end{subfigure} 
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_20_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_20_lambda_prior_0.700000.png}
         \caption{k=20}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_30_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_30_lambda_prior_0.700000.png}
         \caption{k=30}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_40_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_40_lambda_prior_0.700000.png}
         \caption{k=40}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_50_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_50_lambda_prior_0.700000.png}
         \caption{k=50}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_60_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_60_lambda_prior_0.700000.png}
         \caption{k=60}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_70_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_70_lambda_prior_0.700000.png}
         \caption{k=70}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_80_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_80_lambda_prior_0.700000.png}
         \caption{k=80}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_90_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_90_lambda_prior_0.700000.png}
         \caption{k=90}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_100_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_100_lambda_prior_0.700000.png}
         \caption{k=100}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weightsIm_kk_130_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_130_lambda_prior_0.700000.png}
         \caption{k=130}
      \end{subfigure}
     \caption{Different weights-maps for okra reconstruction. Low intensity denotes regions of new changes in test.}
@@ -1370,51 +1334,51 @@ described in the supplementary material~\cite{supp_paper}.
 \end{figure}
 \begin{figure}[h]
     \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_5_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_5_lambda_prior_0.700000.png}
         \caption{k=5,\\ SSIM = 0.79}
      \end{subfigure}     
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_10_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_10_lambda_prior_0.700000.png}
         \caption{k=10,\\ SSIM = 0.78}
      \end{subfigure} 
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_20_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_20_lambda_prior_0.700000.png}
         \caption{k=20,\\ SSIM = 0.76}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_30_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_30_lambda_prior_0.700000.png}
         \caption{k=30,\\ SSIM = 0.74}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_40_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_40_lambda_prior_0.700000.png}
         \caption{k=40,\\ SSIM = 0.72}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_50_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_50_lambda_prior_0.700000.png}
         \caption{k=50,\\ SSIM = 0.63}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_60_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_60_lambda_prior_0.700000.png}
         \caption{k=60,\\ SSIM = 0.61}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_70_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_70_lambda_prior_0.700000.png}
         \caption{k=70,\\ SSIM = 0.59}
      \end{subfigure}
   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_80_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_80_lambda_prior_0.700000.png}
         \caption{k=80,\\ SSIM = 0.58}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_90_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_90_lambda_prior_0.700000.png}
         \caption{k=90,\\ SSIM = 0.56}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_100_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_100_lambda_prior_0.700000.png}
         \caption{k=100,\\ SSIM = 0.55}
      \end{subfigure}
    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/48_views/tuning_k/weighted_prior_kk_130_lambda_prior_0.700000.png}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_130_lambda_prior_0.700000.png}
         \caption{k=130,\\ SSIM = 0.53}
      \end{subfigure}
     \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_3D_results}(a)), the region where the test is different from all of the previously scanned objects.}
