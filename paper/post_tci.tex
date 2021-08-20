@@ -105,11 +105,11 @@
   necessity when the measurement process is potentially harmful, needs
   to be rapid, or is resource-expensive. In such cases, information
   from previously existing longitudinal scans of the same object
-  (`object-prior'), helps in the reconstruction from the current
-  measurements of that object (`test'), while requiring significantly
-  fewer updating measurements. In this work, we improve the state of
-  the art by proposing the context under which priors can be
-  effectively used based on the final goal of the application at hand.
+  (`object-prior') helps in the reconstruction of the current object (`test')  from its
+  significantly fewer measurements. A common problem with these techniques is
+  the strong influence of object-priors in the reconstruction of new regions in the test.
+  In this work, we mitigate this problem by first estimating the location of new regions and
+  then imposing object-prior in \textit{only} the other old regions which are similar to the prior.
 
   Our work is based on longitudinal data acquisition scenarios where
   we wish to study new changes that evolve within an object over time,
@@ -117,15 +117,7 @@
   tomography-guided surgical procedures. While this is easily feasible
   when measurements are acquired from a large number of projection
   angles (`views'), it is challenging when the number of views is
-  limited. 
-
-  If the goal is to track the changes while simultaneously reducing
-  sub-sampling artefacts, we propose (1) acquiring measurements from
-  an \emph{extremely small} number of views and using a
-  \emph{`uniform'} prior-based reconstruction. If the goal is to
-  observe \textbf{details} of new changes, we propose (2) acquiring
-  measurements from a \emph{moderate} number of views (albeit, still
-  sub-Nyquist), and using a more involved reconstruction routine. We
+  limited (sub-Nyquist). We
   show that in the latter case, a `spatially-varying' technique is
   appropriate in order to prevent the prior from adversely affecting the
   reconstruction of new structures that are absent in any of the
@@ -134,16 +126,15 @@
   the local influence of the priors. We are thus able to effectively
   reconstruct both the old and the new structures in the test. We have
   tested the efficacy of our method on synthetic as well as real
-  projection data. The results demonstrate the use of both uniform and
-  spatially-varying priors in different scenarios. Our methods
-  significantly improve the overall quality of the reconstructed data
+  projection data, in both 2D and 3D. Our method
+  significantly improves the overall quality of reconstructed data
   while minimizing the number of measurements needed for imaging in
   longitudinal studies.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Limited-view tomographic reconstruction, compressed sensing, priors, longitudinal studies.
+Limited-view tomographic reconstruction, regularization priors, object priors, longitudinal studies.
 \end{IEEEkeywords}
 
 
@@ -180,49 +171,41 @@ reconstruction algorithm in order to achieve the most accurate
 recovery of the underlying slice, given the measurements from any
 limited set of views~\cite{yang2018,geyer2015,kilic2011}.
 
-In conventional data acquisition techniques, the tomographic
+In conventional data acquisition techniques, tomographic
 measurements $\boldsymbol{y}$ are acquired by sampling the physical
 object $\boldsymbol{x}$ uniformly with a substantial number of views,
 ideally above the Nyquist rate. In such a case when there are
-sufficient measurements, reconstruction using the conventional
+sufficient measurements, reconstruction using conventional
 filtered backprojection (FBP) suffices, as seen in
 Fig.~\ref{fig:story} (first column, 600 views). The figure shows the
 ground truth image (260$\times$260) of naturally growing sprouts at the top
 left (the details of this dataset is postponed to
-Section~\ref{sec:results_uniform_prior}).
+Section~\ref{sec:datasets}).
 
-However, in the last decade, reconstruction from reduced views has
-been made possible by assuming the data to exhibit sparsity under
-certain mathematical transforms $\boldsymbol{\Upsilon}$ such as the
-wavelet transforms, or the Discrete Cosine Transform (DCT). This is
-known as sparsity prior and is the fundamental principle in the widely
-used Compressed Sensing (CS) technique~\cite{Donoho,introCS}.  There
-are multiple ways to incorporate the sparsity prior using CS. We use
-the LASSO (least absolute shrinkage and selection operator) which
-iteratively solves for the solution by penalizing a combination of
-least squares error and $L_1$-norm of the sparse coefficients
-$\boldsymbol{\theta}$ of the object $\boldsymbol{x}$. If $\boldsymbol{\Psi}$
-represents the sparsity basis, i.e., if $\boldsymbol{x} = \boldsymbol{\Psi\theta}$, and 
-$\boldsymbol{\mathcal{R}}$ represents the acquisition model, then the
-LASSO solution is described by one that minimizes
-
-
- \begin{equation}
-   TV(\boldsymbol{x}) = \sum_{i,j}\nabla_{ij}(\boldsymbol{x})
-   \label{Eq:definition_TV}
-\end{equation}
- 
+However, reconstruction from reduced views has
+been made possible by assuming the data to exhibit certain properties such as
+smoothness in image space, sparsity in gradient space~\cite{TV} or sparsity under
+certain mathematical transforms~\cite{Donoho,introCS} such as the Discrete Cosine Transform (DCT).  There are multiple such regularization priors and our work aims at significantly improving
+the reconstructions obtained from any of these methods. Hence, although our technique is agnostic to the type of regularization prior used, here we have used the total Variation (TV) method as part of our presented solution. If $\boldsymbol{\mathcal{R}}$ represents the acquisition model, then TV-regularized solution is described by one that minimizes a combination of
+least squares error and $TV$-norm  of the object $\boldsymbol{x}$. This is described by
 
  \begin{equation}
    J_{TV}(\boldsymbol{x}) = \lVert\boldsymbol{\mathcal{R}x}- \boldsymbol{y}\rVert_2^2 + \lambda_{TV}TV(\boldsymbol{x})
    \label{Eq:simple_TV}
-   \end{equation}
+ \end{equation}
+
+ where the $TV$ norm is given by
+
+  \begin{equation}
+   TV(\boldsymbol{x}) = \sum_{i,j}\nabla_{ij}(\boldsymbol{x}).
+   \label{Eq:definition_TV}
+\end{equation}
+ 
  Fig.~\ref{fig:story}
- (second column) demonstrates the benefit of using sparsity prior when
+ (second column) demonstrates the benefit of using a regularization prior when
  the number of projection views is limited (100 views).
- We solve this cost function using the popular l1-regularized least
- squares (l1-ls) package available in~\cite{l1ls}, and choose DCT as
- our sparsity basis $\boldsymbol{\Upsilon}$. We had observed no significant improvement if, say, the wavelet transform were instead used as the basis.  
+ We solve this cost function using an optimal first-order method for large scale TV regularization
+ presented in~\cite{TVReg}  and available in~\cite{TVReg-lib}. 
 
  %%% Postpone later We observed that there was no significant benefit
  %%% in choosing wavelets over DCT.  }
@@ -248,7 +231,7 @@ LASSO solution is described by one that minimizes
  \end{figure} 
 
  When the number of views is significantly reduced (this paper), the
- sparsity prior alone is not sufficient.  In such cases additional
+ regularization prior alone is not sufficient.  In such cases additional
  information (`object-prior') specific to the current
  object being scanned (called the `test' henceforth) is useful in
  further improving the reconstruction.  While this has been done in
@@ -258,8 +241,8 @@ LASSO solution is described by one that minimizes
  context: the acquisition of sequential CT scans of the same subject
  in order to track time-evolving changes within the subject's
  interior. As seen in Fig.~\ref{fig:story} (last column, 30 views) our
- method uses the set $S$ \emph{uniformly} by creating an
- eigenspace representation (Section~\ref{sec:method_uniform_prior}).
+ method uses the set $S$ by creating an
+ eigenspace representation (Section~\ref{sec:method_spatially_varying_prior}).
 
  However, with the use of such an object prior, a new challenge
  emerges. The prior set $S$ may potentially overwhelm the necessary
@@ -272,7 +255,7 @@ LASSO solution is described by one that minimizes
  regions in the test. We refer to this method as a
  \textit{spatially-varying} prior-based reconstruction routine, that
  still uses \textit{all} the previous scans in the set $S$, without
- using simply the prior scan, or endeavoring to find the ``right''
+ using the prior scan \textit{as is}, or endeavoring to find the ``right''
  prior.
 
  This paper is organized as follows. After discussing related work in
@@ -280,15 +263,12 @@ LASSO solution is described by one that minimizes
  the key contributions of this work. Details of the datasets created and
  used for validation
  are described in Section~\ref{sec:datasets}. Section~\ref{sec:tmh}
- demonstrates the utility of both the uniform and spatially-varying
- methods on a longitudinal medical dataset. We now move to the
- details. Section~\ref{sec:method_uniform_prior} describes the
- construction of the uniform eigenspace prior, followed by the
- corresponding results in real and synthetic 3D biological datasets in
- Section~\ref{sec:results_uniform_prior}. Section~\ref{sec:method_spatially_varying_prior}
- describes how the uniform prior needs to be modified when accurate
- details of new changes are to be observed. A spatially-varying
- technique offers a solution, the results of which are presented in
+ demonstrates the utility of our
+ method on a longitudinal medical dataset. We now move to the
+ details. Section~\ref{sec:method_spatially_varying_prior}
+ describes the
+ construction of a uniform eigenspace prior and computation of a spatially-varying map in order to preserve new changes in the test. 
+ The results of are presented in
  Section~\ref{sec:results_spatially_varying_prior}. Section~\ref{sec:discussion}
  discusses tuning of the hyperparameters involved, and limitations of
  our method. Finally, we conclude with key inferences that can be
@@ -311,10 +291,9 @@ by physically inserting a contrast agent, and therefore there is an
 inherent sharper contrast between the vessels and the background.  In
 other applications where the spatial-gradient of the underlying volume
 is known to be sparse, the `total variation' method, as used
-in~\cite{Li2015,Polak2017}, can be applied.  In a more generalized
-application scenario, like the ones addressed in this paper, any
-information about the regions of interest is not known, and such
-techniques have limited applicability. 
+in~\cite{Li2015,Polak2017}, can be applied.  However, as shown earlier
+in Fig.~\ref{fig:story}, these regularization priors are not sufficient when very few
+views are acquired, thus needing information from stronger priors such as those obtained from previous scans of the same or similar object. 
 
 %  As can be seen
 % in the situatiowe will
@@ -379,7 +358,7 @@ simultaneously. In the scenario of a longitudinal study (where
 projection measurements are acquired at instants that are several
 weeks apart) which we consider in this paper, such approaches are not
 feasible. A longitudinal study will necessarily require reconstruction
-results after acquisition of each set of measurements
+results after acquisition of each set of measurements.
 
 There exists methods for estimating the new changes (in the test)
 directly in the projection space. In such techniques which can
@@ -391,7 +370,7 @@ difference between the unknown test and the known object prior. Hence,
 a variety of reconstruction algorithms can be used to estimate such a
 difference image which can then be added to the object prior to yield
 the final estimate of the test. Such methods have been proposed
-in~\cite{Pourmorteza2015,Lee2012}. However, the reconstruction of the
+in~\cite{Pourmorteza2015,Lee2012}. Here the reconstruction of the
 difference image will inherently contain sub-sampling artefacts, and
 these artefacts will appear in the final reconstruction as there is no
 mechanism to mitigate them (unlike the method that we propose). This
@@ -412,7 +391,7 @@ material~\cite{supp_paper}).  Besides this, since we use a statistical
 model with multiple object priors, we avoid the problem of selecting
 an appropriate single object prior
 unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
-also make use of the additional information available in the multiple
+also make use of the additional information available in multiple
 priors. Our technique also has the advantage of not requiring any
 expert-domain knowledge about the object being scanned.
  
@@ -693,7 +672,7 @@ slice.
 %\captionsetup{labelformat=empty}       
  \caption{slice 7}
     \end{subfigure}     
-     \caption{Radio-frequency ablation dataset: One of the slices (512$\times$512) from each of the 8 scan volumes of a longitudinal study dataset of the liver. Note that in volumes (a) through (g), the needle (shown in red in (f)) approaches the target tumor.} 
+     \caption{Radio-frequency ablation dataset: One of the slices (512$\times$512) from each of the 7 scan volumes of a longitudinal study dataset of the liver. Note that in volumes (a) through (g), the needle (shown in red in (f)) approaches the target tumor.} 
 \label{fig:RFA2_test_object-prior}
 \end{figure}
 
@@ -753,8 +732,8 @@ reconstructions are quantitatively compared using SSIM.
 
 
 %---------------------------------Uniform section---------------------
-\section{Uniform prior-based reconstruction}
-\label{sec:method_uniform_prior}
+\section{Spatially-Varying prior-based reconstruction}
+\label{sec:method_spatially_varying_prior}
 Having presented the application, we first review the algorithm~\cite{my_dicta_paper} for a uniform  prior-based reconstruction since we are extending this algorithm to 3D reconstructions as part of this work.
 %Principal Component Analysis (PCA) has been traditionally used to find the significant modes of (Gaussian corrupted) data. In this regard, it has been widely applied in the context of data compression. However, PCA can also be seen as a tool to provide an orthogonal basis to represent the space in which most of the test data could lie (except the new changes). This space is constructed from the available set of previously scanned objects which must cover a realistically representative range of structures. %, which was shown~\cite{my_dicta_paper} to be better when compared to dictionary-based priors. %A preliminary version of this particular method was earlier presented in \cite{my_dicta_paper}. 
 We first present the eigenspace-cum-CS prior-based reconstruction. To begin with, when an object is scanned multiple times, a set of high quality reconstructions (i.e., reconstructions from a dense set of projection views) may be chosen as object-prior for the reconstruction of future scan volumes, which in turn, may be scanned using far fewer measurements. The eigenspace $E_{\text{high}}$ of the $L$ previously scanned objects $Q_1,Q_2,...,Q_L$ is pre-computed. Here, it is assumed that most of the test volume, barring the new changes, can be expressed as a sparse linear combination of the principal components (eigenvectors of the covariance matrix) obtained from a group of structurally similar volumes. Hence, the object-prior is represented by means of PCA. For the eigenspace to encompass a range of possible structures in the test slice, the object-prior must represent a wide structural range. Moreover, if these volumes are not aligned, then they must be first registered before computing the prior. The prior is built by computing the covariance matrix from the template set $\{Q_i\}_{i=1}^L$. The space spanned by the eigenvectors $\{\boldsymbol{V_k}\}_{k=1}^{L-1}$ (eigenspace) of the covariance matrix is the object prior and is assumed to contain most of the test slice that is similar, but not necessarily identical to the object-prior. We use all of the $L-1$ orthogonal eigenvectors as a basis to represent the unknown test volume. Let $\boldsymbol{\mu}$ denote the mean of the previously scanned objects, and $\boldsymbol{\alpha}$ the unknown vector of eigen-coefficients of the test scan, of which $\alpha_k$ is the $k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed, the test is reconstructed by minimizing the following cost function:
@@ -770,58 +749,8 @@ The cost function described in Eq.~\ref{Eq:main_prior} is biconvex and the conve
  %---------------------------------------------------------
  \vspace{2mm}
 
- \section{Results: Reconstruction by uniform prior}
- \label{sec:results_uniform_prior}
-
- 
- The proposed method has been validated on new scans of biological
- specimens in a longitudinal setting. 
- %We emphasize that in
-% most of the literature on tomographic reconstruction, the results are
- %shown on reconstruction from projections \emph{simulated} from 3D
- %volumes. This is because most CT scanners do not reveal the raw
- %projections, and instead output only the full reconstructed
- %volumes. Moreover, the process of conversion from the projections to
- %the full volumes is proprietary.
-
-%In all figures in this section, `uniform prior' refers to optimizing Eq.~\ref{eq:spatially-varying_prior} with $\boldsymbol{W}(x,y,z)=1$.
-%----------------------------------------------------------
-%-------------------------------------------------
-\subsubsection{\textbf{Okra}}
-\label{Sec:okra_uniform}
-The test volume was reconstructed from a partial set of
-45 projections, i.e., $10\%$ of the projection views from which ground
-truth was reconstructed.
- One of the slices of the reconstructed volumes is shown in
- Fig.~\ref{fig:okra_3D_results_uniform}. The SSIM values presented in
- Table~\ref{table:okra_ssim_full_volume} show that the presence of a
- uniform object prior significantly improves the overall
- reconstruction in comparison with the usage of sparsity prior alone.
- The selected 3D ground truth of template volumes, the test volume as
- well as the 3D reconstructions can be seen in the supplementary
- material~\cite{supp_paper}.
-
-
-
-%----------------------------------------------------
-\subsubsection{\textbf{Sprouts}}
-\label{Sec:sprouts}
-The test volume was reconstructed from partial set of 45
-projections, i.e., $2.5\%$ of the projection views from which ground
-truth was reconstructed.
-One of the slices of the reconstructed
- volumes is shown in
- Fig.~\ref{fig:sprouts_3D_results_uniform}. Table~\ref{table:sprouts_ssim_full_volume}
- shows the SSIM of the full reconstructed volumes.  Here again, the
- presence of a uniform object prior significantly improves the overall
- reconstruction in comparison with the usage of sparsity prior alone.
- The selected 3D ground truth of template volumes, the test volume as
- well as the 3D reconstructions can be seen in the supplementary
- material~\cite{supp_paper}.
-
 %----------------------------------------------------------------------
-\section{Spatially-Varying prior-based reconstruction}
-\label{sec:method_spatially_varying_prior}
+
 
 Although the uniform prior can be very useful in some
 circumstances, as was shown in Sec.~\ref{sec:tmh}, it poses a 
