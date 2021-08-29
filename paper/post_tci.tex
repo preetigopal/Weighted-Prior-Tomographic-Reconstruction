@@ -111,13 +111,12 @@
   with these techniques is the strong influence of object-priors in
   the reconstruction of new regions in the test.  In this work, we
   mitigate this problem by first estimating the location of new
-  regions and then imposing object-prior in \textit{only} the other
-  old regions which are similar to the prior.
+  regions and then imposing object-prior in \textit{only} old regions which are similar to the prior.
 
   Our work is based on longitudinal data acquisition scenarios where
   we wish to study new changes that evolve within an object over time,
   such as in repeated scanning for disease monitoring, or in
-  tomography-guided surgical procedures. While this is easily feasible
+  tomography-guided surgical procedures. While reconstruction is easily feasible
   when measurements are acquired from a large number of projection
   angles (`views'), it is challenging when the number of views is
   limited (sub-Nyquist). We show that in the latter case, a
@@ -162,7 +161,7 @@ damage to it and in order to reduce the acquisition time. Therefore,
 current research seeks to either significantly reduce the radiation
 intensity required to reconstruct with adequate
 fidelity~\cite{yang2018,Lin2016,Xie2017,gopal2019low} or significantly
-reduce the number of measurements required to reconstruct with
+reduce measurements required to reconstruct with
 adequate fidelity. For the latter case, there are two lines of
 pursuit. One is to intelligently choose those sets of projection views
 that capture most
@@ -189,9 +188,9 @@ certain mathematical transforms~\cite{Donoho,introCS} such as the
 Discrete Cosine Transform (DCT).  There are multiple such
 regularization priors, of which we choose the total Variation (TV)
 method as a baseline for this work. If $\boldsymbol{\mathcal{R}}$
-represents the acquisition model, then TV-regularized solution is
+represents the acquisition model, then the TV-regularized solution is
 described by one that minimizes a combination of least squares error
-and $TV$-norm of the object $\boldsymbol{x}$. This is described by
+and the $TV$-norm of the object $\boldsymbol{x}$. This is described by
 
  \begin{equation}
    J_{TV}(\boldsymbol{x}) = \lVert\boldsymbol{\mathcal{R}x}- \boldsymbol{y}\rVert_2^2 + \lambda_{TV}TV(\boldsymbol{x})
@@ -219,7 +218,7 @@ and $TV$-norm of the object $\boldsymbol{x}$. This is described by
  \begin{figure}[t]
 \centering
 	\includegraphics[width=0.45\textwidth]{../images/story/post_TCI/story.png}
-        \caption{Illustration of the use of various priors in 
+        \caption{Illustration of the use of  priors in 
           reconstruction as the number of views reduces. For all cases,
           the ground truth (260$\times$260) appears in the top left.
           For extremely large number of views (800 views), FBP
@@ -392,7 +391,7 @@ change between the test and the eigenspace spanned by previous high
 quality object-priors in a purely data driven manner. Additionally,
 our technique differentiates between genuine structural changes and
 ``changes'' that appear due to undersampling artefacts (as seen in
-Sec.4 of our supplementary material~\cite{supp_paper}).  Besides this,
+Sec.~\4 of our supplementary material~\cite{supp_paper}).  Besides this,
 since we use a statistical model with multiple object-priors, we avoid
 the problem of selecting an appropriate single object-prior
 unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
@@ -435,7 +434,7 @@ Fig.~\ref{fig:prior_overview} provides an overview.
  \begin{figure}[h]
 \centering
 	\includegraphics[width=0.5\textwidth]{../images/prior_cmb.png}
-        \caption{Overview of our work. When the number of measurements is lower than what is conventionally used, (a) a regularization prior (such as Total Variation) alone is not sufficient to mitigate the sub-sampling artefacts. (b) An object-prior must be used to provide additional information. Here, in order to prevent a prior induced bias in the reconstruction, we propose using a spatially-varying weights-map to modulate the effect of object-prior on the final reconstruction.}
+        \caption{Overview of our work. When the number of measurements is lower than what is conventionally used, (upper part of the diagram) a regularization prior (such as Total Variation) alone is not sufficient to mitigate the sub-sampling artefacts. (Lower) An object-prior must be used to provide additional information, but this may induce bias from the prior. In this paper, in order to prevent this bias, we propose using a spatially-varying weights-map to modulate the effect of object-prior on the final reconstruction.}
  \label{fig:prior_overview}
 \end{figure}
 
@@ -477,8 +476,8 @@ datasets.
  %to illustrate an application
 %where \textit{both} uniform and spatially-varying priors are
 %useful.
-This data was sourced from Tata Memorial Centre~\cite{tmh} in Parel,
-Mumbai.  This is the national comprehensive centre for the prevention,
+This data was sourced from Tata Memorial Centre (TMC) ~\cite{tmh} in Parel,
+Mumbai.  TMC is the national comprehensive centre for the prevention,
 treatment, education and research in cancer, and is recognized as one
 of the leading cancer centres in India. The dataset
 (Fig.~\ref{fig:RFA2_test_object-prior}) from this longitudinal medical
@@ -849,7 +848,7 @@ an eigenspace.
   \begin{enumerate}
   \item Perform pilot reconstructions of the test using $M$ different
     reconstruction algorithms like the CS~\cite{lasso}, Total
-    Vairiation~\cite{TV},Algebraic Reconstruction Technique
+    Variation~\cite{TV}, Algebraic Reconstruction Technique
     (ART)~\cite{art}, Simultaneous Algebraic Reconstruction Technique
     (SART)~\cite{sart} and Simultaneous Iterative Reconstruction
     Technique (SIRT)~\cite{sirt}. Let this set of pilot
@@ -932,7 +931,15 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weightsIm_all_methods30.png}
         \caption{combined}
      \end{subfigure}
-      \caption{For reconstruction of the test image in Fig.~\ref{fig:potato_dataset}(d) from $6$ views, these are the weights-maps (corresponding to the difference between pilot reconstruction of the test and its projection onto the eigenspace $\boldsymbol{V_\text{low}}$) constructed using different reconstruction methods individually (a-f) and collectively (g) by fusing information from all reconstruction methods, as specified in Eq.~\ref{eq:weightsEq}. The weights-maps are different because the reconstruction artefacts of the new structures in test image will be different for every reconstruction method used, as seen in Fig.~\ref{fig:reconstructions_diff_methods}. }
+      \caption{The motivation for multiple methods is demonstrated with a slice of the data in Fig.~\ref{fig:potato_datasett}.  The test image in Fig.~\ref{fig:potato_dataset}(d) is reconstructed using only  $6$ paltry views.  The weights-maps 
+        %(corresponding to the difference between pilot reconstruction
+        of the test and its projection onto the eigenspace
+        $\boldsymbol{V_\text{low}}$) constructed using different
+        reconstruction methods individually (a-g) are inadequate and
+        represent different false positives. By fusing information
+        from all reconstruction methods, as specified in
+        Eq.~\ref{eq:weightsEq} we get the final weights map (h). The corresponding reconstructions appear in Fig.~\ref{fig:reconstruction_diff_methods}. 
+%The weights-maps are different because the reconstruction artefacts of the new structures in test image will be different for every reconstruction method used, as seen in Fig.~\ref{fig:reconstructions_diff_methods}. }
 \label{fig:weights_map_2Dpotato}
 \end{figure}
 %-----------------------------potato 2D weights
@@ -969,7 +976,13 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weighted_pca_all_methods30.png}
         \caption{combined}
      \end{subfigure}
-      \caption{(a)-(f):Different reconstructions of~\ref{fig:potato_dataset}(d) from $6$ views. The magnitude and sharpness of the artefacts is different for each method. (g) Spatially-Varying-prior method that combines weights-map information from all other methods. The SSIM of these reconstructions is shown in Table.~\ref{table:potato_2D_ssim}.} 
+      \caption{(a)-(f): Reconstructions of~\ref{fig:potato_dataset}(d)
+        from $6$ views. The magnitude and sharpness of the artefacts
+        are different for distinct methods. (h)
+        Spatially-Varying-prior method (from this paper) combines
+        weights-map information from all other methods. The SSIM of
+        these reconstructions is shown in
+        Table.~\ref{table:potato_2D_ssim}.}
 \label{fig:reconstructions_diff_methods}
 \end{figure}
 
