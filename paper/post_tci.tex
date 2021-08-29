@@ -23,7 +23,7 @@
 \usepackage{amsmath,graphicx, amssymb,tabularx,booktabs}
 \usepackage{subcaption}
 \usepackage[font=small,skip=2pt]{caption}
-\usepackage{boxedminipage}
+%\usepackage{boxedminipage}
 %\usepackage{algpseudocode}
 %\usepackage{algorithm}
 \usepackage{xcolor}
@@ -391,7 +391,7 @@ change between the test and the eigenspace spanned by previous high
 quality object-priors in a purely data driven manner. Additionally,
 our technique differentiates between genuine structural changes and
 ``changes'' that appear due to undersampling artefacts (as seen in
-Sec.~\4 of our supplementary material~\cite{supp_paper}).  Besides this,
+Sec.\ 4 of our supplementary material~\cite{supp_paper}).  Besides this,
 since we use a statistical model with multiple object-priors, we avoid
 the problem of selecting an appropriate single object-prior
 unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
@@ -931,14 +931,18 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weightsIm_all_methods30.png}
         \caption{combined}
      \end{subfigure}
-      \caption{The motivation for multiple methods is demonstrated with a slice of the data in Fig.~\ref{fig:potato_datasett}.  The test image in Fig.~\ref{fig:potato_dataset}(d) is reconstructed using only  $6$ paltry views.  The weights-maps 
+      \caption{The motivation for multiple methods is demonstrated
+        with a slice of the data in Fig.~\ref{fig:potato_datasett}.
+        The test image in Fig.~\ref{fig:potato_dataset}(d) is
+        reconstructed using only $6$ paltry views.  The weights-maps
         %(corresponding to the difference between pilot reconstruction
-        of the test and its projection onto the eigenspace
-        $\boldsymbol{V_\text{low}}$) constructed using different
+        %of the test and its projection onto the eigenspace
+        %$\boldsymbol{V_\text{low}}$) 
+        constructed using different
         reconstruction methods individually (a-g) are inadequate and
         represent different false positives. By fusing information
         from all reconstruction methods, as specified in
-        Eq.~\ref{eq:weightsEq} we get the final weights map (h). The corresponding reconstructions appear in Fig.~\ref{fig:reconstruction_diff_methods}. 
+        Eq.~\ref{eq:weightsEq} we get the final weights map (h). The corresponding reconstructions appear in Fig.~\ref{fig:reconstruction_diff_methods}}.
 %The weights-maps are different because the reconstruction artefacts of the new structures in test image will be different for every reconstruction method used, as seen in Fig.~\ref{fig:reconstructions_diff_methods}. }
 \label{fig:weights_map_2Dpotato}
 \end{figure}
