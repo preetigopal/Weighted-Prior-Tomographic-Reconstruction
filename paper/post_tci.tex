@@ -1,4 +1,3 @@
-
 %% bare_jrnl.tex
 %% V1.4b
 %% 2015/08/26
@@ -31,7 +30,7 @@
 \usepackage{footnote}
 \makesavenoteenv{tabular}
 
-
+%\setlength{\textfloatsep}{10pt plus 1cm}
 
 
 % Example definitions.
@@ -90,7 +89,7 @@
   Sharat Chandran,
   Imants Svalbe,
         and~Ajit Rajwade
-\thanks{Preeti Gopal is with IITB-Monash Research Academy}
+\thanks{Preeti Gopal is currently with the Applied Artificial Intelligence Institute, Deakin University}
 \thanks{Sharat Chandran and Ajit Rajwade are with the Department of Computer Science and Engineering, IIT Bombay}
 \thanks{Imants Svalbe is with the School of Physics and Astronomy, Monash University}}
 
@@ -111,7 +110,8 @@
   with these techniques is the strong influence of object-priors in
   the reconstruction of new regions in the test.  In this work, we
   mitigate this problem by first estimating the location of new
-  regions and then imposing object-prior in \textit{only} old regions which are similar to the prior.
+  regions and then imposing object-prior in \textit{only} old regions
+  which are similar to the prior.
 
   Our work is based on longitudinal data acquisition scenarios where
   we wish to study new changes that evolve within an object over time,
@@ -186,11 +186,13 @@ assuming the data to exhibit certain properties such as smoothness in
 image space, sparsity in gradient space~\cite{TV} or sparsity under
 certain mathematical transforms~\cite{Donoho,introCS} such as the
 Discrete Cosine Transform (DCT).  There are multiple such
-regularization priors, of which we choose the total Variation (TV)
-method as a baseline for this work. If $\boldsymbol{\mathcal{R}}$
-represents the acquisition model, then the TV-regularized solution is
-described by one that minimizes a combination of least squares error
-and the $TV$-norm of the object $\boldsymbol{x}$. This is described by
+regularization priors, of which we had initally worked with Compressed
+Sensing based l1-ls prior~\cite{my_dicta_paper}. For the purposes of
+this paper, we use a simpler method, the total Variation (TV) as a
+baseline. If $\boldsymbol{\mathcal{R}}$ represents the acquisition
+model, then the TV-regularized solution is described by one that
+minimizes a combination of least squares error and the $TV$-norm of
+the object $\boldsymbol{x}$. This is described by
 
  \begin{equation}
    J_{TV}(\boldsymbol{x}) = \lVert\boldsymbol{\mathcal{R}x}- \boldsymbol{y}\rVert_2^2 + \lambda_{TV}TV(\boldsymbol{x})
@@ -230,7 +232,7 @@ and the $TV$-norm of the object $\boldsymbol{x}$. This is described by
           0.96 vs 0.82). If the number of views is drastically reduced
           (20 views), the presence of both TV prior and object-
           prior together improves the reconstruction (SSIM=0.91) when compared
-          to presence of only TV prior (SSIM=0.87) or no prior
+          to presence of TV-only prior (SSIM=0.87) or no prior
           (SSIM=0.64).}
  \label{fig:story}
  \end{figure} 
@@ -245,9 +247,7 @@ and the $TV$-norm of the object $\boldsymbol{x}$. This is described by
  previous scans of the same object. This is relevant in a longitudinal
  context: the acquisition of sequential CT scans of the same subject
  in order to track time-evolving changes within the subject's
- interior. As seen in Fig.~\ref{fig:story} (last column, 20 views) our
- method uses the set $S$ by creating an eigenspace representation
- (Section~\ref{sec:method_spatially_varying_prior}).
+ interior. 
 
  With the use of an object-prior, a new challenge emerges. The prior
  set $S$ may potentially overwhelm the necessary details, and when
@@ -260,20 +260,24 @@ and the $TV$-norm of the object $\boldsymbol{x}$. This is described by
  \textit{spatially-varying} prior-based reconstruction routine, that
  still uses \textit{all} the previous scans in the set $S$, without
  using any of the prior scans \textit{as is}, or endeavoring to choose
- one ``right'' prior.
+ one ``right'' prior. In this way, this work is novel and contrasted
+ with earlier work. As seen in Fig.~\ref{fig:story} (last column, 20
+ views) our method uses the set $S$ to yield a better reconstruction
+ than regularization-only or backprojection-only methods.
 
  This paper is organized as follows. After discussing related work in
- Section~\ref{sec:related}, Section~\ref{sec:contributions} lays down
- the key contributions of this work. Details of the datasets created
- and used for validation are described in
+ Section~\ref{sec:related}, Section~\ref{sec:contributions} \textit{lays down
+ the key contributions} of this work.  In order to validate our method, we created
+ new cone-beam longitudinal CT datasets, details of which are described in
  Section~\ref{sec:datasets}. Section~\ref{sec:tmh} demonstrates the
  utility of our method on a longitudinal medical dataset. We now move
  to the details. Section~\ref{sec:method_spatially_varying_prior}
  describes computation of a spatially-varying weights map in order to
  preserve new changes in the test.  Results are presented in
  Section~\ref{sec:results_spatially_varying_prior}. Section~\ref{sec:discussion}
- discusses tuning of the hyperparameters involved, and limitations of
- our method. Finally, we conclude with key inferences that can be
+ discusses tuning of the hyperparameters involved. %and limitations of
+ %our method.
+ Finally, we conclude with key inferences that can be
  drawn from our work in Section~\ref{sec:conclusions}.
 % We present results on real and simulated 3D
 %  data for different longitudinal studies.  These are studies wherein
@@ -379,7 +383,7 @@ in~\cite{Pourmorteza2015,Lee2012}. However, reconstruction of the
 difference image will inherently contain sub-sampling artefacts, and
 these artefacts will appear in the final reconstruction as there is no
 mechanism to mitigate them (unlike the method that we propose). This
-can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
+can be seen in our supplementary material~\cite{supp_paper},
 where we have compared our method with~\cite{Lee2012}.
 
 In this paper, we present a technique that makes use of multiple
@@ -390,8 +394,7 @@ largely undersampled measurements. In particular, we define regions of
 change between the test and the eigenspace spanned by previous high
 quality object-priors in a purely data driven manner. Additionally,
 our technique differentiates between genuine structural changes and
-``changes'' that appear due to undersampling artefacts (as seen in
-Sec.\ 4 of our supplementary material~\cite{supp_paper}).  Besides this,
+``changes'' that appear due to undersampling artefacts.  Besides this,
 since we use a statistical model with multiple object-priors, we avoid
 the problem of selecting an appropriate single object-prior
 unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
@@ -410,20 +413,18 @@ assumption of continuity of changes or knowledge of the attenuation
 coefficients of the structures. We also do not make any temporal
 assumption in terms of time intervals -- prior scans could be months
 apart. We use the current measurements from few-views and previous
-scans of the same object. A key idea in our work is this starting
+scans of the same object.
+
+A key idea in our work is this starting
 point -- the new test volume is close to the space spanned by the
 eigenvectors of multiple representative previously scanned objects.
-
-% We utilize the uniform global eigenspace prior presented
-% in~\cite{my_dicta_paper} which assume 
-
-We discuss the danger in imposing an inflexible
-constant weight (and hence an unnecessary bias) when reconstructing
-the data. As a solution, we present a method to moderate the control
-of the prior by estimating and imposing spatially-varying weights to
-the prior in order to reconstruct new structures accurately. This
-spatially-varying prior tunes the effect of the templates in different
-regions of the reconstruction.
+We then present a method to accomodate new changes in the test that
+may lie outside of this eigenspace. This will prevent an unnecessary
+bias when reconstructing the data. As a solution, our method moderates
+the control of the prior by estimating and imposing spatially-varying
+weights to the prior in order to reconstruct new structures
+accurately. This spatially-varying prior tunes the effect of the
+templates in different regions of reconstruction.
 
 Fig.~\ref{fig:prior_overview} provides an overview.
 
@@ -434,7 +435,7 @@ Fig.~\ref{fig:prior_overview} provides an overview.
  \begin{figure}[h]
 \centering
 	\includegraphics[width=0.5\textwidth]{../images/prior_cmb.png}
-        \caption{Overview of our work. When the number of measurements is lower than what is conventionally used, (upper part of the diagram) a regularization prior (such as Total Variation) alone is not sufficient to mitigate the sub-sampling artefacts. (Lower) An object-prior must be used to provide additional information, but this may induce bias from the prior. In this paper, in order to prevent this bias, we propose using a spatially-varying weights-map to modulate the effect of object-prior on the final reconstruction.}
+        \caption{Overview of our work. When the number of measurements is lower than what is conventionally used, (upper part of the diagram) a regularization prior such as Total Variation alone is not sufficient to mitigate the sub-sampling artefacts. (Lower) An object-prior must be used to provide additional information without introducing any bias. To this end, here we propose using a spatially-varying weights-map to modulate the effect of object-prior on the final reconstruction.}
  \label{fig:prior_overview}
 \end{figure}
 
@@ -460,24 +461,117 @@ In summary, the key contributions are
 %-------------------------------Dataset----------------------------
 \section{Datasets}
 \label{sec:datasets}
-In this section, we lay the details of all the real and simulated
-datasets created and used for this work. The first 3 datasets: Okra,
-Potato and Sprouts were acquired from the Australian National
-University (ANU). We wish to emphasize that data from commercially
-available CT machines may not be suitable because most CT scanners do
-not reveal the raw measurements, and instead output only the full
-reconstructed volumes. Moreover, the process of conversion from the
-projections to the full volumes is proprietary. Departing from this,
-we demonstrate reconstruction results (in
-Section~\ref{sec:results_spatially_varying_prior} from the following
-datasets.
+In this section, we present details of the biological and medical datasets created and used for this work. For the first two datasets namely,
+Potato and Okra, the forward imaging model was available to us and hence all reconstructions were performed from raw measurements. For the other two datasets namely, Sprouts and Liver, the forward imaging model was not available to us (due to commercial reasons) and hence we generated measurements from these datasets assuming a circular cone-beam imaging model for 3D and a parallel-beam imaging model for 2D. 
+
+\subsection{Datasets with the forward model available}
+
+These consist of longitudinal scans of a Potato and an Okra, both acquired at the Australian National University (ANU), Canberra. \\
+
+\textbf{Potato:} This dataset consisted of four scans of the humble
+potato (Fig.~\ref{fig:potato_dataset}). While the first
+scan was taken of the undistorted potato, subsequent scans were taken
+of the same specimen, each time after drilling a new hole halfway into
+the potato. Measurements from each scan consisted of real circular
+cone-beam projections from 900 views, each of size
+150$\times$150. %Further, this alignment can be refined following
+%every update of the reconstructed test volume.
+In our experiments,
+the first 3 volumes were used to build the object-prior and the last
+volume was used as the test. The ground truth consists of volumes of
+size 150$\times$150$\times$100 reconstructed using FDK from the full
+set of 900 projection views.
+%---------------------------------------
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_1.png}
+\captionsetup{labelformat=empty}       
+ \caption{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.235\linewidth}
+        \fcolorbox{white}{blue}{\includegraphics[width=\textwidth]{../images/potato/testIm_color.png}}
+\captionsetup{labelformat=empty}
+\caption{}
+\label{fig:potato3D_test}
+     \end{subfigure}
+      \caption{Potato 3D dataset: One slice each from the scanned
+        objects that are used as templates (the first three from
+        left) and a slice from the test volume (extreme right). Notice
+        the appearance of the fourth hole in the test slice. }
+\label{fig:potato_dataset}
+\end{figure}
+
+
+
+ \textbf{Okra:} This dataset is that of an Okra specimen consisting of
+ its five scans (Fig.~\ref{fig:object-prior_test_okra}). Each of the scanned volumes consists of a varying number of cuts (or deformations) on the surface of the specimen. The specimen was kept in the same position throughout the
+ acquisitions. Measurements consisted of real circular cone-beam
+ projections from 450 views, each of size 336$\times$156.
+%In cases where such an
+%alignment is not present, all the template volumes must be pre-aligned
+%before computing the eigenspace. The test must be registered to the
+%object-prior after its preliminary pilot reconstruction.
+In our experiments, the first 4 volumes shown in
+Fig.~\ref{fig:object-prior_test_okra} were used to build the
+object-prior and the last volume was used as the test. Note that in
+the region marked red, all the templates have a deformation, and hence
+an unchecked reliance of object-prior for the reconstruction of test in this region will result in a deformation. The ground truth consists of
+volumes of size 338$\times$338$\times$123 reconstructed using the
+Feldkamp-Davis-Kress (FDK) algorithm~\cite{FDK} from the full set of
+450 view projections.  \\
+ %--------------------------------okra data-------------------------------
+\begin{figure}[!h]
+  \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/template4_marked.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/template3_marked.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/template2_marked.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.18\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/template1_marked.png}
+\captionsetup{labelformat=empty}       
+ \caption{}
+    \end{subfigure}
+     \begin{subfigure}[b]{0.148\linewidth}
+        \fcolorbox{white}{cyan}{\includegraphics[width=\textwidth]{../images/okra/post_TCI/test_marked.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+    \end{subfigure}
+     \caption{Okra 3D dataset: One slice each from the scanned objects that are used as templates (the first four from left) and a slice from the test 
+        volume (extreme right). Notice the region marked in red box; while all slices have deformities here, the test has none.}
+\label{fig:object-prior_test_okra}
+\end{figure}
+
+
+\subsection{Datasets without the forward model}
+These consist of longitudinal scans of a Liver obtained from Tata
+Memorial Centre (TMC) ~\cite{tmh} in Parel, Mumbai, and longitudinal
+scans of Sprouts obtained from Australian National University. 
 
  \textbf{Liver:} %We have used this dataset
  %to illustrate an application
 %where \textit{both} uniform and spatially-varying priors are
 %useful.
-This data was sourced from Tata Memorial Centre (TMC) ~\cite{tmh} in Parel,
-Mumbai.  TMC is the national comprehensive centre for the prevention,
+TMC is the national comprehensive centre for the prevention,
 treatment, education and research in cancer, and is recognized as one
 of the leading cancer centres in India. The dataset
 (Fig.~\ref{fig:RFA2_test_object-prior}) from this longitudinal medical
@@ -538,72 +632,19 @@ of the 7 slices.
      \caption{Radio-frequency ablation dataset: One of the slices (512$\times$512) from each of the 7 scan volumes of a longitudinal study dataset of the liver. Note that in volumes (a) through (g), the needle (shown in red in (f)) approaches the target tumor.} 
 \label{fig:RFA2_test_object-prior}
 \end{figure}
-
-
- \textbf{Okra:} This dataset is that of an Okra specimen consisting of
- its five scans (Fig.~\ref{fig:object-prior_test_okra}). Prior to the
- first scan, two cuts were drilled on the surface of the
- specimen. This was followed by four scans, each after introducing one
- new cut. The specimen was kept in the same position throughout the
- acquisitions. The measurements consisted of real circular cone-beam
- projections from 450 views, each of size 336$\times$156.
-%In cases where such an
-%alignment is not present, all the template volumes must be pre-aligned
-%before computing the eigenspace. The test must be registered to the
-%object-prior after its preliminary pilot reconstruction.
-In our experiments, the first 4 volumes shown in
-Fig.~\ref{fig:object-prior_test_okra} were used to build the
-object-prior and the last volume was used as the test. The ground
-truth consists of volumes of size 338$\times$338$\times$123
-reconstructed using the Feldkamp-Davis-Kress (FDK)
-algorithm~\cite{FDK} from the full set of 450 view projections.
-\\
- %--------------------------------okra data-------------------------------
-\begin{figure}[!h]
-  \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/template4_marked.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/template3_marked.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/template2_marked.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-    \end{subfigure}
-     \begin{subfigure}[b]{0.18\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/template1_marked.png}
-\captionsetup{labelformat=empty}       
- \caption{}
-    \end{subfigure}
-     \begin{subfigure}[b]{0.148\linewidth}
-        \fcolorbox{white}{cyan}{\includegraphics[width=\textwidth]{../images/okra/post_TCI/test_marked.png}}
-\captionsetup{labelformat=empty}
-        \caption{}
-    \end{subfigure}
-     \caption{Okra 3D dataset: One slice each from the scanned objects that are used as object-prior (the first four from left) and a slice from the test 
-        volume (extreme right). Notice the region marked in red box; while all slices have deformities here, the test has none.}
-\label{fig:object-prior_test_okra}
-\end{figure}
 %----------------------------------------------------
 
 %\subsection{Simulated measurements from real-life reconstructed volumes}
-\textbf{Sprouts:} This 3D dataset, which was also obtained at ANU,
-consists of six reconstructed volumes corresponding to six scans of an
-in-vivo sprout specimen imaged at its various stages of growth
-(Fig.~\ref{fig:object-prior_test_sprouts}).  \textit{In contrast to
-  the scientific experiment performed for the case of the okra and
-  potato where we introduced man-made defects, the changes here are
-  purely the work of nature.} In our experiments, the first 5 volumes
-were used to build the object-prior and the last volume was used as
-the test. The ground truth consists of FDK reconstructed volumes of
-size 130$\times$130$\times$130 from a set of 1800 view
-projections. For the test, cone-beam projections were generated from
-the test volume. \\
+\textbf{Sprouts:} This dataset consists of six volumes
+corresponding to six scans of an in-vivo sprout specimen imaged at its
+various stages of growth (Fig.~\ref{fig:object-prior_test_sprouts}).
+\textit{In contrast to the scientific experiment performed for the
+  case of the okra and potato where we introduced man-made defects,
+  the changes here are purely the work of nature.} In our experiments,
+the first 5 volumes were used to build the object-prior and the last
+volume was used as the test. The ground truth consists of FDK
+reconstructed volumes of size 130$\times$130$\times$130 from a set of
+1800 view projections. Test measurements were generated assuming a circular cone-beam imaging model.\\
 %-------------------------sprouts data
 
 \begin{figure}[!h]
@@ -641,61 +682,22 @@ the test volume. \\
 \captionsetup{labelformat=empty}
         \caption{}
      \end{subfigure}
-      \caption{Sprouts 3D dataset: One slice each from the previously scanned objects (the first five from left) and a slice from the test (extreme
-        right). Notice the structure within the red box in the test that is different from all of the other images.}
+      \caption{Sprouts 3D dataset: One slice each from the scanned
+        objects that are used as templates (the first five from
+        left) and a slice from the test (extreme right). One of the
+        many regions in the test that is different from all other
+        templates is the structure within the red box.}
 \label{fig:object-prior_test_sprouts}
 \addtolength{\textfloatsep}{-0.8cm}
 \end{figure}
 
-
-\textbf{Potato:} This dataset consisted of four scans of the humble
-potato (Fig.~\ref{fig:potato_dataset}). While the first
-scan was taken of the undistorted potato, subsequent scans were taken
-of the same specimen, each time after drilling a new hole halfway into
-the potato. Measurements from each scan consisted of real circular
-cone-beam projections from 900 views, each of size
-150$\times$150. %Further, this alignment can be refined following
-every update of the reconstructed test volume.  In our experiments,
-the first 3 volumes were used to build the object-prior and the last
-volume was used as the test. The ground truth consists of volumes of
-size 150$\times$150$\times$100 reconstructed using FDK from the full
-set of 900 projection views.
-%---------------------------------------
-\begin{figure}[!h]
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/potato/template_1.png}
-\captionsetup{labelformat=empty}       
- \caption{}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/potato/template_2.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/potato/template_3.png}
-\captionsetup{labelformat=empty}
-        \caption{}
-     \end{subfigure}
-    \begin{subfigure}[b]{0.235\linewidth}
-        \fcolorbox{white}{blue}{\includegraphics[width=\textwidth]{../images/potato/testIm_color.png}}
-\captionsetup{labelformat=empty}
-\caption{}
-\label{fig:potato3D_test}
-     \end{subfigure}
-      \caption{Potato 3D dataset: One slice each from the previously scanned objects (the first three from left) and a slice from the test 
-        volume (extreme right). Notice the appearance of the fourth
-        hole in the test slice. }
-\label{fig:potato_dataset}
-\end{figure}
 %----------------------------------------Method-------------------------
 \section{Spatially-Varying prior-based reconstruction}
 \label{sec:method_spatially_varying_prior}
 Our method modifies the algorithm presented in~\cite{my_dicta_paper}
 and addtionally overcomes one of its major limitations by introducing
 an extra computational step. We first review the eigenspace-cum-CS
-prior-based reconstruction algorithm for a
-2D uniform prior-based reconstruction, which was
+prior-based reconstruction algorithm which was
 shown~\cite{my_dicta_paper} to be better when compared to
 dictionary-based priors. PCA has been traditionally used
 to find the significant modes of (Gaussian corrupted) data. In this
@@ -735,14 +737,12 @@ eigen-coefficients of the test scan, of which $\alpha_k$ is the
 $k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed,
 the test was reconstructed in~\cite{my_dicta_paper} by imposing a
 penalty if the estimated slice does not lie within the eigen-space of
-the object prior.
-
-
-Although the uniform prior can be very useful in some circumstances,
-it poses a limitation when we want accurate details of a portion of
-the new changes. While the uniform prior compensates very well for the
+the object prior. Although such a prior can be very useful in some circumstances, it poses a limitation when we want accurate details of a portion of
+the new changes. While the object prior compensates very well for the
 possible artefacts due to sparse measurements, it may dominate the
-regions with new changes masking the signal. Ideally, we will want to
+regions with new changes masking the signal. \\
+
+Ideally, we will want to
 impose the prior only in the regions that are common between the test
 and object-prior.  Our spatially-varying prior based reconstruction
 overcomes this limitation by minimizing the following cost function:
@@ -755,16 +755,7 @@ overcomes this limitation by minimizing the following cost function:
   \label{eq:spatially_varying_prior}
   \end{split}
 \end{equation}
-\begin{equation}
-  \begin{split}
-    J_{\boldsymbol{\alpha}}(\boldsymbol{\x}) \triangleq &\lVert\boldsymbol{\mathcal{R} x- y}\rVert_2^2  + \lambda_1TV(\boldsymbol{x}) \\
-    &+\lambda_2\lVert(\boldsymbol{W}(\boldsymbol{x} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2
-  \end{split}
-  \end{equation}
-  
-\begin{equation}
-J_{\boldsymbol{x}}(\boldsymbol{\alpha}) \triangleq \lVert\boldsymbol{\boldsymbol{W}(\boldsymbol{x}} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2.
-\end{equation}
+
 
 The key to our method is the discovery of a diagonal weights matrix
 $\boldsymbol{W}$, where $W_{ii}$ contains the (non-negative) weight
@@ -784,10 +775,22 @@ using the resultant $\boldsymbol{\x}$.
 $J_{\boldsymbol{\alpha}}(\boldsymbol{\x})$ is solved for using an
 optimal first-order method for large-scale TV regularization presented
 in~\cite{TVReg} and available in~\cite{TVReg-lib}.
+
+\begin{equation}
+  \begin{split}
+    J_{\boldsymbol{\alpha}}(\boldsymbol{\x}) \triangleq &\lVert\boldsymbol{\mathcal{R} x- y}\rVert_2^2  + \lambda_1TV(\boldsymbol{x}) \\
+    &+\lambda_2\lVert(\boldsymbol{W}(\boldsymbol{x} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2
+  \end{split}
+  \end{equation}
+  
+\begin{equation}
+J_{\boldsymbol{x}}(\boldsymbol{\alpha}) \triangleq \lVert\boldsymbol{\boldsymbol{W}(\boldsymbol{x}} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2.
+\end{equation}
+
 Solving for $\boldsymbol{\alpha}$ leads to the closed form update:
 
 \begin{equation}
-\boldsymbol{\alpha} = [(\boldsymbol{WV})^T\boldsymbol{WV}]^{-1}.\boldsymbol{V}^T(\boldsymbol{W}^T\boldsymbol{W}(\boldsymbol{x} - \boldsymbol{\mu}))
+\boldsymbol{\alpha} = [(\boldsymbol{WV})^T\boldsymbol{WV}]^{-1}\boldsymbol{V}^T(\boldsymbol{W}^T\boldsymbol{W}(\boldsymbol{x} - \boldsymbol{\mu}))
 \end{equation}
 
 %Optimal values of $\lambda_1, \lambda_2$ must be empirically chosen \textit{a priori}, based on the reconstructions of one of the template volumes (see also Sec.~\ref{sec:discussion}).
@@ -847,7 +850,8 @@ an eigenspace.
 %\vspace{-0.1cm}
   \begin{enumerate}
   \item Perform pilot reconstructions of the test using $M$ different
-    reconstruction algorithms like the CS~\cite{lasso}, Total
+    reconstruction algorithms like the CS~\cite{lasso} with any
+    suitable sparsity domain such as wavelets (Haar) or  DCT, Total
     Variation~\cite{TV}, Algebraic Reconstruction Technique
     (ART)~\cite{art}, Simultaneous Algebraic Reconstruction Technique
     (SART)~\cite{sart} and Simultaneous Iterative Reconstruction
@@ -896,7 +900,63 @@ because it is unlikely that \emph{every} algorithm would produce a significant a
 Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
 %-------------------------------------------
 
-\textbf{Motivation for the use of multiple types of eigenspaces for the computation of weights:}
+%----------------------------------------Results-----------------------
+\section{Results}
+\label{sec:results_spatially_varying_prior}
+
+
+In this section, we first illustrate the advantage of using multiple types of eigenspaces for the computation of weights map, and then present reconstruction results on all datasets. For quatitative evaluation, we compute the Structural Similarity Index Metric\footnote{Here, we assign higher importance to the preservation of structure in a reconstruction by assigning the following weights to (structure, contrast, intensity): $(0.7,0.2,0.1)$.} (SSIM)~\cite{ssim}.
+
+
+\subsection{Motivation for the use of multiple types of eigenspaces for the computation of weights}
+
+The changes and new structures present in the test data will generate
+different artifacts for different reconstruction techniques. These
+artifacts would not be captured by reconstructions of the object-prior
+since the underlying new changes and structures may be absent in all
+of the previously scanned objects. We aim to let the weights be
+independent of the type of artifact. Hence, we use a combination of
+different reconstruction techniques to generate different types of
+eigenspaces and combine information from all of them to compute
+weights. To illustrate the benefit of this method, we first performed
+2D reconstruction of a test slice from the potato dataset.
+Fig.~\ref{fig:potato_data_2D} shows the test and template
+slices. Fig.~\ref{fig:weights_map_2Dpotato} shows the weights-maps
+generated using Eq.~\ref{eq:weightsEq} by various reconstruction
+methods. It can be seen that the weights are low in the region of the
+new change in test data. Because all the iterative methods are
+computationally expensive, we chose only FBP and TV for
+computing weights-maps for all 3D reconstructions.
+%---------------------------------------
+
+
+%-----------------------------potato data
+\begin{figure}[!h]
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_1.png}
+\captionsetup{labelformat=empty}       
+ \caption{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_2.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/potato/template_3.png}
+\captionsetup{labelformat=empty}
+        \caption{}
+     \end{subfigure}
+    \begin{subfigure}[b]{0.235\linewidth}
+        \fcolorbox{blue}{blue}{\includegraphics[width=\textwidth]{../images/potato/testIm_color.png}}
+\captionsetup{labelformat=empty}
+        \caption{}
+\label{fig:potato_test}
+     \end{subfigure}
+      \caption{Dataset for illustrating the use of multiple eigenspaces: One slice each from the scanned objects (the first three from left) and a slice from the test volume (extreme right). Notice the appearance of the fourth hole in the test slice. }
+\label{fig:potato_data_2D}
+\end{figure}
+
 %-----------------------------potato 2D weights
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.24\linewidth}
@@ -905,11 +965,11 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
     \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weightsIm_cs_dct30.png}
-        \caption{(l1-ls)-DCT}
+        \caption{CS-DCT}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weightsIm_cs_wavelet30.png}
-        \caption{(l1-ls)-Haar}
+        \caption{CS-Haar}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weightsIm_art30.png}
@@ -929,11 +989,11 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weightsIm_all_methods30.png}
-        \caption{combined}
+        \caption{This paper}
      \end{subfigure}
       \caption{The motivation for multiple methods is demonstrated
-        with a slice of the data in Fig.~\ref{fig:potato_datasett}.
-        The test image in Fig.~\ref{fig:potato_dataset}(d) is
+        with a slice of the data in Fig.~\ref{fig:potato_data_2D}.
+        The test image in Fig.~\ref{fig:potato_data_2D}(d) is
         reconstructed using only $6$ paltry views.  The weights-maps
         %(corresponding to the difference between pilot reconstruction
         %of the test and its projection onto the eigenspace
@@ -942,7 +1002,7 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
         reconstruction methods individually (a-g) are inadequate and
         represent different false positives. By fusing information
         from all reconstruction methods, as specified in
-        Eq.~\ref{eq:weightsEq} we get the final weights map (h). The corresponding reconstructions appear in Fig.~\ref{fig:reconstruction_diff_methods}}.
+        Eq.~\ref{eq:weightsEq} we get the final weights map (h). The corresponding reconstructions appear in Fig.~\ref{fig:reconstructions_diff_methods}}.
 %The weights-maps are different because the reconstruction artefacts of the new structures in test image will be different for every reconstruction method used, as seen in Fig.~\ref{fig:reconstructions_diff_methods}. }
 \label{fig:weights_map_2Dpotato}
 \end{figure}
@@ -954,11 +1014,11 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
     \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/cs_dct.png}
-        \caption{(l1-ls)-DCT}
+        \caption{CS-DCT}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/cs_wavelet.png}
-        \caption{(l1-ls)-Haar}
+        \caption{CS-Haar}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/art.png}
@@ -978,9 +1038,9 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weighted_pca_all_methods30.png}
-        \caption{combined}
+        \caption{This paper}
      \end{subfigure}
-      \caption{(a)-(f): Reconstructions of~\ref{fig:potato_dataset}(d)
+      \caption{(a)-(f): Reconstructions of~\ref{fig:potato_data_2D}(d)
         from $6$ views. The magnitude and sharpness of the artefacts
         are different for distinct methods. (h)
         Spatially-Varying-prior method (from this paper) combines
@@ -989,47 +1049,135 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
         Table.~\ref{table:potato_2D_ssim}.}
 \label{fig:reconstructions_diff_methods}
 \end{figure}
-
-The changes and new structures present in the test data will generate
-different artifacts for different reconstruction techniques. These
-artifacts would not be captured by reconstructions of the object-prior
-since the underlying new changes and structures may be absent in all
-of the previously scanned objects. We aim to let the weights be
-independent of the type of artifact. Hence, we use a combination of
-different reconstruction techniques to generate different types of
-eigenspaces and combine information from all of them to compute
-weights. To illustrate the benefit of this method, we first performed
-2D reconstruction of a test slice from the potato dataset.
-Fig.~\ref{fig:potato_dataset} shows the test and template
-slices. Fig.~\ref{fig:weights_map_2Dpotato} shows the weights-maps
-generated using Eq.~\ref{eq:weightsEq} by various reconstruction
-methods. It can be seen that the weights are low in the region of the
-new change in test data. Because all the iterative methods are
-computationally expensive, we chose only FBP and TV for
-computing weights-maps for all 3D reconstructions.
-%---------------------------------------
+%----------------------------------------------
 \begin{table}[!h]
   \centering
 \caption{SSIM of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ground-truth (ideal reconstruction) is 1.}
-\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
- Fig.~\ref{fig:reconstructions_diff_methods}  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
-  & 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
+  \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
+ 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
 \end{tabular}
 \label{table:potato_2D_ssim}
 \end{table}
 
-%----------------------------------------Results-----------------------
-\section{Results}
-\label{sec:results_spatially_varying_prior}
-We present results on 2D and 3D synthetic as well as real
-tomographic data of biological and medical specimens.
+\subsection{Reconstruction of datasets with forward model available}
+\subsubsection{\textbf{Potato}}
+\label{Sec:potato_spatially_varying}
 
-\subsection{\textbf{CT-guided radio-ablation study}}
+The test volume was reconstructed from a partial set of 45 real
+cone-beam projections, i.e., $5\%$ of the $900$ projection views from which
+ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). 2D reconstructions of one of the
+slices is shown in Fig.~\ref{fig:potato_2D_results}. A complete 3D
+reconstruction can be found in the supplementary material
+~\cite{supp_paper}. The red RoI spans
+7 consecutive slices where the test is different from all of the
+previously scanned objects. The zoomed-in images around the major
+region of change (red RoI) is shown in
+Fig.~\ref{fig:potato_zoomed_2D_results}.We observe that our method
+reconstructs new structures while simultaneously reducing streak
+artefacts. Table~\ref{table:potato_ssim} shows SSIM of the
+reconstructed new regions using various methods.
+
+\begin{figure}[!h]
+\centering
+\subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.22\columnwidth]{../images/potato/post_tci/testIm_paper.png}}}
+\subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/fbp.png}}
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/tv_lambdaTV_0.05.png}}
+\subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
+\caption{Reconstruction of potato from 6 projection views--(b) has strong streak artefacts with unclear structure of the potato, (c) largely blurred, and (c) is sharper with significantly reduced streak artefacts.}
+\label{fig:potato_2D_results}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.22\columnwidth]{../images/potato/post_tci/6_views/test_zoomed.png}}}
+\subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/fbp_zoomed.png}}
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/tv_zoomed.png}}
+\subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/weighted_pca_zoomed.png}}
+\caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:potato_2D_results}.}
+\label{fig:potato_zoomed_2D_results}
+\end{figure}
+%-------------------------------------------------------------------------
+\begin{table}[!h]
+  \centering
+  \caption{SSIM of reconstructed potato from various
+    methods. SSIM of ground-truth (ideal reconstruction) is 1.}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline &
+\textbf{Backprojection} & \textbf{TV} &
+\textbf{This paper} \\ \hline \textbf{2D} & 0.52
+& 0.92 & \textcolor{red}{0.97} \\ \hline \textbf{3D} & 0.58 & 0.75 & \textcolor{red}{0.84}
+\\ \hline
+\end{tabular}
+\label{table:potato_ssim}
+\end{table}
+
+%--------------------------Okra-- results
+\subsubsection{\textbf{Okra}}
+\label{Sec:okra_spatially_varying}
+The test volume was reconstructed from a partial set of 45 real
+cone-beam projections, i.e., $10\%$ of the $450$ projection views from which
+ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). 2D reconstructions of one of the
+slices is shown in Fig.~\ref{fig:okra_2D_results}. A complete 3D
+reconstruction can be found in in the supplementary material
+~\cite{supp_paper}. The red RoI spans 7 consecutive slices where the
+test is different from all of the previously scanned objects. A
+zoomed-in region around the major region of change (red RoI) is shown
+in Fig.~\ref{fig:okra_zoomed_2D_results}. As in the test, the
+reconstruction by spatially-varying method shows the absence of the
+deformity and better removal of sub-sampling artefacts when compared
+to FDK and TV. This is also seen in the SSIM values in
+Table~\ref{table:okra_ssim}.
+
+
+
+\begin{figure}[!h]
+\centering
+\subcaptionbox{Test}{\fcolorbox{cyan}{cyan}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/input_roi.png}}}
+\subcaptionbox{FBP, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/FBP_cropped.png}}
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/TV_cropped.png}}
+%\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
+\subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/weighted_prior_cropped.png}}
+\caption{Reconstruction of okra from 48 projection views
+   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts.}
+\label{fig:okra_2D_results}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering
+\subcaptionbox{Test}{\fcolorbox{cyan}{cyan}{\includegraphics[width=0.22\columnwidth]{../images/okra/post_TCI/2D/48_views/test_zoomed.png}}}
+\subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/fbp_zoomed.png}}
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/tv_zoomed.png}}
+%\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
+\subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/weighted_pca_zoomed.png}}
+\caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:okra_2D_results}. }
+\label{fig:okra_zoomed_2D_results}
+\end{figure}
+
+
+%---------------------------------------
+\begin{table}[!h]
+  \centering
+  \caption{SSIM of reconstructed okra from various
+    methods. SSIM of ground-truth (ideal reconstruction) is 1.}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline &
+\textbf{Backprojection} & \textbf{TV} &
+\textbf{This paper} \\ \hline \textbf{2D} & 0.46
+& 0.50 & \textcolor{red}{0.74} \\ \hline \textbf{3D} & 0.69 & 0.74 & \textcolor{red}{0.78}
+\\ \hline
+\end{tabular}
+\label{table:okra_ssim}
+\end{table}
+
+\subsection{Reconstruction of datasets without forward model}
+\subsubsection{\textbf{Liver:}}
 \label{sec:tmh}
 
-We first show how our technique is useful in a
-real-life medical longitudinal study. Here, our data consists of
+Here we show how our technique is useful in a
+real-life medical longitudinal study. Our data consists of
 successive scans of the liver taken during a radio-frequency ablation
 procedure as described in Sec.~\ref{sec:datasets}. Our goal is to to
 track the position of the needle in a relatively stationary
@@ -1047,20 +1195,21 @@ SSIM.
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/colorTestIm.png}}}\hfill
-\subcaptionbox{FBP}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/fbp.png}}\hfill
-\subcaptionbox{TV}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/tv_lambdaTV_0.036.png}}\hfill
-\subcaptionbox{Spatially\\varying prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
-\subcaptionbox{Weights map}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weightsIm_kk_30_lambda_prior_1.100000.png}}
-\caption{\small{ Reconstruction of `test' (slice 7) from Fig.~\ref{fig:RFA2_test_object-prior} from only 30 views, using (b) FBP and no prior resulting in streaks (c) TV resulting in blurred bone structures and (d) spatially varying object-prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks. The region enclosed in red rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background. (e) shows the computed weights map used for reconstruction. Darker intensities indicate lower weights to prior as these are the regions of new changes.}}
+\subcaptionbox{Backprojection\\no prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/fbp.png}}\hfill
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/tv_lambdaTV_0.036.png}}\hfill
+\subcaptionbox{This paper}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
+\caption{\small{ Reconstruction of `test' (slice 7) from Fig.~\ref{fig:RFA2_test_object-prior} from only 30 views, using (b) FBP and no prior resulting in streaks (c) TV resulting in blurred bone structures and (d) spatially varying object-prior (slices 1-6 of Fig.~\ref{fig:RFA2_test_object-prior} are used as object-prior) resulting in clear bone structures with less streaks. The region enclosed in red rectangle is our Region of Interest (RoI) as it contains both the new position of the needle and some background.}}
 \label{fig:tmh_2D_results}
 \end{figure}
+
+%\subcaptionbox{Weights map}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weightsIm_kk_30_lambda_prior_1.100000.png}}
 
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/test_zoomed.png}}}\hfill
-\subcaptionbox{FBP}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/fbp_zoomed.png}}\hfill
-\subcaptionbox{TV}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/tv_zoomed.png}}\hfill
-\subcaptionbox{Spatially\\varying prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weighted_pca_zoomed.png}}
+\subcaptionbox{Backprojection\\no prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/fbp_zoomed.png}}\hfill
+\subcaptionbox{TV, no prior}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/tv_zoomed.png}}\hfill
+\subcaptionbox{This paper}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weighted_pca_zoomed.png}}
 \caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:tmh_2D_results}.}
 \label{fig:tmh_2D_zoomed_results}
 \end{figure}
@@ -1069,76 +1218,14 @@ SSIM.
 \begin{table}[!h]
   \centering
   \caption{SSIM of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ground-truth (ideal reconstruction), SSIM equals 1.}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline &
-\textbf{Backprojection} & \textbf{TV} &
-\textbf{\begin{tabular}[c]{@{}c@{}}Spatially Varying\\prior +
-    TV\end{tabular}} \\ \hline \textbf{2D} & 0.73
+\begin{tabular}{|l|c|c|c|c|}
+\hline \textbf{Backprojection} & \textbf{TV} &
+\textbf{This paper} \\ \hline  0.73
 & 0.91 & \textcolor{red}{0.95} \\ \hline 
 \end{tabular}
 \label{table:sprouts_ssim}
 \end{table}
 %-----------------------------------------------------------------
-
-\subsubsection{\textbf{Okra}}
-\label{Sec:okra_spatially_varying}
-The test volume was reconstructed from a partial set of 45 real
-cone-beam projections, i.e., $10\%$ of the projection views from which
-ground truth was reconstructed. 2D reconstructions of one of the
-slices is shown in Fig.~\ref{fig:okra_2D_results}. A complete 3D
-reconstruction can be found in in the supplementary material
-~\cite{supp_paper}. The red RoI in the video and images show the
-regions where new changes are present. A zoomed-in region around the
-major region of change (red RoI) is shown in
-Fig.~\ref{fig:okra_zoomed_2D_results}. As in the test, the
-reconstruction by spatially-varying method shows the absence of the
-deformity and better removal of sub-sampling artefacts when compared
-to FDK and TV. This is also seen in the SSIM values in
-Table~\ref{table:okra_ssim}.
-
-
-
-\begin{figure}[!h]
-\centering
-\subcaptionbox{Test}{\fcolorbox{cyan}{cyan}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/input_roi.png}}}
-\subcaptionbox{FBP, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/FBP_cropped.png}}
-\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/TV_cropped.png}}
-%\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
-\subcaptionbox{Spatially-\\Varying prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/weighted_prior_cropped.png}}
-\caption{Reconstruction of 2D okra from 48 projection views
-   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. 3D reconstructed volumes can be viewed  in the supplementary material ~\cite{supp_paper}.}
-\label{fig:okra_2D_results}
-\end{figure}
-
-
-\begin{figure}[!h]
-\centering
-\subcaptionbox{Test}{\fcolorbox{cyan}{cyan}{\includegraphics[width=0.22\columnwidth]{../images/okra/post_TCI/2D/48_views/test_zoomed.png}}}
-\subcaptionbox{FBP, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/fbp_zoomed.png}}
-\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/tv_zoomed.png}}
-%\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
-\subcaptionbox{Spatially-\\Varying prior}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/weighted_pca_zoomed.png}}
-\caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:okra_2D_results}. }
-\label{fig:okra_zoomed_2D_results}
-\end{figure}
-
-
-%---------------------------------------
-\begin{table}[!h]
-  \centering
-  \caption{SSIM of reconstructed okra from various
-    methods. For 3D, the RoI spans 7 consecutive slices where the test is
-    different from all of the previously scanned objects. SSIM of ground-truth (ideal reconstruction) is 1.}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline &
-\textbf{Backprojection} & \textbf{TV} &
-\textbf{\begin{tabular}[c]{@{}c@{}}Spatially Varying\\prior +
-    TV\end{tabular}} \\ \hline \textbf{2D} & 0.46
-& 0.50 & \textcolor{red}{0.74} \\ \hline \textbf{3D} & 0.69 & 0.74 & \textcolor{red}{0.78}
-\\ \hline
-\end{tabular}
-\label{table:okra_ssim}
-\end{table}
 
 
 
@@ -1147,8 +1234,8 @@ Table~\ref{table:okra_ssim}.
  %-----------------------------sprouts 3D results
 
 The test volume was reconstructed from partial set of 45 real
-cone-beam projections, i.e., $2.5\%$ of the projection views from
-which ground truth was reconstructed. The selected 3D ground truth of
+cone-beam projections, i.e., $2.5\%$ of the $1800$ projection views from
+which ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). The selected 3D ground truth of
 template volumes, test volume, as well as the 3D reconstructions are
 shown in the supplementary material~\cite{supp_paper}.  2D
 reconstruction of one of the slices and a zoomed-in region around the
@@ -1166,9 +1253,9 @@ the reconstructed new regions as compared to other methods.
 \subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.22\columnwidth]{../images/sprouts/post_TCI/2D/20_views/testIm_roi.png}}}
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/fbp.png}}
 \subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/tv_lambdaTV_0.100.png}}
-\subcaptionbox{Spatially-\\Varying prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/weighted_prior_kk_30_lambda_prior_2.100000.png}}
-\caption{Reconstruction of 2D sprouts from 20 projection views
-   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. 3D reconstructed volumes can be viewed  in the supplementary material ~\cite{supp_paper}.}
+\subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/weighted_prior_kk_30_lambda_prior_2.100000.png}}
+\caption{Reconstruction of sprouts from 20 projection views
+   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts.}
 \label{fig:sprouts_2D_results}
 \end{figure}
 
@@ -1180,7 +1267,7 @@ the reconstructed new regions as compared to other methods.
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/fbp_zoomed.png}}
 \subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/tv_zoomed.png}}
 %\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
-\subcaptionbox{Spatially-\\Varying prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/weighted_pca_zoomed.png}}
+\subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/weighted_pca_zoomed.png}}
 \caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:sprouts_2D_results}}
 \label{fig:sprouts_zoomed_2D_results}
 \end{figure}
@@ -1188,13 +1275,11 @@ the reconstructed new regions as compared to other methods.
 \begin{table}[!h]
   \centering
   \caption{SSIM of reconstructed sprouts from various
-    methods. For 3D, the RoI spans 7 consecutive slices where the test is
-    different from all of the previously scanned objects. The SSIM of ground-truth (ideal reconstruction) is 1.}
+    methods. The SSIM of ground-truth (ideal reconstruction) is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
-\textbf{Backprojection} & \textbf{TV} &
-\textbf{\begin{tabular}[c]{@{}c@{}}Spatially Varying\\prior +
-    TV\end{tabular}} \\ \hline \textbf{2D} & 0.67
+\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
+ \\ \hline \textbf{2D} & 0.67
 & 0.82 & \textcolor{red}{0.86} \\ \hline \textbf{3D} & 0.67 & 0.73 & \textcolor{red}{0.82}
 \\ \hline
 \end{tabular}
@@ -1202,58 +1287,7 @@ the reconstructed new regions as compared to other methods.
 \end{table}
 
 %--------------------------------------------------------------------------
-\subsection{Potato}
-\label{sec:potato}
 
-The test volume was reconstructed from a partial set of 45 real
-cone-beam projections, i.e., $5\%$ of the projection views from which
-ground truth was reconstructed. 2D reconstructions of one of the
-slices is shown in Fig.~\ref{fig:potato_2D_results}. A complete 3D
-reconstruction can be found in the supplementary material
-~\cite{supp_paper}. The red RoI in the video and images show 
-regions where both new changes and some old regions are present. The
-zoomed-in images around the major region of change (red RoI) is shown
-in Fig.~\ref{fig:potato_zoomed_2D_results}.We observe that our method
-reconstructs new structures while simultaneously reducing streak
-artefacts. Table~\ref{table:potato_ssim} shows SSIM
-of the reconstructed new regions using various
-methods.
-
-\begin{figure}[!h]
-\centering
-\subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.22\columnwidth]{../images/potato/post_tci/testIm_paper.png}}}
-\subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/fbp.png}}
-\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/tv_lambdaTV_0.05.png}}
-\subcaptionbox{Spatially-\\Varying prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
-\caption{Reconstruction of the 2D-potato from 6 projection views--(b) has strong streak artefacts with unclear structure of the potato, (c) largely blurred, and (c) is sharper with significantly reduced streak artefacts. The 3D reconstructed volumes can be viewed in the supplementary material~\cite{supp_paper}.}
-\label{fig:potato_2D_results}
-\end{figure}
-
-\begin{figure}[!h]
-\centering
-\subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.22\columnwidth]{../images/potato/post_tci/6_views/test_zoomed.png}}}
-\subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/fbp_zoomed.png}}
-\subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/tv_zoomed.png}}
-\subcaptionbox{Spatially-\\Varying prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/weighted_pca_zoomed.png}}
-\caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:potato_2D_results}.}
-\label{fig:potato_zoomed_2D_results}
-\end{figure}
-%-------------------------------------------------------------------------
-\begin{table}[!h]
-  \centering
-  \caption{SSIM of reconstructed potato from various
-    methods. For 3D, the RoI spans 7 consecutive slices where the test is
-    different from all of the previously scanned objects. SSIM of ground-truth (ideal reconstruction) is 1.}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline &
-\textbf{Backprojection} & \textbf{TV} &
-\textbf{\begin{tabular}[c]{@{}c@{}}Spatially Varying\\prior +
-    TV\end{tabular}} \\ \hline \textbf{2D} & 0.52
-& 0.92 & \textcolor{red}{0.97} \\ \hline \textbf{3D} & 0.58 & 0.75 & \textcolor{red}{0.84}
-\\ \hline
-\end{tabular}
-\label{table:potato_ssim}
-\end{table}
 %---------------------------------------------------------
 
 \section{Discussion}
@@ -1271,8 +1305,7 @@ value was chosen to lie between $0-3$ for our datasets. Finally, the
 hyper-parameter $k$ defines the sensitivity of the weights map to the
 difference between test image and object-prior (projection of
 test onto the space of object-prior). When $k=0$, our method 
-behaves similar to the uniform prior method discussed
-in~\cite{my_dicta_paper}. As $k$ increases, the weights map starts
+behaves similar to the reconstruction using TV-only regularization. As $k$ increases, the weights map starts
 capturing new changes in the test, at the cost of detecting a few
 false positives i.e., false new changes. In other words, as the
 weights-map becomes more sensitive to the difference between the test

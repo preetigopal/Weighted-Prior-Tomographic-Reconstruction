@@ -601,7 +601,7 @@
        x2="1645.9147"
        y2="-136.54927"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.0037225,0,0,0.99998428,-6.2429943,-0.56415143)" />
+       gradientTransform="matrix(1.0037225,0,0,0.99998428,-4.7135168,0.21638872)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -610,9 +610,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="975.51306"
-     inkscape:cy="703.82046"
+     inkscape:zoom="0.56875"
+     inkscape:cx="704.65858"
+     inkscape:cy="585.52569"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -920,7 +920,27 @@
          x="21.82769"
          y="649.92413"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-         id="tspan3148">With object-prior</tspan></text>
+         id="tspan218">    Regularization prior</tspan><tspan
+         sodipodi:role="line"
+         x="21.82769"
+         y="697.42413"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
+         id="tspan232">    with our modified</tspan><tspan
+         sodipodi:role="line"
+         x="21.82769"
+         y="744.92413"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
+         id="tspan234">    object-prior</tspan><tspan
+         sodipodi:role="line"
+         x="21.82769"
+         y="761.92023"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
+         id="tspan230" /><tspan
+         sodipodi:role="line"
+         x="21.82769"
+         y="761.92023"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
+         id="tspan222" /></text>
     <g
        id="g3959"
        transform="translate(161.42857,-348.57142)">
@@ -937,15 +957,20 @@
        id="g3149">
       <text
          id="text3402-7-6-6"
-         y="-139.34959"
-         x="69.761986"
+         y="-183.07278"
+         x="78.309975"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-           y="-139.34959"
-           x="69.761986"
+           y="-183.07278"
+           x="78.309975"
            sodipodi:role="line"
-           id="tspan3176">No object-prior</tspan></text>
+           id="tspan214">    Regularization-only prior,</tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
+           y="-135.57278"
+           x="78.309975"
+           sodipodi:role="line"
+           id="tspan226">    no object prior</tspan></text>
       <text
          id="text3402-7-6-6-3"
          y="-277.05273"
@@ -1270,10 +1295,24 @@
        id="rect4307-3-2"
        width="1632.6639"
        height="369.00162"
-       x="11.561988"
-       y="-321.61209"
+       x="13.091468"
+       y="-320.83157"
        inkscape:export-filename="/home/rsuser/Documents/DT/Literature/diagrams/few_view_prior/prior_cmb.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:2.26771665;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect240"
+       width="7.0329671"
+       height="1.7582418"
+       x="1084.397"
+       y="-103.02209" />
+    <rect
+       style="opacity:0;fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:2.26771665;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect242"
+       width="12.307693"
+       height="21.098902"
+       x="850.55072"
+       y="-217.3078" />
   </g>
 </svg>
