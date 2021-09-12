@@ -336,7 +336,7 @@
        x2="1472.5345"
        y2="612.2702"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.1174561,0,0,1.2015694,-1.1837671,-104.29263)" />
+       gradientTransform="matrix(1.1174561,0,0,1.2015694,-1.1838262,-104.29263)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3961"
@@ -601,7 +601,7 @@
        x2="1645.9147"
        y2="-136.54927"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.0037225,0,0,0.99998428,-4.7135168,0.21638872)" />
+       gradientTransform="matrix(1.0037225,0,0,0.99998428,-6.8775086,0.21638533)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -610,9 +610,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.56875"
-     inkscape:cx="704.65858"
-     inkscape:cy="585.52569"
+     inkscape:zoom="0.46210938"
+     inkscape:cx="851.87994"
+     inkscape:cy="783.45322"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -925,12 +925,12 @@
          x="21.82769"
          y="697.42413"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-         id="tspan232">    with our modified</tspan><tspan
+         id="tspan232">    with spatially-varying</tspan><tspan
          sodipodi:role="line"
          x="21.82769"
          y="744.92413"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-         id="tspan234">    object-prior</tspan><tspan
+         id="tspan234">    object prior</tspan><tspan
          sodipodi:role="line"
          x="21.82769"
          y="761.92023"
@@ -957,18 +957,18 @@
        id="g3149">
       <text
          id="text3402-7-6-6"
-         y="-183.07278"
-         x="78.309975"
+         y="-174.46268"
+         x="633.79767"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:sans-serif;-inkscape-font-specification:Sans;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#0000ff;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-           y="-183.07278"
-           x="78.309975"
+           y="-174.46268"
+           x="633.79767"
            sodipodi:role="line"
            id="tspan214">    Regularization-only prior,</tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:38px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ff0000"
-           y="-135.57278"
-           x="78.309975"
+           y="-126.96268"
+           x="633.79767"
            sodipodi:role="line"
            id="tspan226">    no object prior</tspan></text>
       <text
@@ -1295,8 +1295,8 @@
        id="rect4307-3-2"
        width="1632.6639"
        height="369.00162"
-       x="13.091468"
-       y="-320.83157"
+       x="10.927488"
+       y="-320.83154"
        inkscape:export-filename="/home/rsuser/Documents/DT/Literature/diagrams/few_view_prior/prior_cmb.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
