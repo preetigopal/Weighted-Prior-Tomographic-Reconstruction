@@ -6,26 +6,101 @@
 \usepackage{subcaption}
 
 \usepackage{boxedminipage}
-%\usepackage{geometry}
+\usepackage{a4wide}
 \usepackage[colorlinks=true]{hyperref}
-\title{Changes after the last submission}
+\title{Handling of Rejected Papers
+Changes after the last submission}
 \begin{document}
+\date{}
 \maketitle
-In this document, we explain the steps we have taken to address the reviews received in our previous submission to TCI. In particular, there were two major concerns:
+
+This paper was submitted earlier, and out of the three reviewers, two of them had pronounced this as ``publish unaltered'' and one reviewer (R1) did not recommend resubmission.
+
+The handling Editor has encouraged a resubmission of this paper taking into account the comments of R1.  In particular, R1 has these concerns and we quote these
+\begin{quote}
+  The authors have spent considerable effort in revising the
+  manuscript and addressing the concerns of the reviewers. I would
+  like to thank the authors for their effort. I believe the manuscript
+  has improved because of these revisions, especially in the structure
+  of the paper and the discussion of related work. Unfortunately, some
+  of my main concerns with regards to the experiments, the accuracy of
+  the proposed method, and the presentation of the findings remain
+  present in the revised manuscript. In some cases the revisions have
+  even increased my concerns about certain aspects. Mainly, the
+  included experiments still do not clearly show that the proposed
+  method improves upon existing ‘simple’ prior-based methods, and the
+  new results even show that there is evidence that FDK is more
+  accurate than the proposed method exactly in the region that changed
+  \end{quote}
+
+In this document, we explain the steps we have taken to address the
+reviews received in our previous submission to TCI. In particular,
+we address the main concern of the reviewer below.
 
 \begin{itemize}
-\item \textbf{Total-Variation being better than CS + spatially-varying prior-based reconstruction:}\\
-
-  The goal of our previous and curent work is to provide a technique that can improve upon any chosen baseline reconstruction when measurements are few. After noting reviewer's comments, we conducted further analysis and observed that TV is indeed better suited as a baseline reconstruction method for our datasets and our subsampling choices. Hence, our current paper presents all results using TV regularization coupled with spatially-varying technique, and demonstrates its benefits over TV-only and backprojection-only methods.
-
-\item \textbf{Comparison with Deep Learning Techniques:}\\
+\item \textbf{Simple methods are better, why yours?}
   
-  In a machine learning based setting, our goal of detecting new changes is a `prediction' problem in a continuous solution space i.e., \textit{``given intensities of a voxel at various time instants in a longitudinal setting and partial measurements of the voxel at the current time, what will be the intensity of the same voxel at the current time instant?''} This estimation can be learnt by a deep neural network only if there are hundreds if not, thousands of time instants at which the previous voxel intensities are known for each voxel. This amount of data is not available to us, and may be hard to acquire because each specimen is usually scanned only a couple of times in any longitudinal study.
+The Reviewer has taken pains in showing how the Total-Variation method
+is better than our earlier Compressed Sensing plus spatially-varying
+prior-based reconstruction. In some cases FDK is more accurate.
 
-  Further, a specific `event-of-interest' may occur just once in a longitudinal study and hence training on data of all previous time instants may be misleading. If however, we use measurements from identical and full-cycle longitudinal studies (including events-of-interest) of similar specimen (instead of the `same' specimen as we used), a deep-learning technique may be applied. We see this as an extension of using object-prior generated from the same object, and hence we have not explored this direction.
+This is correct for the dataset show, and we accept this to be true.
 
-  Another avenue for using deep-networks \textit{within} our current work is to replace the currently used fixed eigenspace provided by PCA by a learnt feature basis provided by a network such as an autoencoder. For each dataset, an autoencoder may be trained to learn a specific set of latent features (this might again require atleast a few tens of volumes). We see this as a future direction of work. 
+  That said, the goal of our previous and curent work is to provide a
+  technique that can improve upon a chosen baseline reconstruction
+  when measurements are extremely sparse. One may choose any baseline
+  reconstruction for pedagogical, historical, or ocmmercial reasons,
+  and is there a way to improve?
+  
+  Nevertheless, after noting reviewer's comments, we conducted further
+  analysis and observed that TV is indeed better suited as a baseline
+  reconstruction method for our datasets and our subsampling
+  choices. Hence, our current paper presents all results using TV
+  regularization coupled with spatially-varying technique, and
+  demonstrates its benefits over TV-only and backprojection-only
+  methods.  We have eliminated our previous implicit claim that the CS
+  based scheme is optimal for the dataset provided.
 
+  As far as FDK is concerned, the current results indeed show the
+  superiority of the TV-based scheme (as also noted by the reviewer).
+  
+\item \textbf{Other comments given by Reviewer R1 and the handling editor}
+
+ \begin{itemize}
+  \item {Machine Learning}
+  
+  In a machine learning based setting, our goal of detecting new
+  changes is a `prediction' problem in a continuous solution space
+  i.e., \textit{``given intensities of a voxel at various time
+    instants in a longitudinal setting and partial measurements of the
+    voxel at the current time, what will be the intensity of the same
+    voxel at the current time instant?''} This estimation can be
+  learnt by a deep neural network if there are hundreds of labeled
+  data.  However, generalization of this across multiple datasets
+  poses a question mark. 
+  
+  %% thousands of time instants at which the previous voxel intensities
+  %% are known for each voxel. This amount of data is not available to
+  %% us, and may be hard to acquire because each specimen is usually
+  %% scanned only a couple of times in any longitudinal study.
+
+  Further, a specific `event-of-interest' may occur just once in a
+  longitudinal study and hence training on data of all previous time
+  instants may be misleading. If however, we use measurements from
+  identical and full-cycle longitudinal studies (including
+  events-of-interest) of similar specimen (instead of the `same'
+  specimen as we used), a deep-learning technique may be applied. We
+  see this as an extension of using object-prior generated from the
+  same object, and hence we have not explored this direction.
+
+  Another avenue for using deep-networks \textit{within} our current
+  work is to replace the currently used fixed eigenspace provided by
+  PCA by a learnt feature basis provided by a network such as an
+  autoencoder. For each dataset, an autoencoder may be trained to
+  learn a specific set of latent features (this might again require
+  atleast a few tens of volumes). We see this as a future direction of
+  work.
+\end{itemize}
   
   
 \end{itemize}
