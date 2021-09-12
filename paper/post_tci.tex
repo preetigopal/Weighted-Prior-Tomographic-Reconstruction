@@ -27,6 +27,7 @@
 %\usepackage{algpseudocode}
 %\usepackage{algorithm}
 \usepackage{xcolor}
+\usepackage{comment}
 %\usepackage[sort&compress]{natbib}
 \usepackage{footnote}
 \makesavenoteenv{tabular}
@@ -1164,8 +1165,8 @@ is shown in Fig.~\ref{fig:potato_2D_results}. A complete 3D
 reconstruction can be found in the supplementary
 material~\cite{supp_paper}. The red RoI spans 7 consecutive slices
 where the test is different from all of the previously scanned
-objects. The zoomed-in images around the major region of change (red
-RoI) is shown in Fig.~\ref{fig:potato_zoomed_2D_results}. 
+objects. %The zoomed-in images around the major region of change (red
+%RoI) is shown in Fig.~\ref{fig:potato_zoomed_2D_results}. 
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.22\columnwidth]{../images/potato/post_tci/testIm_paper.png}}}
@@ -1180,6 +1181,7 @@ We observe
 that our method reconstructs new structures while simultaneously
 reducing streak artefacts. Table~\ref{table:potato_ssim} shows SSIM of
 the reconstructed new regions using various methods.
+\begin{comment}
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{blue}{blue}{\includegraphics[width=0.22\columnwidth]{../images/potato/post_tci/6_views/test_zoomed.png}}}
@@ -1189,6 +1191,7 @@ the reconstructed new regions using various methods.
 \caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:potato_2D_results}.}
 \label{fig:potato_zoomed_2D_results}
 \end{figure}
+\end{comment}
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
@@ -1213,14 +1216,14 @@ ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). 2D reconstructio
 slices is shown in Fig.~\ref{fig:okra_2D_results}. A complete 3D
 reconstruction can be found in in the supplementary material
 ~\cite{supp_paper}. The red RoI spans 7 consecutive slices where the
-test is different from all of the previously scanned objects. A
-zoomed-in region around the major region of change (red RoI) is shown
-in Fig.~\ref{fig:okra_zoomed_2D_results}. As in the test, the
+test is different from all of the previously scanned objects. %A
+%zoomed-in region around the major region of change (red RoI) is shown
+%in Fig.~\ref{fig:okra_zoomed_2D_results}.
+As in the test, the
 reconstruction by spatially-varying method shows the absence of the
 deformity and better removal of sub-sampling artefacts when compared
 to FDK and TV. This is also seen in the SSIM values in
 Table~\ref{table:okra_ssim}.
-
 
 
 \begin{figure}[!h]
@@ -1235,7 +1238,7 @@ Table~\ref{table:okra_ssim}.
 \label{fig:okra_2D_results}
 \end{figure}
 
-
+\begin{comment}
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{cyan}{cyan}{\includegraphics[width=0.22\columnwidth]{../images/okra/post_TCI/2D/48_views/test_zoomed.png}}}
@@ -1246,7 +1249,7 @@ Table~\ref{table:okra_ssim}.
 \caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:okra_2D_results}. }
 \label{fig:okra_zoomed_2D_results}
 \end{figure}
-
+\end{comment}
 
 %---------------------------------------
 \begin{table}[!h]
@@ -1276,11 +1279,10 @@ background, while simultaneously reducing sub-sampling artefacts.
 Specifically, we choose slices 1-6 as our object-prior, and
 reconstruct slice 7 from few-views with the specific goal of tracking
 the needle and simultaneously reducing
-artefacts. Fig.~\ref{fig:tmh_2D_results} and
-Fig.~\ref{fig:tmh_2D_zoomed_results} show reconstruction of the test
-slice from its measurements from only 30 views and a zoomed-in version
-around the RoI. The reconstructions are quantitatively compared using
-SSIM.
+artefacts. Fig.~\ref{fig:tmh_2D_results} 
+shows reconstruction of the test
+slice from its measurements from only 30 views. The reconstructions are quantitatively compared using
+SSIM in Table~\ref{table:tmh_ssim}.
 
 %--------------------RFA 2 few views
 \begin{figure}[!h]
@@ -1294,7 +1296,7 @@ SSIM.
 \end{figure}
 
 %\subcaptionbox{Weights map}{\includegraphics[width=0.24\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/weightsIm_kk_30_lambda_prior_1.100000.png}}
-
+\begin{comment}
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{white}{green}{\includegraphics[width=0.23\columnwidth]{../images/tmh/RFA2/post_TCI/very_few_views/test_zoomed.png}}}\hfill
@@ -1304,7 +1306,7 @@ SSIM.
 \caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:tmh_2D_results}.}
 \label{fig:tmh_2D_zoomed_results}
 \end{figure}
-
+\end{comment}
 
 \begin{table}[!h]
   \centering
@@ -1314,7 +1316,7 @@ SSIM.
 \textbf{This paper} \\ \hline  0.73
 & 0.91 & \textcolor{red}{0.95} \\ \hline 
 \end{tabular}
-\label{table:sprouts_ssim}
+\label{table:tmh_ssim}
 \end{table}
 %-----------------------------------------------------------------
 
@@ -1325,18 +1327,17 @@ SSIM.
  %-----------------------------sprouts 3D results
 
 The test volume was reconstructed from partial set of 45 real
-cone-beam projections, i.e., $2.5\%$ of the $1800$ projection views from
-which ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). The selected 3D ground truth of
-template volumes, test volume, as well as the 3D reconstructions are
-shown in the supplementary material~\cite{supp_paper}.  2D
-reconstruction of one of the slices and a zoomed-in region around the
-RoI are shown in Figs.~\ref{fig:sprouts_2D_results} and
-~\ref{fig:sprouts_zoomed_2D_results} respectively. For the sake of
+cone-beam projections, i.e., $2.5\%$ of the $1800$ projection views
+from which ground truth was reconstructed (refer
+Sec.~\ref{sec:datasets}). The selected 3D ground truth of template
+volumes, test volume, as well as the 3D reconstructions are shown in
+the supplementary material~\cite{supp_paper}. For the sake of
 exposition, the red region of interest (RoI) has been culled out from
 7 consecutive slices in the 3D volume to indicate new structures;
-other changes can be viewed in the
-video. Table~\ref{table:sprouts_ssim} shows the improvement in SSIM of
-the reconstructed new regions as compared to other methods.
+other changes can be viewed in the video.  2D reconstruction of one of
+the slices is shown in Fig.~\ref{fig:sprouts_2D_results}.
+Table~\ref{table:sprouts_ssim} shows the improvement in SSIM of the
+reconstructed new regions as compared to other methods.
 %----------------------------------------------------
 
 \begin{figure}[!h]
@@ -1351,7 +1352,7 @@ the reconstructed new regions as compared to other methods.
 \end{figure}
 
 %----------------------------------------------------
-
+\begin{comment}
 \begin{figure}[!h]
 \centering
 \subcaptionbox{Test}{\fcolorbox{yellow}{yellow}{\includegraphics[width=0.22\columnwidth]{../images/sprouts/post_TCI/2D/20_views/test_zoomed.png}}}
@@ -1362,6 +1363,7 @@ the reconstructed new regions as compared to other methods.
 \caption{A zoomed-in version of the regions around the RoI of the reconstructions shown in Fig.~\ref{fig:sprouts_2D_results}}
 \label{fig:sprouts_zoomed_2D_results}
 \end{figure}
+\end{comment}
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
