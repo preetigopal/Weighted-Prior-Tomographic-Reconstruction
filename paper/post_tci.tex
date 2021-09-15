@@ -91,9 +91,9 @@
   Sharat Chandran,
   Imants Svalbe,
         and~Ajit Rajwade
-\thanks{Preeti Gopal is currently with the Applied Artificial Intelligence Institute, Deakin University}
-\thanks{Sharat Chandran and Ajit Rajwade are with the Department of Computer Science and Engineering, IIT Bombay}
-\thanks{Imants Svalbe is with the School of Physics and Astronomy, Monash University}}
+\thanks{Preeti Gopal is currently with the Applied Artificial Intelligence Institute, Deakin University; p.gopal@deakin.edu.au}
+\thanks{Sharat Chandran and Ajit Rajwade are with the Department of Computer Science and Engineering, IIT Bombay; \{sharat, ajitvr\}@cse.iitb.ac.in}
+\thanks{Imants Svalbe is with the School of Physics and Astronomy, Monash University; imants.svalbe@monash.edu}}
 
 
 
@@ -181,11 +181,11 @@ measurements, reconstruction using conventional filtered
 backprojection (FBP) suffices, as seen in Fig.~\ref{fig:story} (first
 column, 800 views). The figure shows the ground truth image
 (260$\times$260) of naturally growing sprouts at the top left (the
-details of this dataset is postponed to Section~\ref{sec:datasets}).
+details of this dataset are postponed to Section~\ref{sec:datasets}).
 
 However, reconstruction from reduced views has been made possible by
 assuming the data to exhibit certain properties such as smoothness in
-image space, sparsity in gradient space~\cite{TV} or sparsity under
+image space~\cite{Essam2015}, sparsity in gradient space~\cite{TV} or sparsity under
 certain mathematical transforms~\cite{Donoho,introCS} such as the
 Discrete Cosine Transform (DCT).  There are multiple such
 regularization priors such as the Compressed
@@ -211,7 +211,7 @@ $J_{TV}(\boldsymbol{x})$ where
    \label{Eq:definition_TV}
 \end{equation}
 
-  $\nabla$ representing the gradient operator.
+  where $\nabla$ represents the gradient operator.
   
  Fig.~\ref{fig:story} (second column) demonstrates the benefit of
  using a regularization prior when the number of projection views is
@@ -371,7 +371,7 @@ flow through gravel. However, this relies on additional expert domain
 knowledge which may not be available or which may be infeasible to
 acquire. Other approaches variously use robust principal components
 analysis assuming that the object consists of a large static part
-(background) and a sparse moving part (foreground)~\cite{HaoGao},
+(background) and a sparse moving part (foreground)~\cite{HaoGao} or
 spline-based models for tracking the regions of change in an SIRT
 framework~\cite{Van2014}.
 
@@ -428,8 +428,10 @@ mentioned above, we reconstruct the current test object without any
 assumption of continuity of changes or knowledge of the attenuation
 coefficients of the structures. We also do not make any temporal
 assumption in terms of time intervals -- prior scans could be months
-apart. We use the current measurements from few-views and previous
-scans of the same object.
+apart which is typical in cancer scanning, or could be a few
+minutes/seconds apart which is typical in CT-guided surgeries. We use
+the current measurements from few-views and previous scans of the same
+object.
 
 A key idea in our work is this starting
 point -- the new test volume is close to the space spanned by the
@@ -489,7 +491,7 @@ In summary, the key contributions are
 In this section, we present details of the biological and medical
 datasets created and used for this work. For the first two datasets
 namely, Potato and Okra, the raw measurements and  corresponding
-paramteres for cone-beam imaging model are available to us.
+parameters for cone-beam imaging model are available to us.
 Hence all reconstructions on these datasets were performed directly
 from real projection measurements. For the other two datasets namely, Sprouts and
 Liver, the raw measurements and the parameters of imaging
@@ -644,13 +646,13 @@ treatment, education and research in cancer, and is recognized as one
 of the leading cancer centres in India. The dataset
 (Fig.~\ref{fig:RFA2_test_object-prior}) from this longitudinal medical
 study consists of 7 scans taken at different stages of radio-frequency
-ablation study of a liver. In such a procedure~\cite{Dong2015}, the
+ablation (RFA) study of a liver. In such a procedure~\cite{Dong2015}, the
 physician inserts a thin needle-like probe into the organ. Repeated CT
 scans of the patient are acquired in order to track the movement of
 the needle and to ensure that it is reaching the appropriate target
 tumor. Once the needle hits the tumor, a high-frequency electric
 current is passed through the tip of the probe and this burns the
-malignant tumor (ablation). 
+malignant tumor (ablation).  A fairly high amount of radiation is administered to a patient in this RFA procedure~\cite{radiation_dose_RFA}, and hence reducing radiation per scan is highly beneficial here.
 
 In our experiments, we generate parallel beam measurements from 2D
 slices from each of the 7 volumes. Note that all these 7 slices are
@@ -705,11 +707,11 @@ of the 7 slices.
 \label{fig:RFA2_test_object-prior}
 \end{figure}
 
-\textit{Remark:} Liver is interesting because the data comes from live
-data from a clinical setting.  The oncologist has to be aware of the
+\textit{Remark:} This dataset is interesting because it comes from a live
+clinical setting.  The oncologist has to be aware of the
 precise position of the needle contrasted with the site of the tumor,
 yet we do not want to create new mutant DNA by further bombarding the
-patient with X-rays.
+patient with X-rays~\cite{damage_repeated_CT}.
 
 %----------------------------------------------------
 
@@ -851,11 +853,11 @@ to the prior.
 
 $\lambda_1$, $\lambda_2$ are tunable weights given to the
 TV-prior and object-prior terms respectively. The unknowns
-$\boldsymbol{\x}$ and $\boldsymbol{\alpha}$ are solved by alternately
-minimizing $J_{\boldsymbol{\alpha}}(\boldsymbol{\x})$ using a fixed
+$\boldsymbol{x}$ and $\boldsymbol{\alpha}$ are solved by alternately
+minimizing $J_{\boldsymbol{\alpha}}(\boldsymbol{x})$ using a fixed
 $\boldsymbol{\alpha}$, and $J_{\boldsymbol{x}}(\boldsymbol{\alpha})$
-using the resultant $\boldsymbol{\x}$.
-$J_{\boldsymbol{\alpha}}(\boldsymbol{\x})$ is solved for using an
+using the resultant $\boldsymbol{x}$.
+$J_{\boldsymbol{\alpha}}(\boldsymbol{x})$ is solved for using an
 optimal first-order method for large-scale TV regularization presented
 in~\cite{TVReg} and available in~\cite{TVReg-lib}.
 
@@ -867,7 +869,7 @@ in~\cite{TVReg} and available in~\cite{TVReg-lib}.
   \end{equation}
   
 \begin{equation}
-J_{\boldsymbol{x}}(\boldsymbol{\alpha}) \triangleq \lVert\boldsymbol{\boldsymbol{W}(\boldsymbol{x}} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2.
+J_{\boldsymbol{x}}(\boldsymbol{\alpha}) \triangleq \lVert{\boldsymbol{W}(\boldsymbol{x}} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2.
 \end{equation}
 
 Solving for $\boldsymbol{\alpha}$ leads to the closed form update:
@@ -949,7 +951,7 @@ an eigenspace.
     template $Q_i$ using the $M$ different algorithms, for each of the
     $L$ previously scanned objects. Let this set be denoted by $Y
     \triangleq \{\{Y_{i}^j\}_{j=1}^M\}_{i=1}^L$ where $Y^{1}_i =
-    Y^{\text{fdk}}_i$, $\forall i \in \{1,..,,L\}$.
+    Y^{\text{fdk}}_i$, $\forall i \in \{1,..,,L\}$. If the set of projection views for every test is fixed a priori, this set of low quality reconstructions can be produced offline and stored, in order to save computational costs. If new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization.
 
 
   \item For each of the $M$ algorithms (indexed by $j$), build an
@@ -1157,8 +1159,8 @@ computing weights-maps for all 3D reconstructions.
 \subsubsection{\textbf{Potato}}
 \label{Sec:potato_spatially_varying}
 
-The test volume was reconstructed from a partial set of 45 real
-cone-beam projections, i.e., $5\%$ of the $900$ projection views from
+The test volume was reconstructed from a partial set of 18 real
+cone-beam projections, i.e., $2\%$ of the $900$ projection views from
 which ground truth was reconstructed (see remarks in
 Sec.~\ref{sec:potatoAndOkra}). 2D reconstructions of one of the slices
 is shown in Fig.~\ref{fig:potato_2D_results}. A complete 3D
@@ -1173,7 +1175,7 @@ objects. %The zoomed-in images around the major region of change (red
 \subcaptionbox{FDK, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/fbp.png}}
 \subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/tv_lambdaTV_0.05.png}}
 \subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/potato/post_tci/6_views/weighted_prior_kk_30_lambda_prior_1.100000.png}}
-\caption{Reconstruction of potato from 6 projection views--(b) has strong streak artefacts with unclear structure of the potato, (c) largely blurred, and (c) is sharper with significantly reduced streak artefacts.}
+\caption{Reconstruction of potato from 6 projection views--(b) has strong streak artefacts with unclear structure of the potato, (c) largely blurred, and (c) is sharper with significantly reduced streak artefacts. 3D reconstructions from 18 cone-beam views can be seen in the supplementary material~\cite{supp_paper}. }
 \label{fig:potato_2D_results}
 \end{figure}
 
@@ -1210,8 +1212,8 @@ the reconstructed new regions using various methods.
 %--------------------------Okra-- results
 \subsubsection{\textbf{Okra}}
 \label{Sec:okra_spatially_varying}
-The test volume was reconstructed from a partial set of 45 real
-cone-beam projections, i.e., $10\%$ of the $450$ projection views from which
+The test volume was reconstructed from a partial set of 30 real
+cone-beam projections, i.e., $6.7\%$ of the $450$ projection views from which
 ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). 2D reconstructions of one of the
 slices is shown in Fig.~\ref{fig:okra_2D_results}. A complete 3D
 reconstruction can be found in in the supplementary material
@@ -1234,7 +1236,7 @@ Table~\ref{table:okra_ssim}.
 %\subcaptionbox{\mbox{Uniform}\\prior}{\includegraphics[width=0.19\columnwidth]{../images/okra/pca_cropped.png}}\hfill
 \subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/okra/post_TCI/2D/48_views/weighted_prior_cropped.png}}
 \caption{Reconstruction of okra from 48 projection views
-   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts.}
+   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. 3D reconstructions from 30 cone-beam views can be seen in the supplementary material~\cite{supp_paper}.}
 \label{fig:okra_2D_results}
 \end{figure}
 
@@ -1326,8 +1328,8 @@ SSIM in Table~\ref{table:tmh_ssim}.
 \label{Sec:sprouts_spatially_varying}
  %-----------------------------sprouts 3D results
 
-The test volume was reconstructed from partial set of 45 real
-cone-beam projections, i.e., $2.5\%$ of the $1800$ projection views
+The test volume was reconstructed from partial set of 30 
+cone-beam projections, i.e., $1.7\%$ of the $1800$ projection views
 from which ground truth was reconstructed (refer
 Sec.~\ref{sec:datasets}). The selected 3D ground truth of template
 volumes, test volume, as well as the 3D reconstructions are shown in
@@ -1347,7 +1349,7 @@ reconstructed new regions as compared to other methods.
 \subcaptionbox{TV, no prior}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/tv_lambdaTV_0.100.png}}
 \subcaptionbox{This paper}{\includegraphics[width=0.23\columnwidth]{../images/sprouts/post_TCI/2D/20_views/weighted_prior_kk_30_lambda_prior_2.100000.png}}
 \caption{Reconstruction of sprouts from 20 projection views
-   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts.}
+   (b) has streaky artefacts, (c) has blurred structures and (d) is sharper with significantly less streaky artefacts. 3D reconstructions from 30 cone-beam views can be seen in the supplementary material~\cite{supp_paper}.}
 \label{fig:sprouts_2D_results}
 \end{figure}
 
