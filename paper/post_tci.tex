@@ -1011,16 +1011,21 @@ since the underlying new changes and structures may be absent in all
 of the previously scanned objects. We aim to let the weights be
 independent of the type of artifact. Hence, we use a combination of
 different reconstruction techniques to generate different types of
-eigenspaces and combine information from all of them to compute
-weights. To illustrate the benefit of this method, we first performed
-2D reconstruction of a test slice from the potato dataset.
-Fig.~\ref{fig:potato_data_2D} shows the test and template
-slices. Fig.~\ref{fig:weights_map_2Dpotato} shows the weights-maps
+eigenspaces and combine information from all of them to compute the
+weights map. To illustrate the benefit of this method, we first performed
+2D reconstruction of a test slice from the potato dataset using
+various reconstruction methods. We used implementations of algebraic
+methods such as ART, SIRT and SART from~\cite{AIR_tools} and
+implementations of CS solver from~\cite{l1ls}. Among various possible
+sparsity basis for CS reconstruction, we observed that Haar wavelets
+and DCT were best suited for this
+dataset. Fig.~\ref{fig:potato_data_2D} shows the test and template
+slices and Fig.~\ref{fig:weights_map_2Dpotato} shows the weights maps
 generated using Eq.~\ref{eq:weightsEq} by various reconstruction
 methods. It can be seen that the weights are low in the region of the
 new change in test data. Because all the iterative methods are
-computationally expensive, we chose only FBP and TV for
-computing weights-maps for all 3D reconstructions.
+computationally expensive, we chose only FBP and TV for computing
+weights-maps for all 3D reconstructions.
 %---------------------------------------
 
 
@@ -1387,8 +1392,9 @@ reconstructed new regions as compared to other methods.
 
 \section{Discussion}
 \label{sec:discussion}
-In this section, we discuss tuning of the parameters
-used in our method. $\lambda_1$, $\lambda_2$ and $k$ are the three
+In this section, we discuss tuning of parameters and the computational complexity of our method.
+\subsection{Tuning of parameters:}
+$\lambda_1$, $\lambda_2$ and $k$ are the three
 hyper-parameters that need to be chosen carefully for optimal
 reconstruction. In our experiments, $\lambda_1$ was tuned to maximize
 SSIM of the whole reconstructed test volume for TV reconstruction of
@@ -1527,6 +1533,23 @@ in the supplementary material~\cite{supp_paper}.
     \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
 \label{fig:reconstructions_as_k_varies}
 \end{figure}
+\subsection{Computational Complexity:}
+The use of object-priors does introduce additional time and space complexities when compared to the use of a simpler prior such as TV-only prior.  For spatially-varying prior, most of the
+computation time is used in the generation of low quality eigen-space
+by reconstructing each of the templates using TV and FDK. If the set of projection views for every test is fixed a priori, the set of low quality reconstructions can be produced offline and stored, in order to save computational costs. If however, new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization since these reconstructions are completely independent. Here below, we describe the
+time complexity of spatially-varying prior technique.  If
+\begin{itemize}
+\item $N =$ number of voxels of the volume
+\item $T =$ number of templates available, and
+\item $F =$ time taken for iterative TV optimization,
+\end{itemize}
+then, the computational complexity is sum of the following
+\begin{itemize}
+\item $O(NT^2+T^3)$ for creating the eigenspace,
+\item $O(NT^2)$ for deriving the weights map, and
+\item time $F$  taken for iterative minimization
+\end{itemize}
+where $O(.)$ is the notation for `Big O' used in complexity analysis. In terms of space, the complexity is $O(T)$ in order to store the templates and their low quality reconstructions. We need to store a single weights map volume regardless of the number of templates available. 
 
 
 %--------------------------Conclusion-----------------------
