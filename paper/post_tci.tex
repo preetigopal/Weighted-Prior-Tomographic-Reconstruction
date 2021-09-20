@@ -484,17 +484,22 @@ In summary, the key contributions are
     a live teaching and
     research hospital.
 \end{itemize}
+While we demonstrate our results with a Total Variation regularization
+prior, this work provides a technique that can improve upon any chosen
+baseline reconstruction when measurements are extremely sparse.  
+
 
 %-------------------------------Dataset----------------------------
 \section{Datasets}
 \label{sec:datasets}
 In this section, we present details of the biological and medical
 datasets created and used for this work. For the first two datasets
-namely, Potato and Okra, the raw measurements and  corresponding
-parameters for cone-beam imaging model are available to us.
-Hence all reconstructions on these datasets were performed directly
-from real projection measurements. For the other two datasets namely, Sprouts and
-Liver, the raw measurements and the parameters of imaging
+namely, Potato and Okra, the raw measurements and corresponding
+parameters for cone-beam imaging model are available to us.  Hence all
+reconstructions on these datasets were performed directly from real
+projection measurements. These datasets are ``Type A'' datasets in the
+description below.  For the other two datasets (Type B), namely,
+Sprouts and Liver, the raw measurements and the parameters of imaging
 model were not available to us (due to propriety concerns) and hence
 only reconstructed volumes of real data were at hand; we therefore
 generated measurements from these datasets assuming a circular
@@ -999,7 +1004,17 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
 \label{sec:results_spatially_varying_prior}
 
 
-In this section, we first illustrate the advantage of using multiple types of eigenspaces for the computation of weights map, and then present reconstruction results on all datasets. For quantitative evaluation, we compute the Structural Similarity Index Metric (SSIM)~\cite{ssim}. Here, we assign higher importance to the preservation of structure in a reconstruction by assigning the following weights to structure, contrast and intensity respectively: $0.7,0.2,0.1$.
+In this section, we first illustrate the advantage of using multiple
+types of eigenspaces for the computation of weights map, and then
+present reconstruction results on all datasets. For quantitative
+evaluation, we compute the Structural Similarity Index Metric
+(SSIM)~\cite{ssim}. Here, we assign higher importance to the
+preservation of structure in a reconstruction by assigning the
+following weights to structure, contrast and intensity respectively:
+$0.7,0.2,0.1$. The reason for emphasizing the structure with an
+exponent of 0.7 steps from the optimization process since the
+intensity span and, in general, the histogram of reconstructed volumes
+differ across various methods and solvers. 
 
 
 \subsection{Motivation for the use of multiple types of eigenspaces for the computation of weights}

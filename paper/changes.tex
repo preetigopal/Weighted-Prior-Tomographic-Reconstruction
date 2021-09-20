@@ -14,7 +14,14 @@
 \date{}
 \maketitle
 
-This paper was submitted earlier, and out of the three reviewers, two of them had pronounced this as ``publish unaltered'' and one reviewer (R1) did not recommend resubmission. The handling Editor has encouraged a resubmission of this paper taking into account the comments of R1.  We thank all reviewers for their remarks and in this document, we explain the steps we have taken to address the reviews received in our previous submission to TCI. R1 has these concerns and we quote these
+This paper was submitted earlier, and out of the three reviewers, two
+of them had pronounced this as ``publish unaltered'' and one reviewer
+(R1) did not recommend resubmission. The handling Editor has
+encouraged a resubmission of this paper taking into account the
+comments of R1.  We thank all reviewers for their remarks and in this
+document, we explain the steps we have taken to address the reviews
+received in our previous submission to TCI. R1 makes the following
+comments, and we quote excerpts in blue here:
 \begin{quote}
   \textcolor{blue}{The authors have spent considerable effort in revising the
   manuscript and addressing the concerns of the reviewers. I would
@@ -26,52 +33,65 @@ This paper was submitted earlier, and out of the three reviewers, two of them ha
   present in the revised manuscript. In some cases the revisions have
   even increased my concerns about certain aspects. Mainly, the
   included experiments still do not clearly show that the proposed
-  method improves upon existing ‘simple’ prior-based methods, and the
-  new results even show that there is evidence that FDK is more
-  accurate than the proposed method exactly in the region that changed}
+  method improves upon existing ‘simple’ prior-based methods
+%% , and the
+%%   new results even show that there is evidence that FDK is more
+%%   accurate than the proposed method exactly in the region that changed
+  }
   \end{quote}
 
-
-\begin{itemize}
-\item \textbf{In particular, we address the following main concern of the reviewer below.}\\
-  
+The simpler method is based on the well-known ``Total Variation''. 
+In particular, we address the following main concern of the reviewer 
+\begin{quote}  
     \textcolor{blue}{Note that the total
 variation minimization results are much better than the l1-ls results that the authors show in the
-paper.}\\
-    
-The Reviewer has taken pains in showing how the Total-Variation method
-is better than our earlier Compressed Sensing plus spatially-varying
-prior-based reconstruction. In some cases FDK is more accurate.
+paper}
+\end{quote}
 
-This is correct for the dataset shown, and we accept this to be true.
+    by rewriting the paper considerably.  We believe the paper
+    addresses this (correct) stinging criticism of R1.  In fact R1 has taken
+    pains in showing how the Total-Variation method (and sometimes
+    FDK) is better than our earlier Compressed Sensing plus
+    spatially-varying prior-based reconstruction, and we gratefully
+    acknowledge the same.
 
-  That said, the goal of our previous and curent work is to provide a
-  technique that can improve upon a chosen baseline reconstruction
-  when measurements are extremely sparse.  One may choose any baseline
-  reconstruction for pedagogical, historical, or commercial reasons,
-  and given that, our key question is-- is there a way to improve?
-  
-  Nevertheless, after noting reviewer's comments, we conducted further
-  analysis and observed that TV is indeed better suited as a baseline
-  reconstruction method for our datasets and our subsampling
-  choices. Hence, our current paper presents all results using TV
-  regularization coupled with spatially-varying technique, and
-  demonstrates its benefits over TV-only and backprojection-only
-  methods.  We have eliminated our previous implicit claim that the CS
-  based scheme is optimal for the dataset provided.
+Again, this is correct for the dataset shown, and we accept this to be
+true.
+
+  We re-wrote our code and upon further analysis observed that TV is
+  indeed better suited as a baseline reconstruction method for our
+  datasets and our subsampling choices. Hence, our current paper
+  presents all results using TV regularization coupled with
+  spatially-varying technique, and demonstrates  benefits over
+  TV-only and backprojection-only methods.  \emph{We have eliminated our
+  previous implicit claim that the CS based scheme is optimal for the
+  dataset provided. }
 
   As far as FDK is concerned, the current results indeed show the
   superiority of the TV-based scheme (as also noted by the reviewer).
-  \clearpage
-\item \textbf{Other comments given by Reviewer R1 and the handling editor}
+
+    That said, the goal of our previous and curent work is to provide
+    a technique that can improve upon a chosen baseline reconstruction
+    when measurements are extremely sparse.  One may choose any
+    baseline reconstruction (including an inferior -- for this dataset
+    -- Compressed sensing prior) for pedagogical, historical, or
+    commercial reasons, and given that, our key question is -- is
+    there a way to improve?  The spatially-varying method of
+    moderating the prior settles this question.
+
+We also take this opportunity to address other comments given by R1
+and the handling editor.
 
  \begin{itemize}
  \item    \textcolor{blue}{...the paper should at least include a (short) discussion about the
      possibility of using deep learning for this, and its disadvantages.}
 
-   We have now discussed the difficulties in using deep-learning
-   techniques for the current problem in Sec.~7C of our paper. We also
-   describe them here below.
+   We accept this point, and have now discussed the difficulties in
+   using deep-learning techniques for the current problem in Sec.~7C
+   of our paper. We also describe them here below.
+
+\textcolor{red}{Comment from Sharat:  Since the material is in the text, there is no need to mention it here.}
+   
    
   In a machine learning based setting, our goal of detecting new
   changes is a `prediction' problem in a continuous solution space
@@ -127,9 +147,27 @@ This is correct for the dataset shown, and we accept this to be true.
   settings for SSIM?...I don’t understand the reason given for not
   including RMSE: the values don’t have to be optimized again -- you
   could just optimize for SSIM but at least still report RMSE
-  comparisons.}\\
-  
-  In our experiments, we observed that for a given dataset and a set of projection measurements, the intensity span of histograms of reconstructed volumes differ across various methods and solvers. Hence, we choose to focus on preserving the structures on our reconstructions, and not rely on the absolute intensity values alone. Hence, we choose SSIM with a higher weightage to structure-preservation. For our record, we have computed RMSE values as well and they are presented here in Tables~\ref{table:potato_rmse} and~\ref{table:sprouts_rmse}.
+  comparisons.}
+
+  The reason for not reporting RMSE stems from the optimization
+  process. The optimization routine we use transforms the
+  reconstruction to a different space.  That is, in our experiments,
+  we observed that for a given dataset and a set of projection
+  measurements, the intensity span of histograms of reconstructed
+  volumes differ across various methods and solvers. As a result, the
+  RMSE values are not particularly useful.  We provide the numbers
+  here to show the improvement trend but we believe it does not serve
+  the interest of the community to report these.
+
+  For the same reason, the standard setting of SSIM in matlab (for
+  instance) emphasizes the intensity. We found that even when the
+  quality of reconstruction is acceptable visually, the SSIM values
+  were not acceptable.  We choose
+  to focus on preserving the structures on our reconstructions, and
+  not rely on the absolute intensity values alone. Hence, we choose
+  SSIM with a higher weightage to structure-preservation. For our
+  record, we have computed RMSE values as well and they are presented
+  here in Tables~\ref{table:potato_rmse} and~\ref{table:sprouts_rmse}.
 
 \begin{table}[!h]
   \centering
@@ -158,15 +196,25 @@ This is correct for the dataset shown, and we accept this to be true.
 \end{table}
 
 
-\item  \textcolor{blue}{A discussion about computational costs (time, memory) should be included in the paper.}
+\item \textcolor{blue}{A discussion about computational costs (time,
+  memory) should be included in the paper.}
   
   We now present details of both time and space complexities of our technique in Section.7B of our paper.
 
   
-Most of the
-computation time in our technique is used for the generation of low quality eigen-space
-by reconstructing each of the templates using TV and FDK. If the set of projection views for every test is fixed a priori, the set of low quality reconstructions can be produced offline and stored in order to save computational costs. With this assumption, Table~\ref{table:compute_time} shows the computation times for various stages of reconstruction of a 2D slice of Liver on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. If however, new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization since these reconstructions are completely independent. Here below, we describe the
-time complexity of spatially-varying prior technique.  If
+Most of the computation time in our technique is used for the
+generation of low quality eigen-space by reconstructing each of the
+templates using TV and FDK. If the set of projection views for every
+test is fixed a priori, the set of low quality reconstructions can be
+produced offline and stored in order to save computational costs. With
+this assumption, Table~\ref{table:compute_time} shows the computation
+times for various stages of reconstruction of a 2D slice of Liver on
+MATLAB 2019a on an AMD 2920X 12-Core Processor machine with 64GB
+RAM. If however, new sets of projection views for every test are to be
+allowed, the low quality reconstructions can still be performed
+efficiently using parallelization since these reconstructions are
+completely independent. Here below, we describe the time complexity of
+spatially-varying prior technique.  If
 \begin{itemize}
 \item $N =$ number of voxels of the volume
 \item $T =$ number of templates available, and
@@ -194,7 +242,5 @@ Backprojection             & TV                        & \begin{tabular}[c]{@{}l
 \end{itemize}
   
   
-\end{itemize}
-
 \end{document}
 
