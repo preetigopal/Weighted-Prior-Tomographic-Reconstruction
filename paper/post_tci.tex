@@ -871,16 +871,18 @@ in~\cite{TVReg} and available in~\cite{TVReg-lib}.
     J_{\boldsymbol{\alpha}}(\boldsymbol{\x}) \triangleq &\lVert\boldsymbol{\mathcal{R} x- y}\rVert_2^2  + \lambda_1TV(\boldsymbol{x}) \\
     &+\lambda_2\lVert(\boldsymbol{W}(\boldsymbol{x} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2
   \end{split}
+    \label{eq:compute_x}
   \end{equation}
   
 \begin{equation}
-J_{\boldsymbol{x}}(\boldsymbol{\alpha}) \triangleq \lVert{\boldsymbol{W}(\boldsymbol{x}} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2.
+  J_{\boldsymbol{x}}(\boldsymbol{\alpha}) \triangleq \lVert{\boldsymbol{W}(\boldsymbol{x}} - (\boldsymbol{\mu + V\alpha}))\rVert_2^2.
 \end{equation}
 
 Solving for $\boldsymbol{\alpha}$ leads to the closed form update:
 
 \begin{equation}
-\boldsymbol{\alpha} = [(\boldsymbol{WV})^T\boldsymbol{WV}]^{-1}\boldsymbol{V}^T(\boldsymbol{W}^T\boldsymbol{W}(\boldsymbol{x} - \boldsymbol{\mu}))
+  \boldsymbol{\alpha} = [(\boldsymbol{WV})^T\boldsymbol{WV}]^{-1}\boldsymbol{V}^T(\boldsymbol{W}^T\boldsymbol{W}(\boldsymbol{x} - \boldsymbol{\mu}))
+  \label{eq:compute_alpha}
 \end{equation}
 
 %Optimal values of $\lambda_1, \lambda_2$ must be empirically chosen \textit{a priori}, based on the reconstructions of one of the template volumes (see also Sec.~\ref{sec:discussion}).
@@ -1406,7 +1408,7 @@ reconstructed new regions as compared to other methods.
 \section{Discussion}
 \label{sec:discussion}
 In this section, we discuss tuning of parameters, computational complexity of our method, and requirements for applying deep learning techniques in longitudinal few-view reconstruction.
-\subsection{Tuning of parameters:}
+\subsection{Tuning of parameters}
 $\lambda_1$, $\lambda_2$ and $k$ are the three
 hyper-parameters that need to be chosen carefully for optimal
 reconstruction. In our experiments, $\lambda_1$ was tuned to maximize
@@ -1546,28 +1548,29 @@ in the supplementary material~\cite{supp_paper}.
     \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
 \label{fig:reconstructions_as_k_varies}
 \end{figure}
-\subsection{Computational Complexity:}
+\subsection{Computational Complexity}
 Most of the
 computation time in our technique is used for the generation of low quality eigen-space
-by reconstructing each of the templates using TV and FDK. If the set of projection views for every test is fixed a priori, the set of low quality reconstructions can be produced offline and stored in order to save computational costs. With this assumption, Table~\ref{table:compute_time} shows the computation times for various stages of reconstruction of a 2D slice of Liver on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. If however, new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization since these reconstructions are completely independent. Here below, we describe the
-time complexity of spatially-varying prior technique.  If
+by reconstructing each of the templates using TV and FDK. If the set of projection views for every test is fixed a priori, the set of low quality reconstructions can be produced offline and stored in order to save computational costs. With this assumption, Table~\ref{table:compute_time} shows the computation times for various stages of reconstruction of a 2D slice of Liver (refer code in~\cite{codeRepo}) on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. If however, new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization since these reconstructions are completely independent. Here below, we describe the
+time complexity of spatially-varying prior technique.  Let
 \begin{itemize}
-\item $N =$ number of voxels of the volume
-\item $T =$ number of templates available, and
-\item $F =$ time taken for iterative TV optimization,
+\item $N$ denote the number of voxels of test volume,
+\item $L$ denote the number of templates available,
+\item $M$ denote the number of pilot reconstruction algorithms used for the computation of weights map, and
+\item $F$ denote the time taken for optimization.
 \end{itemize}
-then, the computational complexity is sum of the following
+$F$ consists of time taken for alternate minimization of Eq.~\ref{eq:spatially_varying_prior}, which in turn consists of time taken for repeated cycles of a closed-form update of $\boldsymbol{\alpha}$ (Eq.~\ref{eq:compute_alpha}) and an iterative optimization of  $\boldsymbol{x}$ (Eq.~\ref{eq:compute_x}). Speed of iterative optimization is dependent on the number of imaging views as well. Therefore, the time computational complexity of our method is sum of the following
 \begin{itemize}
-\item $O(NT^2+T^3)$ for creating the eigenspace,
-\item $O(NT^2)$ for deriving the weights map, and
+\item $O(NL^2+L^3)$ for creating eigenspace,
+\item $O(NL)*M$ for deriving weights map, and
 \item time $F$  taken for iterative minimization
 \end{itemize}
 where $O(.)$ is the notation for `Big O' used in complexity analysis. 
-In terms of space, the complexity is $O(T)$ in order to store the templates and their low quality reconstructions. We only need to store a single weights map volume regardless of the number of templates available.
+In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templates and their low quality reconstructions, and to store one weights map. We only need to store a single weights map volume regardless of the number of templates available.
 
 \begin{table}[]
  \centering
-  \caption{Computation times (in seconds) for various stages of reconstruction of a 2D slice of Liver on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. Here we assume that low quality eigen-spaces of the templates are computed offline.}
+  \caption{Computation times (in seconds) for various stages of reconstruction of a 2D slice of Liver (refer code in~\cite{codeRepo}) on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. Here we assume that low quality eigen-spaces of the templates are computed offline.}
 \begin{tabular}{|l|l|l|l|}
 \hline
 Backprojection             & TV                        & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map\end{tabular} & \begin{tabular}[c]{@{}l@{}}Final reconstruction\\ with spatially-varying \\ prior\end{tabular} \\ \hline

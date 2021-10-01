@@ -87,44 +87,8 @@ and the handling editor.
      possibility of using deep learning for this, and its disadvantages.}
 
    We accept this point, and have now discussed the difficulties in
-   using deep-learning techniques for the current problem in Sec.~7C
-   of our paper. We also describe them here below.
-
-\textcolor{red}{Comment from Sharat:  Since the material is in the text, there is no need to mention it here.}
-   
-   
-  In a machine learning based setting, our goal of detecting new
-  changes is a `prediction' problem in a continuous solution space
-  i.e., \textit{``given intensities of a voxel at various time
-    instants in a longitudinal setting and partial measurements of the
-    voxel at the current time, what will be the intensity of the same
-    voxel at the current time instant?''} This estimation can be
-  learnt by a deep neural network if there are hundreds of labeled
-  data.  However, generalization of this across multiple datasets
-  poses a question mark.
-  
-  %% thousands of time instants at which the previous voxel
-  %% intensities are known for each voxel. This amount of data is not
-  %% available to us, and may be hard to acquire because each specimen
-  %% is usually scanned only a couple of times in any longitudinal
-  %% study.
-
-  Further, a specific `event-of-interest' may occur just once in a
-  longitudinal study and hence training on data of all previous time
-  instants may be misleading. If however, we use measurements from
-  identical and full-cycle longitudinal studies, including
-  events-of-interest, of similar specimen (instead of the `same'
-  specimen as we used), a deep-learning technique may be applied. We
-  see this as an extension of using object-prior generated from the
-  same object, and hence we have not explored this direction.
-
-  Another avenue for using deep-networks \textit{within} our current
-  work is to replace the currently used fixed eigenspace provided by
-  PCA by a learnt feature basis provided by a network such as an
-  autoencoder. For each dataset, an autoencoder may be trained to
-  learn a specific set of latent features (this might again require
-  atleast a few tens of volumes). We see this as a future direction of
-  work.
+   using deep-learning techniques for the current problem in Section.~7C
+   of our paper. 
 
 \item \textcolor{blue}{There are no added comparisons with popular existing methods for
   reconstruction with a small number of projections (TV, algebraic techniques, etcetera)}\\
@@ -199,47 +163,9 @@ and the handling editor.
 \item \textcolor{blue}{A discussion about computational costs (time,
   memory) should be included in the paper.}
   
-  We now present details of both time and space complexities of our technique in Section.7B of our paper.
+  We now present details of both time and space complexities of our technique in Section.~7B of our paper.
 
-  
-Most of the computation time in our technique is used for the
-generation of low quality eigen-space by reconstructing each of the
-templates using TV and FDK. If the set of projection views for every
-test is fixed a priori, the set of low quality reconstructions can be
-produced offline and stored in order to save computational costs. With
-this assumption, Table~\ref{table:compute_time} shows the computation
-times for various stages of reconstruction of a 2D slice of Liver on
-MATLAB 2019a on an AMD 2920X 12-Core Processor machine with 64GB
-RAM. If however, new sets of projection views for every test are to be
-allowed, the low quality reconstructions can still be performed
-efficiently using parallelization since these reconstructions are
-completely independent. Here below, we describe the time complexity of
-spatially-varying prior technique.  If
-\begin{itemize}
-\item $N =$ number of voxels of the volume
-\item $T =$ number of templates available, and
-\item $F =$ time taken for iterative TV optimization,
-\end{itemize}
-then, the computational complexity is sum of the following
-\begin{itemize}
-\item $O(NT^2+T^3)$ for creating the eigenspace,
-\item $O(NT^2)$ for deriving the weights map, and
-\item time $F$  taken for iterative minimization
-\end{itemize}
-where $O(.)$ is the notation for `Big O' used in complexity analysis. 
-In terms of space, the complexity is $O(T)$ in order to store the templates and their low quality reconstructions. We only need to store a single weights map volume regardless of the number of templates available.
-
-\begin{table}[]
-  \centering
-  \caption{Computation times (in seconds) for various stages of reconstruction of a 2D slice of Liver on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. Here we assume that low quality eigen-spaces of the templates are computed offline.}
-\begin{tabular}{|l|l|l|l|}
-\hline
-Backprojection             & TV                        & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map\end{tabular} & \begin{tabular}[c]{@{}l@{}}Final reconstruction\\ with spatially-varying \\ prior\end{tabular} \\ \hline
-\multicolumn{1}{|c|}{0.40} & \multicolumn{1}{c|}{8.44} & \multicolumn{1}{c|}{0.04}                                             & \multicolumn{1}{c|}{46.73}                                                                     \\ \hline
-\end{tabular}
-\label{table:compute_time}
-\end{table}
-\end{itemize}
+  \end{itemize}
   
   
 \end{document}
