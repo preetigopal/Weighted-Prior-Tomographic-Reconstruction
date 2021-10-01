@@ -1549,23 +1549,39 @@ in the supplementary material~\cite{supp_paper}.
 \label{fig:reconstructions_as_k_varies}
 \end{figure}
 \subsection{Computational Complexity}
-Most of the
-computation time in our technique is used for the generation of low quality eigen-space
-by reconstructing each of the templates using TV and FDK. If the set of projection views for every test is fixed a priori, the set of low quality reconstructions can be produced offline and stored in order to save computational costs. With this assumption, Table~\ref{table:compute_time} shows the computation times for various stages of reconstruction of a 2D slice of Liver (refer code in~\cite{codeRepo}) on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. If however, new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization since these reconstructions are completely independent. Here below, we describe the
-time complexity of spatially-varying prior technique.  Let
+
+Most of the computation time in our technique is used for the
+generation of low quality eigen-space by reconstructing each of the
+templates using TV and FDK. If the set of projection views for every
+test is fixed a priori, a reasonable assumption,
+the set of low quality reconstructions can be
+produced offline and stored in order to save computational costs. With
+this assumption, Table~\ref{table:compute_time} shows the computation
+times for various stages of reconstruction of a 2D slice of Liver
+(refer code in~\cite{codeRepo}) on MATLAB 2019a on an AMD 2920X
+12-Core Processor machine with 64GB RAM. If however, new sets of
+projection views for every test are to be allowed, the low quality
+reconstructions can still be performed efficiently using
+parallelization since these reconstructions are completely
+independent. Here below, we describe the time complexity of
+spatially-varying prior technique.  Let
 \begin{itemize}
 \item $N$ denote the number of voxels of test volume,
 \item $L$ denote the number of templates available,
 \item $M$ denote the number of pilot reconstruction algorithms used for the computation of weights map, and
 \item $F$ denote the time taken for optimization.
+  $F$ consists of time taken for alternate minimization of Eq.~\ref{eq:spatially_varying_prior}, which in turn consists of time taken for repeated cycles of a closed-form update of $\boldsymbol{\alpha}$ (Eq.~\ref{eq:compute_alpha}) and an iterative optimization of  $\boldsymbol{x}$ (Eq.~\ref{eq:compute_x}). 
 \end{itemize}
-$F$ consists of time taken for alternate minimization of Eq.~\ref{eq:spatially_varying_prior}, which in turn consists of time taken for repeated cycles of a closed-form update of $\boldsymbol{\alpha}$ (Eq.~\ref{eq:compute_alpha}) and an iterative optimization of  $\boldsymbol{x}$ (Eq.~\ref{eq:compute_x}). Speed of iterative optimization is dependent on the number of imaging views as well. Therefore, the time computational complexity of our method is sum of the following
-\begin{itemize}
-\item $O(NL^2+L^3)$ for creating eigenspace,
-\item $O(NL)*M$ for deriving weights map, and
-\item time $F$  taken for iterative minimization
-\end{itemize}
-where $O(.)$ is the notation for `Big O' used in complexity analysis. 
+We ntoe that in practice $L$ is independent of $N$ and is likely to be $O(1)$  (e.g. about 12 scans in a year for disease prognosis).  Likewise $M$ is also $O(1)$. The speed of iterative optimization is dependent on the number of imaging views, and is profoundly impacted by the actual method used.  
+Therefore, the time computational complexity of our method is sum of
+the following
+\begin{enumerate}
+\item $O(NL^2+L^3)$ for creating eigenspace, which is, in practice linear, i.e., $O(N)$
+\item $O(NL)*M$ for deriving weights map, which is, in practice linear, i.e., $O(N)$
+\item and the time $F$  taken for iterative minimization, which as mentioned above is not the key contribution of this paper. 
+\end{enumerate}
+In short, the additional burden of the key idea of this paper viz. generating weights map is linear in the number of voxels, although admittedly the burden $F$ of repated optimization drives up the cost.
+
 In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templates and their low quality reconstructions, and to store one weights map. We only need to store a single weights map volume regardless of the number of templates available.
 
 \begin{table}[]

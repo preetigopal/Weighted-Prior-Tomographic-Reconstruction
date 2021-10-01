@@ -98,7 +98,9 @@ and the handling editor.
  Algebraic Reconstruction Technique (SART). We do not reconstruct
  using Discrete Algebraic Reconstruction Technique (DART) since there
  is no prior information about the number of possible attentuation
- coefficients in the test object. Among other iterative techniques, we
+ coefficients in the test object.
+%% IS THERE A NEED TO HIGHGLIHT what we have not done?  Also give references?
+ Among other iterative techniques, we
  have used Simultaneous Iterative Reconstruction Technique (SIRT),
  Total Variation (TV) and Compressed Sensing (CS) with Haar wavelet
  and DCT as sparsity basis. The details of solvers used for these
@@ -114,24 +116,29 @@ and the handling editor.
   comparisons.}
 
   The reason for not reporting RMSE stems from the optimization
-  process. The optimization routine we use transforms the
-  reconstruction to a different space.  That is, in our experiments,
-  we observed that for a given dataset and a set of projection
-  measurements, the intensity span of histograms of reconstructed
-  volumes differ across various methods and solvers. As a result, the
-  RMSE values are not particularly useful.  We provide the numbers
-  here to show the improvement trend but we believe it does not serve
-  the interest of the community to report these.
+  process in Equation~\ref{asfdaf}. The optimization routine we use
+  transforms the reconstruction values to a different range of
+  numerical values.  That is, in our experiments, we observed that for
+  a given dataset and a set of projection measurements, the intensity
+  span of histograms of reconstructed volumes differ considerably across various
+  methods and solvers.  As a result, the RMSE values are not
+  particularly useful, and may even be misleading.  We provide the RMSE numbers below to show the
+  improvement trend but we believe it does not serve the interest of
+  the community to report these in the main paper.
 
   For the same reason, the standard setting of SSIM in matlab (for
   instance) emphasizes the intensity. We found that even when the
   quality of reconstruction is acceptable visually, the SSIM values
-  were not acceptable.  We choose
+  with the standard values were not acceptable.  We choose
   to focus on preserving the structures on our reconstructions, and
   not rely on the absolute intensity values alone. Hence, we choose
-  SSIM with a higher weightage to structure-preservation. For our
-  record, we have computed RMSE values as well and they are presented
-  here in Tables~\ref{table:potato_rmse} and~\ref{table:sprouts_rmse}.
+  SSIM with a higher weightage to structure-preservation.
+
+  For the record, sample RMSE values are presented
+  here in Tables~\ref{table:potato_rmse} and~\ref{table:sprouts_rmse} that shows
+  the superiority of method at the risk of misleading absolute numbers.
+
+  %% Why not combine all of the values in one table?
 
 \begin{table}[!h]
   \centering
