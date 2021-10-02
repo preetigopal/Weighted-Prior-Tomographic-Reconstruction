@@ -1,0 +1,176 @@
+\documentclass{article}
+\bibliographystyle{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\bibliographystyle{IEEEtran}
+\usepackage{caption}
+\usepackage{subcaption, tabularx}
+\usepackage{xcolor}
+\usepackage{boxedminipage}
+\usepackage{a4wide}
+\usepackage{subcaption}
+\usepackage[colorlinks=true]{hyperref}
+\title{Response to Reviewers and Associate Editor}
+\begin{document}
+\date{}
+\maketitle
+
+This paper was submitted earlier, and out of the three reviewers, two
+of them had pronounced this as ``publish unaltered'' and one reviewer
+(R1) did not recommend resubmission. The handling Editor has
+encouraged a resubmission of this paper taking into account the
+comments of R1.  We thank all reviewers for their remarks and in this
+document, we explain the steps we have taken to address the reviews
+received in our previous submission to TCI. R1 makes the following
+comments, and we quote excerpts in blue here:
+\begin{quote}
+  \textcolor{blue}{The authors have spent considerable effort in revising the
+  manuscript and addressing the concerns of the reviewers. I would
+  like to thank the authors for their effort. I believe the manuscript
+  has improved because of these revisions, especially in the structure
+  of the paper and the discussion of related work. Unfortunately, some
+  of my main concerns with regards to the experiments, the accuracy of
+  the proposed method, and the presentation of the findings remain
+  present in the revised manuscript. In some cases the revisions have
+  even increased my concerns about certain aspects. Mainly, the
+  included experiments still do not clearly show that the proposed
+  method improves upon existing ‘simple’ prior-based methods
+%% , and the
+%%   new results even show that there is evidence that FDK is more
+%%   accurate than the proposed method exactly in the region that changed
+  }
+  \end{quote}
+
+The simpler method is based on the well-known ``Total Variation''. 
+In particular, we address the following main concern of the reviewer 
+\begin{quote}  
+    \textcolor{blue}{Note that the total
+variation minimization results are much better than the l1-ls results that the authors show in the
+paper}
+\end{quote}
+
+    by rewriting the paper considerably.  We believe the paper
+    addresses this (correct) stinging criticism of R1.  In fact R1 has taken
+    pains in showing how the Total-Variation method (and sometimes
+    FDK) is better than our earlier Compressed Sensing plus
+    spatially-varying prior-based reconstruction, and we gratefully
+    acknowledge the same.
+
+Again, this is correct for the dataset shown, and we accept this to be
+true.
+
+  We re-wrote our code and upon further analysis observed that TV is
+  indeed better suited as a baseline reconstruction method for our
+  datasets and our subsampling choices. Hence, our current paper
+  presents all results using TV regularization coupled with
+  spatially-varying technique, and demonstrates  benefits over
+  TV-only and backprojection-only methods.  \emph{We have eliminated our
+  previous implicit claim that the CS based scheme is optimal for the
+  dataset provided. }
+
+  As far as FDK is concerned, the current results indeed show the
+  superiority of the TV-based scheme (as also noted by the reviewer).
+
+    That said, the goal of our previous and curent work is to provide
+    a technique that can improve upon a chosen baseline reconstruction
+    when measurements are extremely sparse.  One may choose any
+    baseline reconstruction (including an inferior -- for this dataset
+    -- Compressed sensing prior) for pedagogical, historical, or
+    commercial reasons, and given that, our key question is -- is
+    there a way to improve?  The spatially-varying method of
+    moderating the prior settles this question.
+
+We also take this opportunity to address other comments given by R1
+and the handling editor.
+
+ \begin{itemize}
+ \item    \textcolor{blue}{...the paper should at least include a (short) discussion about the
+     possibility of using deep learning for this, and its disadvantages.}
+
+   We accept this point, and have now discussed the difficulties in
+   using deep-learning techniques for the current problem in Section.~7C
+   of our paper. 
+
+\item \textcolor{blue}{There are no added comparisons with popular existing methods for
+  reconstruction with a small number of projections (TV, algebraic techniques, etcetera)}\\
+  
+ Among the family of algebraic techniques, we have compared our method
+ with Algebraic Reconstruction Technique (ART)~\cite{art} and Simultaneous
+ Algebraic Reconstruction Technique (SART)~\cite{sart}. We do not reconstruct
+ using Discrete Algebraic Reconstruction Technique (DART)~\cite{dart} since there
+ is no prior information about the number of possible attentuation
+ coefficients in the test object.
+%% IS THERE A NEED TO HIGHGLIHT what we have not done?  Also give references?
+ Among other iterative techniques, we
+ have used Simultaneous Iterative Reconstruction Technique (SIRT)~\cite{sirt},
+ Total Variation (TV)~\cite{TV},~\cite{TVReg} and Compressed Sensing (CS)~\cite{lasso} with Haar wavelet
+ and DCT as sparsity basis. The details of solvers used for these
+ algorithms and their reconstructions are in Page.~7 (Section-6A) of
+ the paper. For CS reconstruction, we observed that Haar wavelet and
+ DCT were best suited for our dataset among various other possible
+ sparsity basis.
+
+\item \textcolor{blue}{Why did the authors not choose the standard
+  settings for SSIM?...I don’t understand the reason given for not
+  including RMSE: the values don’t have to be optimized again -- you
+  could just optimize for SSIM but at least still report RMSE
+  comparisons.}
+
+  The reason for not reporting RMSE stems from the optimization
+  process in Equation~\ref{Eq:simple_TV}.
+  
+ \begin{equation}
+   J_{TV}(\boldsymbol{x}) = \lVert\boldsymbol{\mathcal{R}x}- \boldsymbol{y}\rVert_2^2 + \lambda_{TV}TV(\boldsymbol{x})
+   \label{Eq:simple_TV}
+ \end{equation}
+
+  This optimization routine 
+  transforms the reconstruction values to a different range of
+  numerical values.  That is, in our experiments, we observed that for
+  a given dataset and a set of projection measurements, the intensity
+  span of histograms of reconstructed volumes differ considerably across various
+  methods and solvers.  As a result, the RMSE values are not
+  particularly useful, and may even be misleading.  We provide the RMSE numbers below to show the
+  improvement trend but we believe it does not serve the interest of
+  the community to report these in the main paper.
+
+  For the same reason, the standard setting of SSIM in matlab (for
+  instance) emphasizes the intensity. We found that even when the
+  quality of reconstruction is acceptable visually, the SSIM values
+  with the standard values were not acceptable.  We choose
+  to focus on preserving the structures on our reconstructions, and
+  not rely on the absolute intensity values alone. Hence, we choose
+  SSIM with a higher weightage to structure-preservation.
+
+  For the record, sample RMSE values are presented
+  here in Table~\ref{table:rmse} that shows
+  the superiority of our method at the risk of misleading absolute numbers.
+
+  %% Why not combine all of the values in one table?
+
+\begin{table}[!h]
+  \centering
+ \caption{RMSE of reconstructions from various
+    methods within the RoI.}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline 
+&\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
+\\ \hline \textbf{Potato}& 0.29 & 0.24 & \textcolor{red}{0.18}
+\\ \hline \textbf{Sprouts}& 0.53 & 0.48 & \textcolor{red}{0.30}
+\\ \hline \textbf{Liver}& 0.05 & 0.17 & \textcolor{red}{0.03}
+\\ \hline
+\end{tabular}
+\label{table:rmse}
+\end{table}
+
+\item \textcolor{blue}{A discussion about computational costs (time,
+  memory) should be included in the paper.}
+  
+  We now present details of both time and space complexities of our technique in Section.~7B of our paper.
+
+  \end{itemize}
+  
+\bibliography{tci_ref}  
+\end{document}
+
