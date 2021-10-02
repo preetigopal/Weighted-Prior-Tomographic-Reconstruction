@@ -1,4 +1,6 @@
 \documentclass{article}
+\bibliographystyle{IEEEtran}
+
 \usepackage{amsmath}
 \usepackage{graphicx}
 \bibliographystyle{IEEEtran}
@@ -94,15 +96,15 @@ and the handling editor.
   reconstruction with a small number of projections (TV, algebraic techniques, etcetera)}\\
   
  Among the family of algebraic techniques, we have compared our method
- with Algebraic Reconstruction Technique (ART) and Simultaneous
- Algebraic Reconstruction Technique (SART). We do not reconstruct
- using Discrete Algebraic Reconstruction Technique (DART) since there
+ with Algebraic Reconstruction Technique (ART)~\cite{art} and Simultaneous
+ Algebraic Reconstruction Technique (SART)~\cite{sart}. We do not reconstruct
+ using Discrete Algebraic Reconstruction Technique (DART)~\cite{dart} since there
  is no prior information about the number of possible attentuation
  coefficients in the test object.
 %% IS THERE A NEED TO HIGHGLIHT what we have not done?  Also give references?
  Among other iterative techniques, we
- have used Simultaneous Iterative Reconstruction Technique (SIRT),
- Total Variation (TV) and Compressed Sensing (CS) with Haar wavelet
+ have used Simultaneous Iterative Reconstruction Technique (SIRT)~\cite{sirt},
+ Total Variation (TV)~\cite{TV},~\cite{TVReg} and Compressed Sensing (CS)~\cite{lasso} with Haar wavelet
  and DCT as sparsity basis. The details of solvers used for these
  algorithms and their reconstructions are in Page.~7 (Section-6A) of
  the paper. For CS reconstruction, we observed that Haar wavelet and
@@ -116,7 +118,14 @@ and the handling editor.
   comparisons.}
 
   The reason for not reporting RMSE stems from the optimization
-  process in Equation~\ref{asfdaf}. The optimization routine we use
+  process in Equation~\ref{Eq:simple_TV}.
+  
+ \begin{equation}
+   J_{TV}(\boldsymbol{x}) = \lVert\boldsymbol{\mathcal{R}x}- \boldsymbol{y}\rVert_2^2 + \lambda_{TV}TV(\boldsymbol{x})
+   \label{Eq:simple_TV}
+ \end{equation}
+
+  This optimization routine 
   transforms the reconstruction values to a different range of
   numerical values.  That is, in our experiments, we observed that for
   a given dataset and a set of projection measurements, the intensity
@@ -135,37 +144,25 @@ and the handling editor.
   SSIM with a higher weightage to structure-preservation.
 
   For the record, sample RMSE values are presented
-  here in Tables~\ref{table:potato_rmse} and~\ref{table:sprouts_rmse} that shows
-  the superiority of method at the risk of misleading absolute numbers.
+  here in Table~\ref{table:rmse} that shows
+  the superiority of our method at the risk of misleading absolute numbers.
 
   %% Why not combine all of the values in one table?
 
 \begin{table}[!h]
   \centering
- \caption{RMSE within the RoI of 3D reconstructed Potato volume from various
-    methods.}
-\begin{tabular}{|l|c|c|c|c|}
+ \caption{RMSE of reconstructions from various
+    methods within the RoI.}
+\begin{tabular}{|l|c|c|c|c|c|}
 \hline 
-\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
-\\ \hline  0.29 & 0.24 & \textcolor{red}{0.18}
+&\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
+\\ \hline \textbf{Potato}& 0.29 & 0.24 & \textcolor{red}{0.18}
+\\ \hline \textbf{Sprouts}& 0.53 & 0.48 & \textcolor{red}{0.30}
+\\ \hline \textbf{Liver}& 0.05 & 0.17 & \textcolor{red}{0.03}
 \\ \hline
 \end{tabular}
-\label{table:potato_rmse}
+\label{table:rmse}
 \end{table}
-
-\begin{table}[!h]
-  \centering
- \caption{RMSE within the RoI of 3D reconstructed Sprouts volume from various
-    methods.}
-\begin{tabular}{|l|c|c|c|c|}
-\hline 
-\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
-\\ \hline  0.53 & 0.48 & \textcolor{red}{0.30}
-\\ \hline
-\end{tabular}
-\label{table:sprouts_rmse}
-\end{table}
-
 
 \item \textcolor{blue}{A discussion about computational costs (time,
   memory) should be included in the paper.}
@@ -174,6 +171,6 @@ and the handling editor.
 
   \end{itemize}
   
-  
+\bibliography{tci_ref}  
 \end{document}
 

@@ -1168,11 +1168,12 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{SSIM of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ground-truth (ideal reconstruction) is 1.}
-\begin{tabular}{|l|c|c|c|c|c|c|c|c|}
+\caption{SSIM and Relative MSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ground-truth (ideal reconstruction) is 1.}
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
-  \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
- 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
+ & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
+SSIM & 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
+Rel.MSE & 0.33 & 0.07 & 0.14 & 0.41 & 0.24 & 0.1 & 0.03 & \textcolor{red}{0.00}\\ \hline
 \end{tabular}
 \label{table:potato_2D_ssim}
 \end{table}
@@ -1218,13 +1219,13 @@ the reconstructed new regions using various methods.
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{SSIM of reconstructed potato from various
+  \caption{\{SSIM/Relative MSE\} of reconstructed potato from various
     methods. SSIM of ground-truth (ideal reconstruction) is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.52
-& 0.92 & \textcolor{red}{0.97} \\ \hline \textbf{3D} & 0.58 & 0.75 & \textcolor{red}{0.84}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.52 / 0.16
+& 0.92 / 0.00 & \textcolor{red}{0.97 / 0.00} \\ \hline \textbf{3D} & 0.58 / 0.29 & 0.75 / 0.24 & \textcolor{red}{0.84 / 0.18}
 \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
@@ -1233,7 +1234,7 @@ the reconstructed new regions using various methods.
 %--------------------------Okra-- results
 \subsubsection{\textbf{Okra}}
 \label{Sec:okra_spatially_varying}
-The test volume was reconstructed from a partial set of $6.7\%$ of projection views from which
+The test volume was reconstructed from a partial set of $10\%$ of projection views from which
 ground truth was reconstructed (refer Sec.~\ref{sec:datasets}). 2D reconstructions of one of the
 slices is shown in Fig.~\ref{fig:okra_2D_results}. A complete 3D
 reconstruction can be found in in the supplementary material
@@ -1276,13 +1277,13 @@ Table~\ref{table:okra_ssim}.
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{SSIM of reconstructed okra from various
+  \caption{\{SSIM/Relative MSE\} of reconstructed okra from various
     methods. SSIM of ground-truth (ideal reconstruction) is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.46
-& 0.50 & \textcolor{red}{0.74} \\ \hline \textbf{3D} & 0.69 & 0.74 & \textcolor{red}{0.78}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.46 / 0.22
+& 0.50 / 0.16 & \textcolor{red}{0.74 / 0.06} \\ \hline \textbf{3D} & 0.65 / 0.35 & 0.70 / 0.32 & \textcolor{red}{0.71 / 0.29}
 \\ \hline
 \end{tabular}
 \label{table:okra_ssim}
@@ -1332,11 +1333,11 @@ SSIM in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{SSIM of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ground-truth (ideal reconstruction), SSIM equals 1.}
+  \caption{\{SSIM/Rel.MSE\} of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ground-truth (ideal reconstruction), SSIM equals 1.}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline  0.73
-& 0.91 & \textcolor{red}{0.95} \\ \hline 
+\textbf{This paper} \\ \hline  0.73 / 0.05
+& 0.91 / 0.17 & \textcolor{red}{0.95 / 0.03} \\ \hline 
 \end{tabular}
 \label{table:tmh_ssim}
 \end{table}
@@ -1389,13 +1390,13 @@ reconstructed new regions as compared to other methods.
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{SSIM of reconstructed sprouts from various
+  \caption{\{SSIM/Relative MSE\} of reconstructed sprouts from various
     methods. The SSIM of ground-truth (ideal reconstruction) is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
- \\ \hline \textbf{2D} & 0.67
-& 0.82 & \textcolor{red}{0.86} \\ \hline \textbf{3D} & 0.67 & 0.73 & \textcolor{red}{0.82}
+ \\ \hline \textbf{2D} & 0.67 / 0.23
+& 0.82 / 0.12 & \textcolor{red}{0.86 / 0.07} \\ \hline \textbf{3D} & 0.67 / 0.53 & 0.73 / 0.48 & \textcolor{red}{0.82 / 0.30}
 \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
@@ -1572,15 +1573,15 @@ spatially-varying prior technique.  Let
 \item $F$ denote the time taken for optimization.
   $F$ consists of time taken for alternate minimization of Eq.~\ref{eq:spatially_varying_prior}, which in turn consists of time taken for repeated cycles of a closed-form update of $\boldsymbol{\alpha}$ (Eq.~\ref{eq:compute_alpha}) and an iterative optimization of  $\boldsymbol{x}$ (Eq.~\ref{eq:compute_x}). 
 \end{itemize}
-We ntoe that in practice $L$ is independent of $N$ and is likely to be $O(1)$  (e.g. about 12 scans in a year for disease prognosis).  Likewise $M$ is also $O(1)$. The speed of iterative optimization is dependent on the number of imaging views, and is profoundly impacted by the actual method used.  
+We note that in practice $L$ is independent of $N$ and is likely to be $O(1)$  (e.g. about 12 scans in a year for disease prognosis).  Likewise $M$ is also $O(1)$. The speed of iterative optimization is dependent on the number of imaging views, and is profoundly impacted by the actual numerical optimization technique used.  
 Therefore, the time computational complexity of our method is sum of
 the following
 \begin{enumerate}
 \item $O(NL^2+L^3)$ for creating eigenspace, which is, in practice linear, i.e., $O(N)$
-\item $O(NL)*M$ for deriving weights map, which is, in practice linear, i.e., $O(N)$
+\item $O(NLM)$ for deriving weights map, which is, in practice linear, i.e., $O(N)$
 \item and the time $F$  taken for iterative minimization, which as mentioned above is not the key contribution of this paper. 
 \end{enumerate}
-In short, the additional burden of the key idea of this paper viz. generating weights map is linear in the number of voxels, although admittedly the burden $F$ of repated optimization drives up the cost.
+In short, the additional burden of the key idea of this paper viz. generating weights map is linear in the number of voxels, although admittedly the burden $F$ of alternate minimization drives up the cost.
 
 In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templates and their low quality reconstructions, and to store one weights map. We only need to store a single weights map volume regardless of the number of templates available.
 
@@ -1589,8 +1590,8 @@ In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templat
   \caption{Computation times (in seconds) for various stages of reconstruction of a 2D slice of Liver (refer code in~\cite{codeRepo}) on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. Here we assume that low quality eigen-spaces of the templates are computed offline.}
 \begin{tabular}{|l|l|l|l|}
 \hline
-Backprojection             & TV                        & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map\end{tabular} & \begin{tabular}[c]{@{}l@{}}Final reconstruction\\ with spatially-varying \\ prior\end{tabular} \\ \hline
-\multicolumn{1}{|c|}{0.40} & \multicolumn{1}{c|}{8.44} & \multicolumn{1}{c|}{0.04}                                             & \multicolumn{1}{c|}{46.73}                                                                     \\ \hline
+ \begin{tabular}[c]{@{}l@{}} FBP (Sufficient \\ views)\end{tabular}             & \begin{tabular}[c]{@{}l@{}} TV (Moderate \\ views)  \end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map \\ (Very few \\views)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Alternate\\ Minimization \\ (Very few \\views)\end{tabular} \\ \hline
+\multicolumn{1}{|c|}{0.01} & \multicolumn{1}{c|}{6} & \multicolumn{1}{c|}{0.01}                                             & \multicolumn{1}{c|}{34}                                                                     \\ \hline
 \end{tabular}
 \label{table:compute_time}
 \end{table}
