@@ -1014,8 +1014,8 @@ evaluation, we compute the Structural Similarity Index Metric
 preservation of structure in a reconstruction by assigning the
 following weights to structure, contrast and intensity respectively:
 $0.7,0.2,0.1$. The reason for emphasizing the structure with an
-exponent of 0.7 steps from the optimization process since the
-intensity span and, in general, the histogram of reconstructed volumes
+exponent of 0.7 stems from the optimization process since the
+intensity span (and, in general, the histogram) of reconstructed volumes
 differ across various methods and solvers. 
 
 
@@ -1168,7 +1168,7 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{SSIM and Relative MSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ground-truth (ideal reconstruction) is 1.}
+\caption{SSIM and Relative MSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ideal reconstruction is 1.}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
@@ -1219,8 +1219,8 @@ the reconstructed new regions using various methods.
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{\{SSIM/Relative MSE\} of reconstructed potato from various
-    methods. SSIM of ground-truth (ideal reconstruction) is 1.}
+  \caption{The SSIM (Relative MSE) of reconstructed potato from various
+    methods. The SSIM of ideal reconstruction is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
@@ -1277,8 +1277,8 @@ Table~\ref{table:okra_ssim}.
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{\{SSIM/Relative MSE\} of reconstructed okra from various
-    methods. SSIM of ground-truth (ideal reconstruction) is 1.}
+  \caption{The SSIM (Relative MSE) of reconstructed okra from various
+    methods. SSIM of the ideal reconstruction is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
@@ -1333,7 +1333,7 @@ SSIM in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{\{SSIM/Rel.MSE\} of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ground-truth (ideal reconstruction), SSIM equals 1.}
+  \caption{The SSIM (Relative MSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ideal reconstruction, SSIM equals 1.}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
 \textbf{This paper} \\ \hline  0.73 / 0.05
@@ -1390,8 +1390,8 @@ reconstructed new regions as compared to other methods.
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{\{SSIM/Relative MSE\} of reconstructed sprouts from various
-    methods. The SSIM of ground-truth (ideal reconstruction) is 1.}
+  \caption{The SSIM (Relative MSE) of reconstructed sprouts from various
+    methods. The SSIM of ideal reconstruction) is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
@@ -1573,7 +1573,9 @@ spatially-varying prior technique.  Let
 \item $F$ denote the time taken for optimization.
   $F$ consists of time taken for alternate minimization of Eq.~\ref{eq:spatially_varying_prior}, which in turn consists of time taken for repeated cycles of a closed-form update of $\boldsymbol{\alpha}$ (Eq.~\ref{eq:compute_alpha}) and an iterative optimization of  $\boldsymbol{x}$ (Eq.~\ref{eq:compute_x}). 
 \end{itemize}
-We note that in practice $L$ is independent of $N$ and is likely to be $O(1)$  (e.g. about 12 scans in a year for disease prognosis).  Likewise $M$ is also $O(1)$. The speed of iterative optimization is dependent on the number of imaging views, and is profoundly impacted by the actual numerical optimization technique used.  
+We note that in practice $L$ is independent of $N$ and is likely to be
+$O(1)$  (e.g. about 12 scans in a year for disease prognosis).
+Likewise $M$ is also $O(1)$. The speed of the iterative optimization is dependent on the number of imaging views, and is profoundly impacted by the actual numerical optimization technique used.  
 Therefore, the time computational complexity of our method is sum of
 the following
 \begin{enumerate}
@@ -1581,7 +1583,10 @@ the following
 \item $O(NLM)$ for deriving weights map, which is, in practice linear, i.e., $O(N)$
 \item and the time $F$  taken for iterative minimization, which as mentioned above is not the key contribution of this paper. 
 \end{enumerate}
-In short, the additional burden of the key idea of this paper viz. generating weights map is linear in the number of voxels, although admittedly the burden $F$ of alternate minimization drives up the cost.
+In short, the additional burden of the key idea of this paper
+viz. generating weights map is linear in the number of voxels,
+although admittedly the burden $F$ of the alternate minimization procedure drives up
+the cost.
 
 In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templates and their low quality reconstructions, and to store one weights map. We only need to store a single weights map volume regardless of the number of templates available.
 
@@ -1591,7 +1596,7 @@ In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templat
 \begin{tabular}{|l|l|l|l|}
 \hline
  \begin{tabular}[c]{@{}l@{}} FBP (Sufficient \\ views)\end{tabular}             & \begin{tabular}[c]{@{}l@{}} TV (Moderate \\ views)  \end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map \\ (Very few \\views)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Alternate\\ Minimization \\ (Very few \\views)\end{tabular} \\ \hline
-\multicolumn{1}{|c|}{0.01} & \multicolumn{1}{c|}{6} & \multicolumn{1}{c|}{0.01}                                             & \multicolumn{1}{c|}{34}                                                                     \\ \hline
+\multicolumn{1}{|c|}{0.01} & \multicolumn{1}{c|}{6.00} & \multicolumn{1}{c|}{0.01}                                             & \multicolumn{1}{c|}{34.00}                                                                     \\ \hline
 \end{tabular}
 \label{table:compute_time}
 \end{table}
