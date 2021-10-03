@@ -1168,12 +1168,12 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{SSIM and Relative MSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ideal reconstruction is 1.}
+\caption{SSIM and RMSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ideal reconstruction is 1.}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
 SSIM & 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
-Rel.MSE & 0.33 & 0.07 & 0.14 & 0.41 & 0.24 & 0.1 & 0.03 & \textcolor{red}{0.00}\\ \hline
+RMSE & 0.38 & 0.18 & 0.25 & 0.43 & 0.33 & 0.21 & 0.11 & \textcolor{red}{0.04}\\ \hline
 \end{tabular}
 \label{table:potato_2D_ssim}
 \end{table}
@@ -1219,13 +1219,13 @@ the reconstructed new regions using various methods.
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (Relative MSE) of reconstructed potato from various
+  \caption{The SSIM (RMSE) of reconstructed potato from various
     methods. The SSIM of ideal reconstruction is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.52 / 0.16
-& 0.92 / 0.00 & \textcolor{red}{0.97 / 0.00} \\ \hline \textbf{3D} & 0.58 / 0.29 & 0.75 / 0.24 & \textcolor{red}{0.84 / 0.18}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.52 (0.36)
+& 0.92 (0.06) & \textcolor{red}{0.97 (0.03)} \\ \hline \textbf{3D} & 0.58 (0.26) & 0.75 (0.21) & \textcolor{red}{0.84 (0.16)}
 \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
@@ -1277,13 +1277,14 @@ Table~\ref{table:okra_ssim}.
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (Relative MSE) of reconstructed okra from various
+  \caption{The SSIM (RMSE) of reconstructed okra from various
     methods. SSIM of the ideal reconstruction is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.46 / 0.22
-& 0.50 / 0.16 & \textcolor{red}{0.74 / 0.06} \\ \hline \textbf{3D} & 0.65 / 0.35 & 0.70 / 0.32 & \textcolor{red}{0.71 / 0.29}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.46 (0.28)
+& 0.50 (0.24) & \textcolor{red}{0.74 (0.15)} \\ \hline \textbf{3D, 30 views} & 0.69 (0.21) & 0.74 (0.30) & \textcolor{red}{0.78 (0.26)}\\
+\hline \textbf{3D, 45 views} & 0.65 (0.22) & 0.70 (0.21) & \textcolor{red}{0.71 (0.19)}
 \\ \hline
 \end{tabular}
 \label{table:okra_ssim}
@@ -1333,11 +1334,11 @@ SSIM in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (Relative MSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ideal reconstruction, SSIM equals 1.}
+  \caption{The SSIM (RMSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ideal reconstruction, SSIM equals 1.}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline  0.73 / 0.05
-& 0.91 / 0.17 & \textcolor{red}{0.95 / 0.03} \\ \hline 
+\textbf{This paper} \\ \hline  0.73 (0.04)
+& 0.91 (0.09) & \textcolor{red}{0.95 (0.03)} \\ \hline 
 \end{tabular}
 \label{table:tmh_ssim}
 \end{table}
@@ -1390,13 +1391,13 @@ reconstructed new regions as compared to other methods.
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (Relative MSE) of reconstructed sprouts from various
+  \caption{The SSIM (RMSE) of reconstructed sprouts from various
     methods. The SSIM of ideal reconstruction) is 1.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
- \\ \hline \textbf{2D} & 0.67 / 0.23
-& 0.82 / 0.12 & \textcolor{red}{0.86 / 0.07} \\ \hline \textbf{3D} & 0.67 / 0.53 & 0.73 / 0.48 & \textcolor{red}{0.82 / 0.30}
+ \\ \hline \textbf{2D} & 0.67 (0.24)
+& 0.82 (0.17) & \textcolor{red}{0.86 (0.13)} \\ \hline \textbf{3D} & 0.67 (0.25) & 0.73 (0.23) & \textcolor{red}{0.82 (0.14)}
 \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
@@ -1590,13 +1591,13 @@ the cost.
 
 In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templates and their low quality reconstructions, and to store one weights map. We only need to store a single weights map volume regardless of the number of templates available.
 
-\begin{table}[]
+\begin{table}[!h]
  \centering
   \caption{Computation times (in seconds) for various stages of reconstruction of a 2D slice of Liver (refer code in~\cite{codeRepo}) on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. Here we assume that low quality eigen-spaces of the templates are computed offline.}
 \begin{tabular}{|l|l|l|l|}
 \hline
  \begin{tabular}[c]{@{}l@{}} FBP (Sufficient \\ views)\end{tabular}             & \begin{tabular}[c]{@{}l@{}} TV (Moderate \\ views)  \end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map \\ (Very few \\views)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Alternate\\ Minimization \\ (Very few \\views)\end{tabular} \\ \hline
-\multicolumn{1}{|c|}{0.01} & \multicolumn{1}{c|}{6.00} & \multicolumn{1}{c|}{0.01}                                             & \multicolumn{1}{c|}{34.00}                                                                     \\ \hline
+\multicolumn{1}{|c|}{0.01} & \multicolumn{1}{c|}{5.63} & \multicolumn{1}{c|}{0.01}                                             & \multicolumn{1}{c|}{34.00}                                                                     \\ \hline
 \end{tabular}
 \label{table:compute_time}
 \end{table}

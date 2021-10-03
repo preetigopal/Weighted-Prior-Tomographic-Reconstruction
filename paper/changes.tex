@@ -97,10 +97,7 @@ and the handling editor.
   
  Among the family of algebraic techniques, we have compared our method
  with Algebraic Reconstruction Technique (ART)~\cite{art} and Simultaneous
- Algebraic Reconstruction Technique (SART)~\cite{sart}. We do not reconstruct
- using Discrete Algebraic Reconstruction Technique (DART)~\cite{dart} since there
- is no prior information about the number of possible attentuation
- coefficients in the test object.
+ Algebraic Reconstruction Technique (SART)~\cite{sart}. 
 %% IS THERE A NEED TO HIGHGLIHT what we have not done?  Also give references?
  Among other iterative techniques, we
  have used Simultaneous Iterative Reconstruction Technique (SIRT)~\cite{sirt},
@@ -110,6 +107,12 @@ and the handling editor.
  the paper. For CS reconstruction, we observed that Haar wavelet and
  DCT were best suited for our dataset among various other possible
  sparsity basis.
+
+ \item \textcolor{blue}{The paper would be improved by including results from more methods, for example ...DART}\\
+   We do not reconstruct
+ using Discrete Algebraic Reconstruction Technique (DART)~\cite{dart} since there
+ is no prior information about the number of possible attentuation
+ coefficients in the test object.
 
 \item \textcolor{blue}{Why did the authors not choose the standard
   settings for SSIM?...I don’t understand the reason given for not
@@ -156,9 +159,9 @@ and the handling editor.
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline 
 &\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
-\\ \hline \textbf{Potato}& 0.29 & 0.24 & \textcolor{red}{0.18}
-\\ \hline \textbf{Sprouts}& 0.53 & 0.48 & \textcolor{red}{0.30}
-\\ \hline \textbf{Liver}& 0.05 & 0.17 & \textcolor{red}{0.03}
+\\ \hline \textbf{Potato}& (from paper)  &  & \textcolor{red}{}
+\\ \hline \textbf{Sprouts}&  &  & \textcolor{red}{}
+\\ \hline \textbf{Liver}&  &  & \textcolor{red}{}
 \\ \hline
 \end{tabular}
 \label{table:rmse}
