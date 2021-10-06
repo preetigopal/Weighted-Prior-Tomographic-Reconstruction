@@ -190,7 +190,7 @@ certain mathematical transforms~\cite{Donoho,introCS} such as the
 Discrete Cosine Transform (DCT).  There are multiple such
 regularization priors such as the Compressed
 Sensing based l1-ls prior~\cite{my_dicta_paper}. For the purposes of
-demonstrating the efficacy of our method, we use the well known total Variation (TV)
+demonstrating the efficacy of our method, we use the well known Total Variation (TV)
 regularization prior.
 If $\boldsymbol{\mathcal{R}}$ represents the acquisition
 model, then the TV-regularized solution is described by one that
@@ -956,9 +956,9 @@ an eigenspace.
 
   \item From $\boldsymbol{y_{Q_i}}$, perform reconstructions of the
     template $Q_i$ using the $M$ different algorithms, for each of the
-    $L$ previously scanned objects. Let this set be denoted by $Y
+    $L$ previously scanned objects. Let this set\footnote{If the set of projection views for every test is fixed a priori, this set of low quality reconstructions can be produced offline and stored, in order to save computational costs. If new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization.} be denoted by $Y
     \triangleq \{\{Y_{i}^j\}_{j=1}^M\}_{i=1}^L$ where $Y^{1}_i =
-    Y^{\text{fdk}}_i$, $\forall i \in \{1,..,,L\}$. If the set of projection views for every test is fixed a priori, this set of low quality reconstructions can be produced offline and stored, in order to save computational costs. If new sets of projection views for every test are to be allowed, the low quality reconstructions can still be performed efficiently using parallelization.
+    Y^{\text{fdk}}_i$, $\forall i \in \{1,..,,L\}$. 
 
 
   \item For each of the $M$ algorithms (indexed by $j$), build an
@@ -1552,21 +1552,13 @@ in the supplementary material~\cite{supp_paper}.
 \end{figure}
 \subsection{Computational Complexity}
 
-Most of the computation time in our technique is used for the
-generation of low quality eigen-space by reconstructing each of the
-templates using TV and FDK. If the set of projection views for every
-test is fixed a priori, a reasonable assumption,
-the set of low quality reconstructions can be
-produced offline and stored in order to save computational costs. With
-this assumption, Table~\ref{table:compute_time} shows the computation
-times for various stages of reconstruction of a 2D slice of Liver
-(refer code in~\cite{codeRepo}) on MATLAB 2019a on an AMD 2920X
-12-Core Processor machine with 64GB RAM. If however, new sets of
-projection views for every test are to be allowed, the low quality
-reconstructions can still be performed efficiently using
-parallelization since these reconstructions are completely
-independent. Here below, we describe the time complexity of
-spatially-varying prior technique.  Let
+We discuss the computing burden of our method in two parts: the big-Oh
+(symbolic) complexity, and the actual time taken on a specific dataset
+on a specific computer. In the latter case, we provide the actual
+code~\cite{codeRepo} for the purposes of reproduction. 
+
+\subsubsection{Symbolic}
+Let
 \begin{itemize}
 \item $N$ denote the number of voxels of test volume,
 \item $L$ denote the number of templates available,
@@ -1575,25 +1567,49 @@ spatially-varying prior technique.  Let
   $F$ consists of time taken for alternate minimization of Eq.~\ref{eq:spatially_varying_prior}, which in turn consists of time taken for repeated cycles of a closed-form update of $\boldsymbol{\alpha}$ (Eq.~\ref{eq:compute_alpha}) and an iterative optimization of  $\boldsymbol{x}$ (Eq.~\ref{eq:compute_x}). 
 \end{itemize}
 We note that in practice $L$ is independent of $N$ and is likely to be
-$O(1)$  (e.g. about 12 scans in a year for disease prognosis).
-Likewise $M$ is also $O(1)$. The speed of the iterative optimization is dependent on the number of imaging views, and is profoundly impacted by the actual numerical optimization technique used.  
+$O(1)$ (e.g., about 12 scans in a year for disease prognosis).
+Likewise $M$ is also $O(1)$. The speed of the iterative optimization
+is dependent on the number of imaging views, and is profoundly
+impacted by the actual numerical optimization technique used.
 Therefore, the time computational complexity of our method is sum of
 the following
 \begin{enumerate}
-\item $O(NL^2+L^3)$ for creating eigenspace, which is, in practice linear, i.e., $O(N)$
-\item $O(NLM)$ for deriving weights map, which is, in practice linear, i.e., $O(N)$
+\item $O(NL^2+L^3)$ for creating eigenspaces, which is, in practice linear, i.e., $O(N)$.
+\item $O(NLM)$ for deriving weights map, which is, in practice linear, i.e., $O(N)$.
 \item and the time $F$  taken for iterative minimization, which as mentioned above is not the key contribution of this paper. 
 \end{enumerate}
-In short, the additional burden of the key idea of this paper
-viz. generating weights map is linear in the number of voxels,
-although admittedly the burden $F$ of the alternate minimization procedure drives up
-the cost.
+In short, the additional burden of the key idea of this paper viz.,
+generating weights map is linear in the number of voxels, although
+admittedly the burden $F$ of the alternate minimization procedure
+drives up the cost (as can be seen in Table~\ref{table:compute_time}).
 
-In terms of space, the complexity is $O(NL +N)$ to store each of the $L$ templates and their low quality reconstructions, and to store one weights map. We only need to store a single weights map volume regardless of the number of templates available.
+In terms of space, the complexity is $O(NL +N)$ to store each of the
+$L$ templates and their low quality reconstructions, and to store one
+weights map. We only need to store a single weights map volume
+regardless of the number of templates available.
 
+\subsubsection{Example Case}
+If the set of projection views for every test is fixed a priori, a
+reasonable assumption, the set of low quality reconstructions can be
+produced offline and stored in order to save computational costs. 
+% Most of the computation time in our technique is used for the
+% generation of low quality eigen-space by reconstructing each of the
+% templates using TV and FDK. 
+With this as the basis, Table~\ref{table:compute_time} shows the
+computation times for various stages of reconstruction of a 2D slice
+of Liver on MATLAB 2019a on an AMD
+2920X 12-Core Processor machine with 64GB RAM. 
+% If however, new sets of
+% projection views for every test are to be allowed, the low quality
+% reconstructions can still be performed efficiently using
+% parallelization since these reconstructions are completely
+% independent. 
 \begin{table}[!h]
  \centering
-  \caption{Computation times (in seconds) for various stages of reconstruction of a 2D slice of Liver (refer code in~\cite{codeRepo}) on MATLAB 2019a on an  AMD 2920X 12-Core Processor machine with 64GB RAM. Here we assume that low quality eigen-spaces of the templates are computed offline.}
+  \caption{Computation times (in seconds) for various stages of
+    reconstruction of a 2D slice of Liver on MATLAB 2019a on an  AMD
+    2920X 12-Core Processor machine with 64GB RAM. Our code is
+    available for inspection~\cite{codeRepo}.}
 \begin{tabular}{|l|l|l|l|}
 \hline
  \begin{tabular}[c]{@{}l@{}} FBP (Sufficient \\ views)\end{tabular}             & \begin{tabular}[c]{@{}l@{}} TV (Moderate \\ views)  \end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map \\ (Very few \\views)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Alternate\\ Minimization \\ (Very few \\views)\end{tabular} \\ \hline
