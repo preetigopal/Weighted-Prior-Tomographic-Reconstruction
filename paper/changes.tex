@@ -8,7 +8,7 @@
 \usepackage{xcolor}
 \usepackage{boxedminipage}
 \usepackage{a4wide}
-\usepackage{subcaption}
+\usepackage{subcaption,comment}
 \usepackage[colorlinks=true]{hyperref}
 \title{Response to Reviewers and Associate Editor}
 \begin{document}
@@ -96,8 +96,7 @@ and the handling editor.
   
  Among the family of algebraic techniques, we have compared our method
  with Algebraic Reconstruction Technique (ART)~\cite{art} and Simultaneous
- Algebraic Reconstruction Technique (SART)~\cite{sart}. 
-%% IS THERE A NEED TO HIGHGLIHT what we have not done?  Also give references?
+ Algebraic Reconstruction Technique (SART)~\cite{sart}. In order to use the Discrete Algebraic Reconstruction Technique (DART)~\cite{dart}, one must assume the imaged object to be made of only a few fixed number of known attenuation coefficients. Since we do not make any such assumption about  our datasets, we have not used DART. %% IS THERE A NEED TO HIGHGLIHT what we have not done?  Also give references?
  Among other iterative techniques, we
  have used Simultaneous Iterative Reconstruction Technique (SIRT)~\cite{sirt},
  Total Variation (TV)~\cite{TV},~\cite{TVReg} and Compressed Sensing (CS)~\cite{lasso} with Haar wavelet
@@ -107,18 +106,14 @@ and the handling editor.
  DCT were best suited for our dataset among various other possible
  sparsity basis.
 
- \item \textcolor{blue}{The paper would be improved by including results from more methods, for example ...DART}\\
-   We do not reconstruct
- using Discrete Algebraic Reconstruction Technique (DART)~\cite{dart} since there
- is no prior information about the number of possible attentuation
- coefficients in the test object.
-
 \item \textcolor{blue}{Why did the authors not choose the standard
   settings for SSIM?...I don’t understand the reason given for not
   including RMSE: the values don’t have to be optimized again -- you
   could just optimize for SSIM but at least still report RMSE
   comparisons.}
 
+  We have now presented RMSE values for all reconstructions in Tables 1-5 of the main paper. Since RMSE corresponds to error in intensity values, we have used SSIM with a higher weightage to structure for the purpose of measuring error in preservation of structures in our reconstructions.
+  \begin{comment}
   The reason for not reporting RMSE stems from the optimization
   process in Equation~\ref{Eq:simple_TV}.
   
@@ -150,21 +145,7 @@ and the handling editor.
   the superiority of our method at the risk of misleading absolute numbers.
 
   %% Why not combine all of the values in one table?
-
-\begin{table}[!h]
-  \centering
- \caption{RMSE of reconstructions from various
-    methods within the RoI.}
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline 
-&\textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
-\\ \hline \textbf{Potato}& (from paper)  &  & \textcolor{red}{}
-\\ \hline \textbf{Sprouts}&  &  & \textcolor{red}{}
-\\ \hline \textbf{Liver}&  &  & \textcolor{red}{}
-\\ \hline
-\end{tabular}
-\label{table:rmse}
-\end{table}
+\end{comment}
 
 \item \textcolor{blue}{A discussion about computational costs (time,
   memory) should be included in the paper.}
