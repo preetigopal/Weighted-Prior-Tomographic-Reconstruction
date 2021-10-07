@@ -83,7 +83,7 @@ true.
 We also take this opportunity to address other comments given by R1
 and the handling editor.
 
- \begin{itemize}
+ \begin{enumerate}
  \item    \textcolor{blue}{...the paper should at least include a (short) discussion about the
      possibility of using deep learning for this, and its disadvantages.}
 
@@ -112,8 +112,14 @@ and the handling editor.
   could just optimize for SSIM but at least still report RMSE
   comparisons.}
 
-  We have now presented RMSE values for all reconstructions in Tables 1-5 of the main paper. Since RMSE corresponds to error in intensity values, we have used SSIM with a higher weightage to structure for the purpose of measuring error in preservation of structures in our reconstructions.
+We accept the criticism, and have now presented both RMSE and SSIM
+values for all reconstructions in Tables 1-5 of the main paper. 
   \begin{comment}
+Since
+RMSE corresponds to error in intensity values, we have used SSIM with
+a higher weightage to structure for the purpose of measuring error in
+preservation of structures in our reconstructions.
+
   The reason for not reporting RMSE stems from the optimization
   process in Equation~\ref{Eq:simple_TV}.
   
@@ -153,8 +159,8 @@ and the handling editor.
 We accept this point, and present details in Section.~7B of our paper.
 We also provide the code to reproduce the compute time claimed.
 
-  \end{itemize}
-  
+\end{enumerate}
+
 \bibliography{tci_ref}  
 \end{document}
 
