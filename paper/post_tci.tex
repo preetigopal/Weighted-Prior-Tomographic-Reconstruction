@@ -1008,23 +1008,29 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
 
 In this section, we first illustrate the advantage of using multiple
 types of eigenspaces for the computation of weights map, and then
-present reconstruction results on all datasets. For quantitative
-evaluation, we use two metrics: the Root Mean Squared Error (RMSE) and the
-Structural Similarity Index Metric (SSIM)~\cite{ssim}. If
-$\boldsymbol{x}$ is the groundtruth data with $N$ voxels and
-$\hat{\boldsymbol{x}}$ is the reconstructed data, then RMSE is
-computed as follows
+present reconstruction results on all datasets. We show both
+qualitative and quantitative results. For the latter,
+we use two metrics: the Root Mean Squared Error (RMSE) and the
+Structural Similarity Index Metric (SSIM)~\cite{ssim}. 
+% If
+% $\boldsymbol{x}$ is the groundtruth data with $N$ voxels and
+% $\hat{\boldsymbol{x}}$ is the reconstructed data, then RMSE is
+% computed as follows
 
-\begin{equation}
-  \textrm{RMSE} =\sqrt{\frac{1}{N}\sum_{i=1}^N(\boldsymbol{x}(i) -
-    \hat{\boldsymbol{x}}(i))^2}.
- \end{equation}
+% \begin{equation}
+%   \textrm{RMSE} =\sqrt{\frac{1}{N}\sum_{i=1}^N(\boldsymbol{x}(i) -
+%     \hat{\boldsymbol{x}}(i))^2}.
+%  \end{equation}
+While RMSE corresponds to error in intensity values and is a measure
+of absolute error, SSIM seeks to consider perceptual changes, as well
+as correlation between adjacent pixels. This can be useful in a
+clinical context.  We therefore assign a higher weightage to structure
+preservation, that is we assign the
+following weights to structure, contrast, and intensity respectively:
+$0.7,0.2,0.1$.
 
-Since RMSE corresponds to error in intensity values, we have used SSIM
-with a higher weightage to structure for the purpose of measuring
-error in preservation of structures in our reconstructions. Hence, while
-computing SSIM, we assign the following weights to structure, contrast
-and intensity respectively: $0.7,0.2,0.1$.
+It can be verified that in all cases, our results are favourable for the
+various datasets considered.
 %The reason for emphasizing the structure with an
 %exponent of 0.7 stems from the optimization process since the
 %intensity span (and, in general, the histogram) of reconstructed volumes
