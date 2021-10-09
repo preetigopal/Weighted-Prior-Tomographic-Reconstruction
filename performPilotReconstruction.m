@@ -1,5 +1,13 @@
 function performPilotReconstruction(y,idx1,dim,pilotReconMethods,lambda_for_pilot_recon,outDirectory)
 
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
+
+% This function computes FBP and TV reconstructions of the 2D data.
+
 numAngles = length(idx1)
 m = size(y,1);
 A_both_functions =@(z,mode) systemFunction(z,mode,idx1,dim,numAngles,m);

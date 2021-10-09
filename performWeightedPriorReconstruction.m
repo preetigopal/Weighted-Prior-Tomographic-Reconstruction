@@ -1,5 +1,12 @@
 function performWeightedPriorReconstruction(dataset,y,idx1,dim,pilotReconMethods,lambda_for_pilot_recon, baseMethod,lambda_for_base_method,lambda_prior_list,kk,sliceNum,outDirectory)
 
+
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
+
 pilotRecons = cell([2,dim]);
 for iter = 1:length(pilotReconMethods)
     method = pilotReconMethods(iter);

@@ -1,5 +1,11 @@
 function P_pilot = projectPilot_on_EigenSpace_2D(dataset,idx1,pilotOfTestIm,lambda,A_both_functions,method,sliceNo,outDirectory)
 
+
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
 dim = size(pilotOfTestIm);
 
 if strcmp(dataset,'potato')
@@ -16,7 +22,6 @@ if strcmp(dataset,'potato')
        resizedVol = fdkVol;%imresize(fdkVol(10:end-13,10:end-13,:),0.5);
        volumes(:,:,:,i) = resizedVol;
     end
-%     sliceNo = 30;
 end
 if strcmp(dataset,'okra')
     templateNos = [4,5,6,7];
@@ -31,8 +36,6 @@ if strcmp(dataset,'okra')
        fdkVol = fileData.FDK;
        volumes(:,:,:,i) = fdkVol(15:end-14,15:end-14,:);
     end
-%     sliceNo = 30;
-
 end
 
 if strcmp(dataset,'sprouts')
@@ -48,8 +51,6 @@ if strcmp(dataset,'sprouts')
        fdkVol = fileData.volume;
        volumes(:,:,:,i) = fdkVol(10:end-4,2:end-2,:);
     end
-%     sliceNo = 30;
-
 end
 
 if strcmp(dataset,'tmh_7')
@@ -59,8 +60,7 @@ if strcmp(dataset,'tmh_7')
     numSlices = 43;%161;
     sizeOfSlice = [512 512];
     volumes  = zeros(sizeOfSlice(1),sizeOfSlice(2),numSlices,numTemplates);
-%     sliceNum = 27;
-%     sliceNo = sliceNum;
+
     
     for k= 1:numTemplates
         testNo = templateNos(k);
@@ -83,8 +83,7 @@ if strcmp(dataset,'tmh_8')
     numSlices = 43;%161;
     sizeOfSlice = [512 512];
     volumes  = zeros(sizeOfSlice(1),sizeOfSlice(2),numSlices,numTemplates);
-%     sliceNum = 27;
-%     sliceNo = sliceNum;
+
     
     for k= 1:numTemplates
         testNo = templateNos(k);
@@ -143,11 +142,9 @@ for i = 1:numTemplates
         end
         temp = TV;
     end
-
+   
     
-    
-
-    %imshow(temp,[]); title(i); pause(0.5);    
+ 
     if i==1
         templates = zeros((size(temp,1)*size(temp,2)), numTemplates);
         templates(:,1) = temp(:);
@@ -169,7 +166,6 @@ end
 meanTemplate = sumI./numTemplates;
 
 % Compute the Covariance Matrix--------------------------------------------------------------------
-% Refer to Prof. Ajit's notes on face recognition using PCA
 
 templates = templates -repmat(meanTemplate,1,numTemplates);
 L = templates'*templates;

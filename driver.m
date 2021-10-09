@@ -1,5 +1,14 @@
 function driver(dataset)
 %%
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
+%  This is the main file. Run this with the arguement 'tmh_7' for
+%  reconstructing 2D Liver.
+
+
 if strcmp(dataset,'potato')
     
     angleSet =  [12]    ;

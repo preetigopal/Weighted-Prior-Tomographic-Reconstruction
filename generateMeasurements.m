@@ -1,6 +1,13 @@
 function [y,idx1,dim] = generateMeasurements(testIm,numAngles,outDirectory)
 
-%figure;imshow(testIm,[]);
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
+
+% This function generates Radon measurements of the 2D test object for
+% a fixed set of views.
 
 fname = sprintf('%s/testIm.mat',outDirectory);
 save(fname,'testIm');

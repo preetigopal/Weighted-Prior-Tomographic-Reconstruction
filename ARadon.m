@@ -1,6 +1,11 @@
 
 function b = ARadon(X_data,idx,dim,numAngles)
 
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
 startPt = 1;
 endPt = dim(1)*dim(2);
 X = X_data(startPt:endPt);

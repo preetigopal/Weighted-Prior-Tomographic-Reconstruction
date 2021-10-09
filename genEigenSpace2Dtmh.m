@@ -1,8 +1,15 @@
-% close all;
-% clear all;
-% clc;
+
 
 function [eigenVecs,meanTemplate] = genEigenSpace2Dtmh(templateNos,sliceNum,dataFileName,numSlices,sizeOfSlice,outDirectory)
+
+
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
+% This function computes high quality eigen-space from the prior-images
+% of the liver.
 
 numTemplates = length(templateNos);
 volumes  = zeros(sizeOfSlice(1),sizeOfSlice(2),numSlices,numTemplates);
@@ -70,7 +77,6 @@ meanTemplate = sumI./numTemplates;
 
 
 % Compute the Covariance Matrix--------------------------------------------------------------------
-% Refer to Prof. Ajit's notes on face recognition using PCA
 
 templates = templates -repmat(meanTemplate,1,numTemplates);
 L = templates'*templates;

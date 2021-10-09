@@ -1,5 +1,11 @@
 function X_final = AtRadon(b_data,idx,dim,numAngles)
     
+
+% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+
+% Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+
 s = size(b_data,1);
 
 startPt = 1;
