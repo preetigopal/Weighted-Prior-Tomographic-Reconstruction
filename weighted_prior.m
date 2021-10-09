@@ -2,7 +2,7 @@ function [result_weighted_prior,W] =  weighted_prior(dataset,y_given,pilotReconM
                                  pilotRecons,sliceNum,outDirectory,kk)
                              
 
-% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+% This code is part of the following work which has been submitted to IEEE Transactions on Computational Imaging for peer review.
 
 % Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
 % Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 

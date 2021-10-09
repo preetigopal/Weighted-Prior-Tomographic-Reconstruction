@@ -1,7 +1,7 @@
 function P_pilot = projectPilot_on_EigenSpace_2D(dataset,idx1,pilotOfTestIm,lambda,A_both_functions,method,sliceNo,outDirectory)
 
 
-% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+% This code is part of the following work which has been submitted to IEEE Transactions on Computational Imaging for peer review.
 
 % Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
 % Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 

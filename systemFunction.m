@@ -1,9 +1,9 @@
 function output = systemFunction(z,mode,idx,dim,numAngles,m)
 
-% This code is part of the following work which has been submitted to Transactions of Computational Imaging for peer review.
+% This code is part of the following work which has been submitted to IEEE Transactions on Computational Imaging for peer review.
 
 % Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
-% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade 
+% Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade  
 
 if mode==0
     n = dim(1)*dim(2);
