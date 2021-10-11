@@ -1021,16 +1021,20 @@ Structural Similarity Index Metric (SSIM)~\cite{ssim}.
 %   \textrm{RMSE} =\sqrt{\frac{1}{N}\sum_{i=1}^N(\boldsymbol{x}(i) -
 %     \hat{\boldsymbol{x}}(i))^2}.
 %  \end{equation}
-While RMSE corresponds to error in intensity values and is a measure
-of absolute error, SSIM seeks to consider perceptual changes, as well
-as correlation between adjacent pixels. This can be useful in a
-clinical context.  We therefore assign a higher weightage to structure
-preservation, that is we assign the
-following weights to structure, contrast, and intensity respectively:
-$0.7,0.2,0.1$.
+RMSE corresponds to error in intensity values and is a measure of
+absolute error. For purposes of normalization, while reporting numbers
+we rescale intensity values of both the ground truth and the
+reconstructed results to lie between 0 to 1, so that the best possible
+RMSE is 0, and the worst value is 1.  On the other hand, SSIM seeks
+to consider perceptual changes, as well as correlation between
+adjacent pixels. This can be useful in a clinical context.  Here, we
+therefore assign a higher weightage to structure preservation, that is
+we assign the following weights to structure, contrast, and intensity
+respectively: $0.7,0.2,0.1$.
 
-It can be verified that in all cases, our results are favourable for the
-various datasets considered.
+Our results are optimized for SSIM, but it can be verified that in all
+cases for the various datasets considered, our results are favourable
+with either metric.
 %The reason for emphasizing the structure with an
 %exponent of 0.7 stems from the optimization process since the
 %intensity span (and, in general, the histogram) of reconstructed volumes
@@ -1178,7 +1182,8 @@ weights-maps for all 3D reconstructions.
         from $6$ views. The magnitude and sharpness of the artefacts
         are different for distinct methods. (h)
         Spatially-Varying-prior method (from this paper) combines
-        weights-map information from all other methods. The SSIM of
+        weights-map information from all other methods. Quantitative
+        metrics for evaluation  of
         these reconstructions is shown in
         Table.~\ref{table:potato_2D_ssim}.}
 \label{fig:reconstructions_diff_methods}
@@ -1186,7 +1191,12 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{SSIM and RMSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(h). The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.}
+\caption{SSIM and RMSE of the reconstructions shown in
+  Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(h). %The SSIM of
+                                %ideal reconstruction is 1. The ideal
+                                %RMSE is 0, and the worst RMSE
+                                %possible is 1 here.
+}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
@@ -1237,8 +1247,10 @@ the reconstructed new regions using various methods. The ground truth and recons
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (RMSE) of reconstructed potato from various
-    methods. The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. The 2D reconstructed images are shown in Fig.~\ref{fig:potato_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
+  \caption{SSIM (RMSE) of reconstructed potato from various
+    methods. 
+%The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
+The 2D reconstructed images are shown in Fig.~\ref{fig:potato_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
@@ -1295,8 +1307,10 @@ Table~\ref{table:okra_ssim}. The ground truth and reconstructions are normalized
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (RMSE) within the RoI of reconstructed okra from various
-    methods. SSIM of the ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
+  \caption{SSIM (RMSE) within the RoI of reconstructed okra from various
+    methods. 
+%SSIM of the ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
+The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
@@ -1352,7 +1366,9 @@ SSIM and RMSE in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (RMSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ideal reconstruction, SSIM equals 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  The  reconstructed images are shown in Fig.~\ref{fig:tmh_2D_results},}
+  \caption{SSIM (RMSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. 
+%For ideal reconstruction, SSIM equals 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
+The  reconstructed images are shown in Fig.~\ref{fig:tmh_2D_results},}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
 \textbf{This paper} \\ \hline  0.73 (0.04)
@@ -1409,8 +1425,10 @@ reconstructed new regions as compared to other methods. The ground truth and rec
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (RMSE) of reconstructed sprouts from various
-    methods. The SSIM of ideal reconstruction) is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
+  \caption{SSIM (RMSE) of reconstructed sprouts from various
+    methods. 
+%The SSIM of ideal reconstruction) is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
+The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
