@@ -1068,26 +1068,26 @@ weights-maps for all 3D reconstructions.
 \begin{figure}[!h]
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/template_1.png}
-\captionsetup{labelformat=empty}       
+%\captionsetup{labelformat=empty}       
  \caption{}
     \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/template_2.png}
-\captionsetup{labelformat=empty}
+%\captionsetup{labelformat=empty}
         \caption{}
      \end{subfigure}
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/potato/template_3.png}
-\captionsetup{labelformat=empty}
+%\captionsetup{labelformat=empty}
         \caption{}
      \end{subfigure}
     \begin{subfigure}[b]{0.235\linewidth}
         \fcolorbox{blue}{blue}{\includegraphics[width=\textwidth]{../images/potato/testIm_color.png}}
-\captionsetup{labelformat=empty}
+%\captionsetup{labelformat=empty}
         \caption{}
 \label{fig:potato_test}
      \end{subfigure}
-      \caption{Dataset for illustrating the use of multiple eigenspaces: One slice each from the scanned objects (the first three from left) and a slice from the test volume (extreme right). Notice the appearance of the fourth hole in the test slice. }
+      \caption{Dataset for illustrating the use of multiple eigenspaces. (a)-(c): One slice each from the scanned objects, and (d): a slice from the test volume. Notice the appearance of the fourth hole in the test slice. }
 \label{fig:potato_data_2D}
 \end{figure}
 
@@ -1133,7 +1133,7 @@ weights-maps for all 3D reconstructions.
         %of the test and its projection onto the eigenspace
         %$\boldsymbol{V_\text{low}}$) 
         constructed using different
-        reconstruction methods individually (a-g) are inadequate and
+        reconstruction methods individually (a)-(g) are inadequate and
         represent different false positives. By fusing information
         from all reconstruction methods, as specified in
         Eq.~\ref{eq:weightsEq} we get the final weights map (h). The corresponding reconstructions appear in Fig.~\ref{fig:reconstructions_diff_methods}}.
@@ -1174,7 +1174,7 @@ weights-maps for all 3D reconstructions.
         \includegraphics[width=\textwidth]{../images/potato/post_tci/comparison/weighted_pca_all_methods30.png}
         \caption{This paper}
      \end{subfigure}
-      \caption{(a)-(f): Reconstructions of~\ref{fig:potato_data_2D}(d)
+      \caption{(a)-(g): Reconstructions of~\ref{fig:potato_data_2D}(d)
         from $6$ views. The magnitude and sharpness of the artefacts
         are different for distinct methods. (h)
         Spatially-Varying-prior method (from this paper) combines
@@ -1186,7 +1186,7 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{SSIM and RMSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(g). The SSIM of ideal reconstruction is 1.}
+\caption{SSIM and RMSE of the reconstructions shown in Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(h). The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.}
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
  & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
@@ -1222,7 +1222,7 @@ objects. %The zoomed-in images around the major region of change (red
 We observe
 that our method reconstructs new structures while simultaneously
 reducing streak artefacts. Table~\ref{table:potato_ssim} shows SSIM and RMSE of
-the reconstructed new regions using various methods.
+the reconstructed new regions using various methods. The ground truth and reconstructions are normalized to lie in [0-1].
 \begin{comment}
 \begin{figure}[!h]
 \centering
@@ -1238,12 +1238,12 @@ the reconstructed new regions using various methods.
 \begin{table}[!h]
   \centering
   \caption{The SSIM (RMSE) of reconstructed potato from various
-    methods. The SSIM of ideal reconstruction is 1.}
+    methods. The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. The 2D reconstructed images are shown in Fig.~\ref{fig:potato_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.52 (0.36)
-& 0.92 (0.06) & \textcolor{red}{0.97 (0.03)} \\ \hline \textbf{3D} & 0.58 (0.26) & 0.75 (0.21) & \textcolor{red}{0.84 (0.16)}
+\textbf{This paper} \\ \hline \textbf{2D, 6 views} & 0.52 (0.36)
+& 0.92 (0.06) & \textcolor{red}{0.97 (0.03)} \\ \hline \textbf{3D, 18 views} & 0.58 (0.26) & 0.75 (0.21) & \textcolor{red}{0.84 (0.16)}
 \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
@@ -1264,7 +1264,7 @@ As in the test, the
 reconstruction by spatially-varying method shows the absence of the
 deformity and better removal of sub-sampling artefacts when compared
 to FDK and TV. This is also seen in the SSIM and RMSE values in
-Table~\ref{table:okra_ssim}.
+Table~\ref{table:okra_ssim}. The ground truth and reconstructions are normalized to lie in [0-1].
 
 
 \begin{figure}[!h]
@@ -1296,13 +1296,13 @@ Table~\ref{table:okra_ssim}.
 \begin{table}[!h]
   \centering
   \caption{The SSIM (RMSE) within the RoI of reconstructed okra from various
-    methods. SSIM of the ideal reconstruction is 1.}
+    methods. SSIM of the ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.46 (0.28)
+\textbf{This paper} \\ \hline \textbf{2D, 48 views} & 0.46 (0.28)
 & 0.50 (0.24) & \textcolor{red}{0.74 (0.15)} \\ 
-\hline \textbf{3D} & 0.65 (0.22) & 0.70 (0.21) & \textcolor{red}{0.71 (0.19)}
+\hline \textbf{3D, 45 views} & 0.65 (0.22) & 0.70 (0.21) & \textcolor{red}{0.71 (0.19)}
 \\ \hline
 \end{tabular}
 \label{table:okra_ssim}
@@ -1323,7 +1323,7 @@ reconstruct slice 7 from few-views with the specific goal of tracking
 the needle and simultaneously reducing
 artefacts. Fig.~\ref{fig:tmh_2D_results} 
 shows reconstruction of the test
-slice from its measurements from only 30 views. The reconstructions are quantitatively compared using
+slice from its measurements from only 30 views. The ground truth and reconstructions are normalized to lie in [0-1] and are quantitatively compared using
 SSIM and RMSE in Table~\ref{table:tmh_ssim}.
 
 %--------------------RFA 2 few views
@@ -1352,7 +1352,7 @@ SSIM and RMSE in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{The SSIM (RMSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ideal reconstruction, SSIM equals 1.}
+  \caption{The SSIM (RMSE) of 2D reconstruction of radio-frequency ablation data from various methods. Values have been computed within the RoI. For ideal reconstruction, SSIM equals 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  The  reconstructed images are shown in Fig.~\ref{fig:tmh_2D_results},}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
 \textbf{This paper} \\ \hline  0.73 (0.04)
@@ -1379,7 +1379,7 @@ exposition, the red region of interest (RoI) has been culled out from
 other changes can be viewed in the video.  2D reconstruction of one of
 the slices is shown in Fig.~\ref{fig:sprouts_2D_results}.
 Table~\ref{table:sprouts_ssim} shows the improvement in SSIM and RMSE of the
-reconstructed new regions as compared to other methods.
+reconstructed new regions as compared to other methods. The ground truth and reconstructions are normalized to lie in [0-1].
 %----------------------------------------------------
 
 \begin{figure}[!h]
@@ -1410,12 +1410,12 @@ reconstructed new regions as compared to other methods.
 \begin{table}[!h]
   \centering
   \caption{The SSIM (RMSE) of reconstructed sprouts from various
-    methods. The SSIM of ideal reconstruction) is 1.}
+    methods. The SSIM of ideal reconstruction) is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
- \\ \hline \textbf{2D} & 0.67 (0.24)
-& 0.82 (0.17) & \textcolor{red}{0.86 (0.13)} \\ \hline \textbf{3D} & 0.67 (0.25) & 0.73 (0.23) & \textcolor{red}{0.82 (0.14)}
+ \\ \hline \textbf{2D, 20 views} & 0.67 (0.24)
+& 0.82 (0.17) & \textcolor{red}{0.86 (0.13)} \\ \hline \textbf{3D, 30 views} & 0.67 (0.25) & 0.73 (0.23) & \textcolor{red}{0.82 (0.14)}
 \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
@@ -1643,7 +1643,7 @@ problem in a continuous solution space i.e., \textit{``given
   intensities of a voxel at various time instants in a longitudinal
   setting and partial measurements of the voxel at the current time,
   what will be the intensity of the same voxel at the current time
-  instant?''}. This estimation can be learnt by a deep neural network
+  instant?''}. This estimation can be learned by a deep neural network
 if there are hundreds of labeled data.  However, generalization of
 this across multiple datasets poses a question mark.
 
@@ -1657,7 +1657,7 @@ this across multiple datasets poses a question mark.
 
   Another avenue for using deep networks \textit{within} our current
   work is to replace the currently used fixed eigenspace provided by
-  PCA by a learnt feature basis provided by a network such as an
+  PCA by a learned feature basis provided by a network such as an
   autoencoder. For each dataset, an autoencoder may be trained to
   learn a specific set of latent features. This will again require
   atleast a few tens of volumes. We see this as a future direction of
