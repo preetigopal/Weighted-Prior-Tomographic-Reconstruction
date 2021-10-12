@@ -13,15 +13,28 @@
 \title{Supplemental material for `Eliminating object prior-bias from sparse-projection
 tomographic reconstructions'}
 \begin{document}
+\date{}
 \maketitle
-This supplementary material consists of details which we did not include in the main paper for purposes of brevity. This document consists of links to view our complete 3D reconstructions, more details on why we use many eigenspaces, an alternate method to compute weights map and comparison with a method in literature.
+This supplementary material consists of details which we did not
+include in the main paper for purposes of brevity. This document
+consists of links to view our complete 3D reconstructions, an
+alternate simpler motivation for the use of multiple eigenspaces, and an
+alternate method to compute the parameters for the weights map. We
+also include a comparison with a method in literature based on
+comments from a reviewer.
+
 \tableofcontents
 
 %--------------------
 %--------------------------------Links to videos-------------------------------------------------
 
 \section{Links to view our 3D reconstructions}
-Here we present the 3D reconstruction results discussed in Sec.~6 of the main paper. For each dataset, the links contain 2 videos: one showing all the templates and test volumes, and the other showing the reconstructed volumes by various methods. The videos are in .avi format and display reconstructions in a slice-by-slice manner.
+Here we present the 3D reconstruction results discussed in Sec.~6 of
+the main paper. For each dataset, the links contain 2 videos: one
+showing all the templates and test volumes, and the other showing the
+reconstructed volumes by various methods. The videos are in
+\verb+.avi+ format and display reconstructions in a slice-by-slice
+manner.
 
 \begin{itemize}
 \item \textbf{Okra:}
@@ -42,10 +55,12 @@ Here we present the 3D reconstruction results discussed in Sec.~6 of the main pa
 \end{itemize}
 
 %------------------------------------------------------
-\section{Motivation for using multiple eigenspaces in our method}
+\section{Using multiple eigenspaces}
 
-Here we present a schematic explaining the advantage of using multiple eigenspaces within the
-proposed spatially-varying reconstruction technique.\\
+Here we present a schematic explaining the advantage of using multiple
+eigenspaces within the proposed spatially-varying reconstruction
+technique. This may be viewed as a simpler version of the somewhat
+long algorithm described in the main paper.
 
 
 \noindent \begin{boxedminipage}{\textwidth} 
@@ -87,17 +102,50 @@ in Section~5 of the main paper).
 
 %\clearpage
 %----------------------------------------------------------
-\section{An alternate method to compute weights -map}
-The value of $k$ (discussed in Sec.~7 of the main paper) is typically dependent on the number of false positives the system can allow in exchange for the detection of more true positives (regions of new changes). It is this choice and not the particular type of dataset that affects the selection of $k$. In our work, the chosen $k$ corresponds to the one that gives minimal tolerance to false positives. However, in case one wishes to completely avoid the use of this hyper-parameter, one can construct a binary weights-map using an alternate method described below.
+\section{Learning-based computation of weights map}
+
+The value of $k$ (discussed in Sec.~7 of the main paper) is typically
+dependent on the number of false positives the system can allow in
+exchange for the detection of more true positives (regions of new
+changes). It is this choice and not the particular type of dataset
+that affects the selection of $k$. In our work, the chosen $k$
+corresponds to the one that gives minimal tolerance to false
+positives. However, in case one wishes to completely avoid the use of
+this hyper-parameter, one can construct a binary weights-map using a
+method described below.
 
 \begin{enumerate}
-\item For the purposes of training, treat one of the previously scanned images as test. Annotate the region of differences between the test and all of the previously scanned images based on domain knowledge.
-\item Compute the difference between the pilot reconstruction of the test and its projection onto the eigenspace. Let this spatial map be called `error map'.
-\item Train a Support Vector Machine (SVM) model to classify patches of this error-map image into one of the two categories: new changes present, new changes absent.
-\item Once the trained SVM model is obtained, it can be applied to generate binary weights-map for new test images in the same longitudinal study.
-\item Once the binary weights-map $\boldsymbol{W_b}$ is obtained, the prior and the pilot can be stitched by $\boldsymbol{W_b}(\rm{Pilot}) + (1-\boldsymbol{W_b})(\rm{Prior})$. Fig.~\ref{fig:okra_svm} shows results of this method on 2D okra dataset.
+\item For the purposes of training, treat one of the previously
+  scanned images as test. Annotate the region of differences between
+  the test and all of the previously scanned images based on domain
+  knowledge.
 
-  Alternatively, these binary weights can also be used in the alternate minimization optimization described in Eq.~4 of the main paper, although this approach has not been pursued here. 
+\item Compute the difference between the pilot reconstruction of the
+  test and its projection onto the eigenspace. Let this spatial map be
+  called `error map'.
+
+\item Train a Support Vector Machine (SVM) model (or any other
+  classifier model) to classify patches of this error-map image into
+  one of the two categories: new changes present, new changes absent.
+
+\item Once the trained SVM model is obtained, apply the model and
+  generate binary weights-map for new test images in the same
+  longitudinal study.
+
+\item Once the binary weights-map $\boldsymbol{W_b}$ is obtained, use
+  these in the alternate minimization optimization described in Eq.~7
+  of the main paper.
+\end{enumerate}
+
+We mention in passing that if we are to entirely avoid the other
+parameters (viz. $\lambda_1$ and $\lambda_2$, the prior and the pilot
+can be stitched in a simplistic way using the equation 
+$\boldsymbol{W_b}(\rm{Pilot}) + (1-\boldsymbol{W_b})(\rm{Prior})$.
+The advantage of this method is that the computational time is
+signficantly reduced since the alternate minimization procedure is not
+used. 
+
+%Fig.~\ref{fig:okra_svm} shows results of this method on 2D okra dataset.
 
   \begin{comment}
 \begin{equation}
@@ -107,7 +155,7 @@ J_3(\boldsymbol{\theta},\boldsymbol{\alpha}) = \lVert\boldsymbol{\mathcal{R} x}-
 \label{Eq:main}
 \end{equation}
 \end{comment}
-\end{enumerate} 
+%\end{enumerate} 
 
 \begin{figure}[]
     \begin{subfigure}[b]{0.24\linewidth}
@@ -146,11 +194,8 @@ J_3(\boldsymbol{\theta},\boldsymbol{\alpha}) = \lVert\boldsymbol{\mathcal{R} x}-
      \caption[Selecting $k$]{Using an alternate approach to generate (binary) weights map. (a)-(c) the images used as object-prior, (d) the test (310$\times$310). Measurements along $60$ views were taken. (e) error-map showing new regions, (f) detected binary weights map showing regions of new changes, (g) pilot, (h) final reconstruction with pilot in the new regions, and prior in the other regions. } %(h) prior, which is obtained by projecting the pilot onto the eigenspace computed from the templates, 
 \label{fig:okra_svm}
 \end{figure}
-\clearpage
-
-
-
-\newpage
+%\clearpage
+%\newpage
 
 %----------------------------------Comparison with Literature------------------------
 \section{Empirical comparison with a method in literature:\\ Detecting new changes directly in the measurements}
@@ -210,12 +255,12 @@ Sec.~2 of the main paper (`Related work') contrasts the spatially-varying techni
 \hline
  & \textbf{SSIM (whole image)} & \textbf{SSIM (RoI)} \\ \hline
 \textbf{Method in~\cite{Lee2012}} & 0.65 & 0.60 \\ \hline
-\textbf{\begin{tabular}[c]{@{}l@{}}Weighted prior\\reconstruction\end{tabular}} & 0.89 & 0.92 \\ \hline
+\textbf{\begin{tabular}[c]{@{}l@{}}This paper\end{tabular}} & 0.89 & 0.92 \\ \hline
   \end{tabular}
   \label{tab:comparisonLit}
 \end{table}
-\clearpage
-\newpage
+%\clearpage
+%\newpage
 
 
 

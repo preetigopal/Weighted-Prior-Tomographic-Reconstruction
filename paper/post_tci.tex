@@ -399,7 +399,7 @@ in~\cite{Pourmorteza2015,Lee2012}. However, reconstruction of the
 difference image will inherently contain sub-sampling artefacts, and
 these artefacts will appear in the final reconstruction as there is no
 mechanism to mitigate them (unlike the method that we propose). This
-can be seen in Sec.~3 our supplementary material~\cite{supp_paper},
+can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
 where we have compared our method with~\cite{Lee2012}.
 
 In this paper, we present a technique that makes use of multiple
@@ -856,7 +856,7 @@ the final reconstruction. In regions of change in test data, we want
 lower weights for the prior when compared to regions that are similar
 to the prior.
 
-$\lambda_1$, $\lambda_2$ are tunable weights given to the
+$\lambda_1$ and  $\lambda_2$ are tunable weights given to the
 TV-prior and object-prior terms respectively. The unknowns
 $\boldsymbol{x}$ and $\boldsymbol{\alpha}$ are solved by alternately
 minimizing $J_{\boldsymbol{\alpha}}(\boldsymbol{x})$ using a fixed
@@ -1451,39 +1451,50 @@ The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 
 
 \section{Discussion}
 \label{sec:discussion}
-In this section, we discuss tuning of parameters, computational complexity of our method, and requirements for applying deep learning techniques in longitudinal few-view reconstruction.
+In this section, we discuss tuning of parameters, computational
+complexity of our method, and requirements for applying deep learning
+techniques in longitudinal few-view reconstruction.
+
 \subsection{Tuning of parameters}
-$\lambda_1$, $\lambda_2$ and $k$ are the three
-hyper-parameters that need to be chosen carefully for optimal
-reconstruction. In our experiments, $\lambda_1$ was tuned to maximize
-SSIM of the whole reconstructed test volume for TV reconstruction of
-each dataset. This value was retained for spatially-varying
-prior-based reconstruction as well. The value of $\lambda_2$ largely
-depends on the amount of artefacts we aim to remove by using
-object-prior at the cost of their dominance in the new regions. This
-value was chosen to lie between $0-3$ for our datasets. Finally, the
-hyper-parameter $k$ defines the sensitivity of the weights map to the
-difference between test image and object-prior (projection of
-test onto the space of object-prior). When $k=0$, our method 
-behaves similar to the reconstruction using TV-only regularization. As $k$ increases, the weights map starts
-capturing new changes in the test, at the cost of detecting a few
-false positives i.e., false new changes. In other words, as the
-weights-map becomes more sensitive to the difference between the test
-and object-prior, it becomes more noisy. In order to visualize the
-effect of the hyper-parameter $k$, we performed 2D reconstructions on
-okra dataset for different values of
+$\lambda_1$, $\lambda_2$ and $k$ are the three hyper-parameters that
+need to be chosen carefully for optimal reconstruction. In our
+experiments, $\lambda_1$ was tuned in such a way as to maximize the
+SSIM of the complete reconstructed test volume using the TV-only
+regularizer.  In particular, the RoI was not considered.  Now, this
+value was retained for our spatially-varying prior-based
+reconstruction as well.  In principle, one could have jointly
+optimized both $\lambda_1$ and $\lambda_2$ to get even better results
+compared to the one we have in Section~\ref{results}.  The value of
+$\lambda_2$ largely depends on the amount of artefacts one aims to
+remove by using object-prior at the cost of their dominance in the new
+regions. This value was chosen to lie between $0-3$ for our datasets
+(having the fixed $\lambda_1$).
+
+The hyper-parameter $k$ defines the sensitivity of the weights map to
+the difference between test image and object-prior (projection of test
+onto the space of object-prior). When $k=0$, our method behaves
+similar to the reconstruction using TV-only regularization. As $k$
+increases, the weights map starts capturing new changes in the test,
+at the cost of detecting a few false positives i.e., false new
+changes. In other words, as the weights-map becomes more sensitive to
+the difference between the test and object-prior, it becomes more
+noisy. In order to visualize the effect of the hyper-parameter $k$, we
+performed 2D reconstructions on okra dataset for different values of
 $k$. Fig.~\ref{fig:few_view_okra_2D_weights} shows the weights map
 obtained for each of the $k$ values and
 Fig.~\ref{fig:reconstructions_as_k_varies} shows the corresponding
 final reconstructions. We run our experiments for a few values of $k$
-and choose the best reconstruction based on our tolerance for noise
-in the weights-map.
-When a large number of templates are available, this parameter can be
-chosen by assuming one of the templates as test and choosing the $k$
-that gave the best reconstruction. Alternatively, in cases where one
-wishes to completely avoid the use of this hyper-parameter, one can
-construct a binary weights-map using a learning based method described
-in the supplementary material~\cite{supp_paper}.
+and empirically choose the best reconstruction based on our tolerance
+for noise in the weights-map.  However, when a large number of
+templates are available, instead of this empirical method, this
+parameter can be chosen by assuming one of the templates as a
+pseudo-test and validating the $k$ that results in the best
+reconstruction (also see Sec~3 of \cite{supp_paper}.
+
+Alternatively, in cases where one wishes to completely avoid the use
+of this hyper-parameter, one can construct a binary weights-map using
+a learning based method described in the supplementary
+material~\cite{supp_paper}.
 
 %--------------effect of the value of $k$ on Okra dataset
 
