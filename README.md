@@ -12,9 +12,11 @@ Below are the instructions to use the scripts here:
 
 Requirements: Matlab 2019 or later version
 
-Command:  For reconstructing, run driver.m with the arguement 'tmh_7', i.e.,
->> driver('tmh_7')
+Command:  For reconstructing, run `driver.m` with the argument `tmh_7`, i.e.,
+
+> driver('tmh_7')
 
 Reconstruction results can be viewed within the generated 'results' directory.
 
-The data and scripts for reconstructing other datasets will be shared after the review process is complete.
+Data and scripts for reconstructing other datasets will be made
+available after the review process is complete.
