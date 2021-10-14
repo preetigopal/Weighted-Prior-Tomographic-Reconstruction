@@ -215,7 +215,7 @@ $J_{TV}(\boldsymbol{x})$ where
   
  Fig.~\ref{fig:story} (second column) demonstrates the benefit of
  using a regularization prior when the number of projection views is
- limited (100 views).  We solve this cost function using an optimal
+ limited (for example reducing sampling to 100 views for the same resolution reconstructed image).  We solve this cost function using an optimal
  first-order method for large-scale TV regularization presented
  in~\cite{TVReg} and available in~\cite{TVReg-lib}.
 
@@ -243,7 +243,7 @@ $J_{TV}(\boldsymbol{x})$ where
  \label{fig:story}
  \end{figure} 
 
-  When the number of views is significantly reduced (this paper), a
+  When the number of views is reduced significantly further (as is discussed in this work), a
  regularization prior alone is not sufficient.  In such cases
  additional information (`object-prior') specific to the current
  object being scanned (called the `test' henceforth) is useful in
@@ -258,17 +258,16 @@ $J_{TV}(\boldsymbol{x})$ where
  
  With the use of an object-prior, a \emph{new} challenge emerges. The prior
  set $S$ may potentially overwhelm the necessary details, and when
- several prior scans are available, finding the right one is an
+ several prior scans are available, finding the best one is an
  issue. We therefore devise an algorithm that estimates the location
  and magnitude of new changes in the (unknown) test. As we show in
- Section~\ref{sec:method_spatially_varying_prior}, this eventually
- prevents the prior from adversely affecting the reconstruction of new
+ Section~\ref{sec:method_spatially_varying_prior}, this prevents the prior from adversely affecting the reconstruction of new
  regions in the test. We refer to this method as a
  \textit{spatially-varying} prior-based reconstruction routine, that
  still uses \textit{all} the previous scans in the set $S$, without
  using any of the prior scans \textit{as is}, or endeavoring to choose
- one ``right'' prior. In this way, this work is novel and contrasted
- with earlier work. As seen in Fig.~\ref{fig:story} (last column, 20
+ one ``right'' prior. In this way, this work is novel and compared to
+ earlier work. As seen in Fig.~\ref{fig:story} (last column, 20
  views) our method uses the set $S$ to yield a better reconstruction
  than the regularization-only, or the backprojection-only methods.
 
@@ -632,7 +631,7 @@ the absence of a feature.  Although mathematically one is the
 conjugate of the other, in practice, experimental methods may have
 difficulties which explains the choice of our test. Notice also that
 the structure of the Okra is intricate as compared to Potato, and this
-brings with it a different challenge.
+brings with it a stronger challenge.
 
 
 
@@ -1704,8 +1703,8 @@ this across multiple datasets poses a question mark.
 \section{Conclusions}
 \label{sec:conclusions}
 This work deals with the effective use of priors for tomographic
-reconstruction in longitudinal studies. When the number of measurements is
-substantially low, we discuss the utility of
+reconstruction in longitudinal studies. When the number of measurements 
+impedes the benefit of applying classic regularization methods, we discuss the utility of
 using information from previous scans of the same object, as outlined in
 Figs.~\ref{fig:story} and~\ref{fig:prior_overview}. In order to observe details of new changes
 accurately, we use a novel
@@ -1717,7 +1716,7 @@ affected by the priors, while the other relatively stationary regions benefit fr
 We have thus
 improved state of the art by detecting the strength and location
 of these regions of change and
-assigning low prior weights wherever necessary. The probability of
+assigning low prior weights wherever necessary. This innovation becomes evident through the weights maps shown here in Figures~\ref{fig:weights_map_2Dpotato} and~\ref{fig:few_view_okra_2D_weights}. The probability of
 presence of a `new region' is enhanced considerably by a novel
 combination of different reconstruction techniques.  We have validated
 our technique on medical 2D and real, biological 3D datasets for
