@@ -105,7 +105,7 @@ in Section~5 of the main paper).
 %----------------------------------------------------------
 \section{Learning-based computation of weights map}
 
-The value of $k$ (discussed in Sec.~7 of the main paper) is typically
+The value of $k$ (discussed in Sec.~6A of the main paper) is typically
 dependent on the number of false positives the system can allow in
 exchange for the detection of more true positives (regions of new
 changes). It is this choice and not the particular type of dataset
@@ -139,11 +139,12 @@ method described below.
 \end{enumerate}
 
 We mention in passing that if we are to entirely avoid the other
-parameters (viz. $\lambda_1$ and $\lambda_2$), the prior and the pilot
-can be stitched in a simplistic way using the equation 
-$\boldsymbol{W_b}*(\rm{pilot}) + (1-\boldsymbol{W_b})*(\rm{prior})$.
+parameters (viz. $\lambda_1$ and $\lambda_2$), the object-prior and the pilot
+can be stitched in a simplistic way using the equation
+
+$\boldsymbol{W_b}*(\rm{pilot}) + (1-\boldsymbol{W_b})*(\rm{object\textrm{ }prior})$.
 The advantage of this method is that the computational time is
-signficantly reduced since the alternate minimization procedure is not
+significantly reduced since the alternate minimization procedure is not
 used. 
 
 %Fig.~\ref{fig:okra_svm} shows results of this method on 2D okra dataset.
@@ -159,40 +160,31 @@ J_3(\boldsymbol{\theta},\boldsymbol{\alpha}) = \lVert\boldsymbol{\mathcal{R} x}-
 %\end{enumerate} 
 
 \begin{figure}[]
-    \begin{subfigure}[b]{0.24\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \includegraphics[width=\textwidth]{../images/svm/okra/template_1.png}
         \caption{}
      \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \includegraphics[width=\textwidth]{../images/svm/okra/template_2.png}
         \caption{}
      \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \includegraphics[width=\textwidth]{../images/svm/okra/template_3.png}
         \caption{}
      \end{subfigure}
-     \begin{subfigure}[b]{0.24\linewidth}
+     \begin{subfigure}[b]{0.32\linewidth}
         \includegraphics[width=\textwidth]{../images/svm/okra/testIm.png}
         \caption{}
      \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \includegraphics[width=\textwidth]{../images/svm/okra/weights.png}
         \caption{}
     \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
+    \begin{subfigure}[b]{0.32\linewidth}
         \includegraphics[width=\textwidth]{../images/svm/okra/detectedInlier.png}
         \caption{}
     \end{subfigure}
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/svm/okra/result_pilot.png}
-
-        \caption{}
-    \end{subfigure}    
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/svm/okra/resultStitched_svm.png}
-        \caption{}
-     \end{subfigure}
-     \caption[Selecting $k$]{Using an alternate approach to generate (binary) weights map. (a)-(c) the images used as object-prior, (d) the test (310$\times$310). Measurements along $60$ views were taken. (e) error-map showing new regions, (f) detected binary weights map showing regions of new changes, (g) pilot, (h) final reconstruction with pilot in the new regions, and prior in the other regions. } %(h) prior, which is obtained by projecting the pilot onto the eigenspace computed from the templates, 
+     \caption[Selecting $k$]{Using an alternate approach to generate (binary) weights map. (a)-(c) the images used as object-prior, (d) the test (310$\times$310). Measurements along $60$ views were taken. (e) error-map showing new regions, (f) detected binary weights map showing regions of new changes.}%, (g) pilot, (h) final reconstruction with pilot in the new regions, and prior in the other regions. } %(h) prior, which is obtained by projecting the pilot onto the eigenspace computed from the templates, 
 \label{fig:okra_svm}
 \end{figure}
 %\clearpage
@@ -270,3 +262,14 @@ Sec.~2 of the main paper (`Related work') contrasts the spatially-varying techni
 %\clearpage
 %\newpage
 \bibliography{tci_ref}
+
+
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/result_pilot.png}
+
+        \caption{}
+    \end{subfigure}    
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/svm/okra/resultStitched_svm.png}
+        \caption{}
+     \end{subfigure}
