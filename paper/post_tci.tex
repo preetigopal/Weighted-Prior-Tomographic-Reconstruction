@@ -1055,15 +1055,15 @@ regularizer.  In particular, regions of interest (RoI) are obviously
 not known in advance, and thus not considered for the purpose of
 tuning.  Further, this value was retained for our spatially-varying
 prior-based reconstruction as well, that is, the value optimized for
-the TV-only regularize is maintained for the method proposed in this
+the TV-only regularizer is maintained for the method proposed in this
 paper.  In principle, one could have jointly optimized both
 $\lambda_1$ and $\lambda_2$ to get even better results compared to the
 one we have in Sections~\ref{sec:results_with_imaging_model},
 and~\ref{sec:results_without_imaging_model}.  The value of $\lambda_2$
-largely depends on the amount of artefacts one aims to remove by using
-object-prior at the cost of their dominance in the new regions. This
-value was empirically chosen to lie between $0--3$ for our datasets
-(having the fixed $\lambda_1$).
+largely depends on the amount of artefacts one aims to remove by the
+use of object-prior at the cost of their dominance in the new
+regions. This value was empirically chosen to lie between $(0,3)$ for
+our datasets (having the fixed $\lambda_1$).
 
 The hyper-parameter $k$ defines the sensitivity of the weights map to
 the difference between test image and object-prior (projection of test
@@ -1085,15 +1085,7 @@ templates are available, instead of this empirical method, this
 parameter can be chosen by assuming one of the templates as a
 pseudo-test and validating the $k$ that results in the best
 reconstruction (also see Sec~3 of \cite{supp_paper}.
-
-Alternatively, in cases where one wishes to completely avoid the use
-of this hyper-parameter, one can construct a binary weights-map using
-a learning based method described in the supplementary
-material~\cite{supp_paper}.
-
 %--------------effect of the value of $k$ on Okra dataset
-
-
 \begin{figure}[h]
     \begin{subfigure}[b]{0.24\linewidth}
         \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_5_lambda_prior_0.700000.png}
@@ -1198,6 +1190,11 @@ material~\cite{supp_paper}.
     \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
 \label{fig:reconstructions_as_k_varies}
 \end{figure}
+
+Alternatively, in cases where one wishes to completely avoid the use
+of this hyper-parameter, one can construct a binary weights-map using
+a learning based method described in the supplementary
+material~\cite{supp_paper}.
 
 
 \subsection{Motivation for the use of multiple types of eigenspaces for the computation of weights}
