@@ -397,9 +397,9 @@ test. Such methods have been proposed
 in~\cite{Pourmorteza2015,Lee2012}. However, reconstruction of the
 difference image will inherently contain sub-sampling artefacts, and
 these artefacts will appear in the final reconstruction as there is no
-mechanism to mitigate them (unlike the method that we propose). This
-can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
-where we have compared our method with~\cite{Lee2012}.
+mechanism to mitigate them (unlike the method that we propose). %This
+%can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
+%where we have compared our method with~\cite{Lee2012}.
 
 In this paper, we present a technique that makes use of multiple
 object priors, corresponding to high quality reconstructions of
@@ -856,7 +856,8 @@ lower weights for the prior when compared to regions that are similar
 to the prior.
 
 $\lambda_1$ and  $\lambda_2$ are tunable weights given to the
-TV-prior and object-prior terms respectively. The unknowns
+TV-prior and object-prior terms respectively. Their selection is discussed in
+Section.~\ref{sec:tuning_parameters}. The unknowns
 $\boldsymbol{x}$ and $\boldsymbol{\alpha}$ are solved by alternately
 minimizing $J_{\boldsymbol{\alpha}}(\boldsymbol{x})$ using a fixed
 $\boldsymbol{\alpha}$, and $J_{\boldsymbol{x}}(\boldsymbol{\alpha})$
@@ -1024,20 +1025,172 @@ RMSE corresponds to error in intensity values and is a measure of
 absolute error. For purposes of normalization, while reporting numbers
 we rescale intensity values of both the ground truth and the
 reconstructed results to lie between 0 to 1, so that the best possible
-RMSE is 0, and the worst value is 1.  On the other hand, SSIM seeks
-to consider perceptual changes, as well as correlation between
-adjacent pixels. This can be useful in a clinical context.  Here, we
-therefore assign a higher weightage to structure preservation, that is
-we assign the following weights to structure, contrast, and intensity
-respectively: $0.7,0.2,0.1$.
+RMSE is 0, and the worst value is 1.  On the other hand, SSIM seeks to
+consider perceptual changes, as well as correlation between adjacent
+pixels. This can be useful in a clinical context.  Here, we therefore
+assign a higher weightage to structure preservation, that is we assign
+the following weights to structure, contrast, and intensity
+respectively: $0.7,0.2,0.1$. Our results are optimized for SSIM, but
+it can be verified that in all cases for the various datasets
+considered, our results are favourable with either metric.
 
-Our results are optimized for SSIM, but it can be verified that in all
-cases for the various datasets considered, our results are favourable
-with either metric.
+Here below, we first discuss tuning of parameters followed by the
+rationale for using multiple eigenspaces to compute weightsmap. We
+then present reconstruction results for each of the datasets.
 %The reason for emphasizing the structure with an
 %exponent of 0.7 stems from the optimization process since the
 %intensity span (and, in general, the histogram) of reconstructed volumes
 %differ across various methods and solvers. 
+
+\subsection{Tuning of parameters}
+\label{sec:tuning_parameters}
+$\lambda_1$, $\lambda_2$ and $k$ are the three hyper-parameters that
+need to be chosen carefully for optimal reconstruction. In our
+experiments, $\lambda_1$ was tuned in such a way as to maximize the
+SSIM of the complete reconstructed test volume using the TV-only
+regularizer.  In particular, the RoI was not considered.  Now, this
+value was retained for our spatially-varying prior-based
+reconstruction as well.  In principle, one could have jointly
+optimized both $\lambda_1$ and $\lambda_2$ to get even better results
+compared to the one we have in Sections~\ref{sec:results_with_imaging_model}, and~\ref{sec:results_without_imaging_model}.  The value of
+$\lambda_2$ largely depends on the amount of artefacts one aims to
+remove by using object-prior at the cost of their dominance in the new
+regions. This value was chosen to lie between $0-3$ for our datasets
+(having the fixed $\lambda_1$).
+
+The hyper-parameter $k$ defines the sensitivity of the weights map to
+the difference between test image and object-prior (projection of test
+onto the space of object-prior). When $k=0$, our method behaves
+similar to the reconstruction using TV-only regularization. As $k$
+increases, the weights map starts capturing new changes in the test,
+at the cost of detecting a few false positives i.e., false new
+changes. In other words, as the weights-map becomes more sensitive to
+the difference between the test and object-prior, it becomes more
+noisy. In order to visualize the effect of the hyper-parameter $k$, we
+performed 2D reconstructions on okra dataset for different values of
+$k$. Fig.~\ref{fig:few_view_okra_2D_weights} shows the weights map
+obtained for each of the $k$ values and
+Fig.~\ref{fig:reconstructions_as_k_varies} shows the corresponding
+final reconstructions. We run our experiments for a few values of $k$
+and empirically choose the best reconstruction based on our tolerance
+for noise in the weights-map.  However, when a large number of
+templates are available, instead of this empirical method, this
+parameter can be chosen by assuming one of the templates as a
+pseudo-test and validating the $k$ that results in the best
+reconstruction (also see Sec~3 of \cite{supp_paper}.
+
+Alternatively, in cases where one wishes to completely avoid the use
+of this hyper-parameter, one can construct a binary weights-map using
+a learning based method described in the supplementary
+material~\cite{supp_paper}.
+
+%--------------effect of the value of $k$ on Okra dataset
+
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_5_lambda_prior_0.700000.png}
+        \caption{k=5}
+     \end{subfigure}     
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_10_lambda_prior_0.700000.png}
+        \caption{k=10}
+     \end{subfigure} 
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_20_lambda_prior_0.700000.png}
+        \caption{k=20}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_30_lambda_prior_0.700000.png}
+        \caption{k=30}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_40_lambda_prior_0.700000.png}
+        \caption{k=40}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_50_lambda_prior_0.700000.png}
+        \caption{k=50}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_60_lambda_prior_0.700000.png}
+        \caption{k=60}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_70_lambda_prior_0.700000.png}
+        \caption{k=70}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_80_lambda_prior_0.700000.png}
+        \caption{k=80}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_90_lambda_prior_0.700000.png}
+        \caption{k=90}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_100_lambda_prior_0.700000.png}
+        \caption{k=100}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_130_lambda_prior_0.700000.png}
+        \caption{k=130}
+     \end{subfigure}
+    \caption{Different weights-maps for okra reconstruction. Low intensity denotes regions of new changes in test.}
+\label{fig:few_view_okra_2D_weights}
+\end{figure}
+\begin{figure}[h]
+    \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_5_lambda_prior_0.700000.png}
+        \caption{k=5,\\ SSIM = 0.79}
+     \end{subfigure}     
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_10_lambda_prior_0.700000.png}
+        \caption{k=10,\\ SSIM = 0.78}
+     \end{subfigure} 
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_20_lambda_prior_0.700000.png}
+        \caption{k=20,\\ SSIM = 0.76}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_30_lambda_prior_0.700000.png}
+        \caption{k=30,\\ SSIM = 0.74}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_40_lambda_prior_0.700000.png}
+        \caption{k=40,\\ SSIM = 0.72}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_50_lambda_prior_0.700000.png}
+        \caption{k=50,\\ SSIM = 0.63}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_60_lambda_prior_0.700000.png}
+        \caption{k=60,\\ SSIM = 0.61}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_70_lambda_prior_0.700000.png}
+        \caption{k=70,\\ SSIM = 0.59}
+     \end{subfigure}
+  \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_80_lambda_prior_0.700000.png}
+        \caption{k=80,\\ SSIM = 0.58}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_90_lambda_prior_0.700000.png}
+        \caption{k=90,\\ SSIM = 0.56}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_100_lambda_prior_0.700000.png}
+        \caption{k=100,\\ SSIM = 0.55}
+     \end{subfigure}
+   \begin{subfigure}[b]{0.24\linewidth}
+        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_130_lambda_prior_0.700000.png}
+        \caption{k=130,\\ SSIM = 0.53}
+     \end{subfigure}
+    \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
+\label{fig:reconstructions_as_k_varies}
+\end{figure}
 
 
 \subsection{Motivation for the use of multiple types of eigenspaces for the computation of weights}
@@ -1206,6 +1359,7 @@ RMSE & 0.38 & 0.18 & 0.25 & 0.43 & 0.33 & 0.21 & 0.11 & \textcolor{red}{0.04}\\ 
 \end{table}
 
 \subsection{Reconstruction of datasets with imaging model available}
+\label{sec:results_with_imaging_model}
 \subsubsection{\textbf{Potato}}
 \label{Sec:potato_spatially_varying}
 
@@ -1324,6 +1478,7 @@ The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D 
 \end{table}
 
 \subsection{Reconstruction of datasets without imaging model}
+\label{sec:results_without_imaging_model}
 \subsubsection{\textbf{Liver}}
 \label{sec:tmh}
 
@@ -1450,158 +1605,9 @@ The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 
 
 \section{Discussion}
 \label{sec:discussion}
-In this section, we discuss tuning of parameters, computational
-complexity of our method, and requirements for applying deep learning
+In this section, we discuss computational
+complexity of our method and requirements for applying deep learning
 techniques in longitudinal few-view reconstruction.
-
-\subsection{Tuning of parameters}
-$\lambda_1$, $\lambda_2$ and $k$ are the three hyper-parameters that
-need to be chosen carefully for optimal reconstruction. In our
-experiments, $\lambda_1$ was tuned in such a way as to maximize the
-SSIM of the complete reconstructed test volume using the TV-only
-regularizer.  In particular, the RoI was not considered.  Now, this
-value was retained for our spatially-varying prior-based
-reconstruction as well.  In principle, one could have jointly
-optimized both $\lambda_1$ and $\lambda_2$ to get even better results
-compared to the one we have in Section~\ref{results}.  The value of
-$\lambda_2$ largely depends on the amount of artefacts one aims to
-remove by using object-prior at the cost of their dominance in the new
-regions. This value was chosen to lie between $0-3$ for our datasets
-(having the fixed $\lambda_1$).
-
-The hyper-parameter $k$ defines the sensitivity of the weights map to
-the difference between test image and object-prior (projection of test
-onto the space of object-prior). When $k=0$, our method behaves
-similar to the reconstruction using TV-only regularization. As $k$
-increases, the weights map starts capturing new changes in the test,
-at the cost of detecting a few false positives i.e., false new
-changes. In other words, as the weights-map becomes more sensitive to
-the difference between the test and object-prior, it becomes more
-noisy. In order to visualize the effect of the hyper-parameter $k$, we
-performed 2D reconstructions on okra dataset for different values of
-$k$. Fig.~\ref{fig:few_view_okra_2D_weights} shows the weights map
-obtained for each of the $k$ values and
-Fig.~\ref{fig:reconstructions_as_k_varies} shows the corresponding
-final reconstructions. We run our experiments for a few values of $k$
-and empirically choose the best reconstruction based on our tolerance
-for noise in the weights-map.  However, when a large number of
-templates are available, instead of this empirical method, this
-parameter can be chosen by assuming one of the templates as a
-pseudo-test and validating the $k$ that results in the best
-reconstruction (also see Sec~3 of \cite{supp_paper}.
-
-Alternatively, in cases where one wishes to completely avoid the use
-of this hyper-parameter, one can construct a binary weights-map using
-a learning based method described in the supplementary
-material~\cite{supp_paper}.
-
-%--------------effect of the value of $k$ on Okra dataset
-
-
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_5_lambda_prior_0.700000.png}
-        \caption{k=5}
-     \end{subfigure}     
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_10_lambda_prior_0.700000.png}
-        \caption{k=10}
-     \end{subfigure} 
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_20_lambda_prior_0.700000.png}
-        \caption{k=20}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_30_lambda_prior_0.700000.png}
-        \caption{k=30}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_40_lambda_prior_0.700000.png}
-        \caption{k=40}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_50_lambda_prior_0.700000.png}
-        \caption{k=50}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_60_lambda_prior_0.700000.png}
-        \caption{k=60}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_70_lambda_prior_0.700000.png}
-        \caption{k=70}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_80_lambda_prior_0.700000.png}
-        \caption{k=80}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_90_lambda_prior_0.700000.png}
-        \caption{k=90}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_100_lambda_prior_0.700000.png}
-        \caption{k=100}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weightsIm_kk_130_lambda_prior_0.700000.png}
-        \caption{k=130}
-     \end{subfigure}
-    \caption{Different weights-maps for okra reconstruction. Low intensity denotes regions of new changes in test.}
-\label{fig:few_view_okra_2D_weights}
-\end{figure}
-\begin{figure}[h]
-    \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_5_lambda_prior_0.700000.png}
-        \caption{k=5,\\ SSIM = 0.79}
-     \end{subfigure}     
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_10_lambda_prior_0.700000.png}
-        \caption{k=10,\\ SSIM = 0.78}
-     \end{subfigure} 
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_20_lambda_prior_0.700000.png}
-        \caption{k=20,\\ SSIM = 0.76}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_30_lambda_prior_0.700000.png}
-        \caption{k=30,\\ SSIM = 0.74}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_40_lambda_prior_0.700000.png}
-        \caption{k=40,\\ SSIM = 0.72}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_50_lambda_prior_0.700000.png}
-        \caption{k=50,\\ SSIM = 0.63}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_60_lambda_prior_0.700000.png}
-        \caption{k=60,\\ SSIM = 0.61}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_70_lambda_prior_0.700000.png}
-        \caption{k=70,\\ SSIM = 0.59}
-     \end{subfigure}
-  \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_80_lambda_prior_0.700000.png}
-        \caption{k=80,\\ SSIM = 0.58}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_90_lambda_prior_0.700000.png}
-        \caption{k=90,\\ SSIM = 0.56}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_100_lambda_prior_0.700000.png}
-        \caption{k=100,\\ SSIM = 0.55}
-     \end{subfigure}
-   \begin{subfigure}[b]{0.24\linewidth}
-        \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_130_lambda_prior_0.700000.png}
-        \caption{k=130,\\ SSIM = 0.53}
-     \end{subfigure}
-    \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
-\label{fig:reconstructions_as_k_varies}
-\end{figure}
 \subsection{Computational Complexity}
 
 We discuss the computing burden of our method in two parts: the big-Oh

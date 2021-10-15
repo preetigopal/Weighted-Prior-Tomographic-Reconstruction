@@ -133,12 +133,12 @@ method described below.
   longitudinal study.
 
 \item Once the binary weights-map $\boldsymbol{W_b}$ is obtained, use
-  these in the alternate minimization optimization described in Eq.~7
+  these in the alternate minimization optimization described in Eq.~3
   of the main paper.
 \end{enumerate}
 
 We mention in passing that if we are to entirely avoid the other
-parameters (viz. $\lambda_1$ and $\lambda_2$, the prior and the pilot
+parameters (viz. $\lambda_1$ and $\lambda_2$), the prior and the pilot
 can be stitched in a simplistic way using the equation 
 $\boldsymbol{W_b}(\rm{Pilot}) + (1-\boldsymbol{W_b})(\rm{Prior})$.
 The advantage of this method is that the computational time is
@@ -196,6 +196,13 @@ J_3(\boldsymbol{\theta},\boldsymbol{\alpha}) = \lVert\boldsymbol{\mathcal{R} x}-
 \end{figure}
 %\clearpage
 %\newpage
+
+
+
+
+
+\end{document}
+
 
 %----------------------------------Comparison with Literature------------------------
 \section{Empirical comparison with a method in literature:\\ Detecting new changes directly in the measurements}
@@ -261,10 +268,4 @@ Sec.~2 of the main paper (`Related work') contrasts the spatially-varying techni
 \end{table}
 %\clearpage
 %\newpage
-
-
-
-
 \bibliography{tci_ref}
-\end{document}
-
