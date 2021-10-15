@@ -230,7 +230,7 @@ $J_{TV}(\boldsymbol{x})$ where
           truth (260$\times$260) appears in the top left.  For
           extremely large number of views (800 views), the standard
           FBP reconstruction (first column) is of very good quality
-          (Structural Similarity Index Metric, SSIM=0.92). As the
+          (Structural Similarity Index Metric, SSIM=0.92, ideal SSIM=1.00). As the
           number of views become limited (100 views), reconstruction
           using the Total Variation regularization prior (TV, middle
           column) is better both visually and quantitatively than FBP
@@ -239,21 +239,23 @@ $J_{TV}(\boldsymbol{x})$ where
           prior and object-prior together with the spatially-varying
           technique of this paper improves the reconstruction
           (SSIM=0.91) when compared to presence of TV-only prior
-          (SSIM=0.87) or no prior (SSIM=0.64), an improvement by $4\%$ and $27\%$ respectively (since the ideal SSIM=1).}
+          (SSIM=0.87) or no prior (SSIM=0.64).
+          % , an improvement by $4\%$ and $27\%$ respectively (since the ideal SSIM=1)
+}
  \label{fig:story}
  \end{figure} 
 
-  When the number of views is reduced significantly further (as is discussed in this work), a
- regularization prior alone is not sufficient.  In such cases
- additional information (`object-prior') specific to the current
- object being scanned (called the `test' henceforth) is useful in
- further improving the reconstruction.  While this has been done in
- the context of dynamic CT-scans (discussed more in
- Section~\ref{sec:related}), in this paper we use a set $S$ of
+ When the number of views is reduced significantly further (as
+ discussed in this work), a regularization prior alone is not
+ sufficient.  In such cases additional information (`object-prior')
+ specific to the current object being scanned (called the `test'
+ henceforth) is useful in further improving the reconstruction.  While
+ this has been done in the context of dynamic CT-scans (discussed more
+ in Section~\ref{sec:related}), in this paper we use a set $S$ of
  previous scans of the same object. This is relevant in a longitudinal
  context: the acquisition of sequential CT scans of the same subject
  in order to track time-evolving changes within the subject's
- interior. 
+ interior.
  \subsection{Difficulties}
  
  With the use of an object-prior, a \emph{new} challenge emerges. The prior
@@ -266,7 +268,8 @@ $J_{TV}(\boldsymbol{x})$ where
  \textit{spatially-varying} prior-based reconstruction routine, that
  still uses \textit{all} the previous scans in the set $S$, without
  using any of the prior scans \textit{as is}, or endeavoring to choose
- one ``right'' prior. In this way, this work is novel and compared to
+ one ``right'' prior. In this way, this work is novel and to be
+ contrasted with 
  earlier work. As seen in Fig.~\ref{fig:story} (last column, 20
  views) our method uses the set $S$ to yield a better reconstruction
  than the regularization-only, or the backprojection-only methods.
@@ -631,7 +634,7 @@ the absence of a feature.  Although mathematically one is the
 conjugate of the other, in practice, experimental methods may have
 difficulties which explains the choice of our test. Notice also that
 the structure of the Okra is intricate as compared to Potato, and this
-brings with it a stronger challenge.
+brings with it a different challenge.
 
 
 
@@ -855,9 +858,9 @@ the final reconstruction. In regions of change in test data, we want
 lower weights for the prior when compared to regions that are similar
 to the prior.
 
-$\lambda_1$ and  $\lambda_2$ are tunable weights given to the
-TV-prior and object-prior terms respectively. Their selection is discussed in
-Section.~\ref{sec:tuning_parameters}. The unknowns
+$\lambda_1$ and $\lambda_2$ are tunable weights given to the TV-prior
+and object-prior terms respectively and the specification of these are
+discussed in Section.~\ref{sec:tuning_parameters}. The unknowns
 $\boldsymbol{x}$ and $\boldsymbol{\alpha}$ are solved by alternately
 minimizing $J_{\boldsymbol{\alpha}}(\boldsymbol{x})$ using a fixed
 $\boldsymbol{\alpha}$, and $J_{\boldsymbol{x}}(\boldsymbol{\alpha})$
@@ -1048,14 +1051,18 @@ $\lambda_1$, $\lambda_2$ and $k$ are the three hyper-parameters that
 need to be chosen carefully for optimal reconstruction. In our
 experiments, $\lambda_1$ was tuned in such a way as to maximize the
 SSIM of the complete reconstructed test volume using the TV-only
-regularizer.  In particular, the RoI was not considered.  Now, this
-value was retained for our spatially-varying prior-based
-reconstruction as well.  In principle, one could have jointly
-optimized both $\lambda_1$ and $\lambda_2$ to get even better results
-compared to the one we have in Sections~\ref{sec:results_with_imaging_model}, and~\ref{sec:results_without_imaging_model}.  The value of
-$\lambda_2$ largely depends on the amount of artefacts one aims to
-remove by using object-prior at the cost of their dominance in the new
-regions. This value was chosen to lie between $0-3$ for our datasets
+regularizer.  In particular, regions of interest (RoI) are obviously
+not known in advance, and thus not considered for the purpose of
+tuning.  Further, this value was retained for our spatially-varying
+prior-based reconstruction as well, that is, the value optimized for
+the TV-only regularize is maintained for the method proposed in this
+paper.  In principle, one could have jointly optimized both
+$\lambda_1$ and $\lambda_2$ to get even better results compared to the
+one we have in Sections~\ref{sec:results_with_imaging_model},
+and~\ref{sec:results_without_imaging_model}.  The value of $\lambda_2$
+largely depends on the amount of artefacts one aims to remove by using
+object-prior at the cost of their dominance in the new regions. This
+value was empirically chosen to lie between $0--3$ for our datasets
 (having the fixed $\lambda_1$).
 
 The hyper-parameter $k$ defines the sensitivity of the weights map to
@@ -1639,7 +1646,9 @@ the following
 In short, the additional burden of the key idea of this paper viz.,
 generating weights map is linear in the number of voxels, although
 admittedly the burden $F$ of the alternate minimization procedure
-drives up the cost (as can be seen in Table~\ref{table:compute_time}).
+drives up the cost (as can be seen in
+Table~\ref{table:compute_time}). The supplementary material describes
+a method to avoid this cost if absolutely necessary.
 
 In terms of space, the complexity is $O(NL +N)$ to store each of the
 $L$ templates and their low quality reconstructions, and to store one
