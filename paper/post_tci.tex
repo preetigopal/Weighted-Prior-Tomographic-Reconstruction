@@ -110,10 +110,10 @@
   (`object-prior') helps in the reconstruction of the current object
   (`test') from its significantly fewer measurements. A common problem
   with these techniques is the strong influence of object-priors in
-  the reconstruction of new regions in the test.  In this work, we
-  mitigate this problem by first estimating the location of new
-  regions and then imposing object-prior in \textit{only} old regions
-  which are similar to the prior.
+  the reconstruction of new changes in the test.  In this work, we
+  mitigate this problem by first estimating the location of changes (`new
+  regions') and then imposing object-prior in \textit{only} those regions
+  which are similar to the prior (`old regions').
 
   Our work is based on longitudinal data acquisition scenarios where
   we wish to study new changes that evolve within an object over time,
@@ -130,9 +130,11 @@
   are thus able to effectively reconstruct both the old and the new
   structures in the test. We have tested the efficacy of our method on
   synthetic as well as real projection data, in both 2D and 3D. Our
-  method significantly improves the overall quality of reconstructions
-  while minimizing the number of measurements needed for imaging in
-  longitudinal studies.
+  technique significantly improves the overall quality of
+  reconstructions while minimizing the number of measurements needed
+  for imaging in longitudinal studies. We show that with
+  as little as $2\%$ of measurements, our method achieves a structural
+  fidelity of $0.84$, with $1.00$ representing ideal reconstruction.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -259,7 +261,7 @@ $J_{TV}(\boldsymbol{x})$ where
  \subsection{Difficulties}
  
  With the use of an object-prior, a \emph{new} challenge emerges. The prior
- set $S$ may potentially overwhelm the necessary details, and when
+ set $S$ may potentially overwhelm the necessary details~\cite{mythesis}, and when
  several prior scans are available, finding the best one is an
  issue. We therefore devise an algorithm that estimates the location
  and magnitude of new changes in the (unknown) test. As we show in
@@ -404,6 +406,7 @@ mechanism to mitigate them (unlike the method that we propose). %This
 %can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
 %where we have compared our method with~\cite{Lee2012}.
 
+
 In this paper, we present a technique that makes use of multiple
 object priors, corresponding to high quality reconstructions of
 similar objects across time, typically in a longitudinal study.  We
@@ -419,6 +422,8 @@ unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
 also make use of the additional information available in multiple
 priors. Our technique also has the advantage of not requiring any
 expert-domain knowledge about the object being scanned.
+
+ In the recent past, deep learning based techniques have also been widely used for limited view CT reconstruction without the use of any longitudinal object-prior. For example, in~\cite{anirudh}, a neural network is trained to predict the complete sinogram from an incomplete one obtained from few-view imaging. This complete sinogram is then fed to analytical reconstruction algorithms to obtain the final reconstruction. Hence, one may in principle use this full sinogram as an alternate initial reconstruction of the test within our framework. \cite{bo2021} presented a cascade of neural networks that predict full-view reconstruction from limited view FBP reconstruction while simlutaneously ensuring consistency between the predicted sinugram and the acquired sinogram. \cite{special} trains an adverserial network for artifact removal and edge preservation in limited view reconstruction. While all of the above methods predict full-view reconstruction from the measurements of test object alone, we believe it is beneficial to use information from longitudinal data, especially if naturally available, like in the radio-frequency ablation datasets that we use. In this context, we present an analytical method that uses the available longitudinal data to better inform the reconstruction of the test. We first construct a `weights map' that gives clear insights about regions of change within the object over time.  
  
 %-------------------------------------------------------------------
 
@@ -1030,10 +1035,7 @@ we rescale intensity values of both the ground truth and the
 reconstructed results to lie between 0 to 1, so that the best possible
 RMSE is 0, and the worst value is 1.  On the other hand, SSIM seeks to
 consider perceptual changes, as well as correlation between adjacent
-pixels. This can be useful in a clinical context.  Here, we therefore
-assign a higher weightage to structure preservation, that is we assign
-the following weights to structure, contrast, and intensity
-respectively: $0.7,0.2,0.1$. Our results are optimized for SSIM, but
+pixels. This can be useful in a clinical context. The SSIM~\cite{multiscale_ssim} also provides a flexibility to set coefficients for the following three factors: Structure, Contrast and Intensity. In all our results, we report SSIM with both the standard setting, i.e., with coefficients $1.0,1.0,1.0$ and a structure-focussed setting, wherein we assign a higher weightage to structure preservation. In the latter case, we assign the following coefficients to the factors Structure, Contrast, and Intensity respectively: $0.7,0.2,0.1$. Our results are optimized for structure-focussed SSIM, but
 it can be verified that in all cases for the various datasets
 considered, our results are favourable with either metric.
 
@@ -1047,23 +1049,26 @@ then present reconstruction results for each of the datasets.
 
 \subsection{Tuning of parameters}
 \label{sec:tuning_parameters}
-$\lambda_1$, $\lambda_2$ and $k$ are the three hyper-parameters that
+The three hyper-parameters, $\lambda_1$, $\lambda_2$ and $k$
 need to be chosen carefully for optimal reconstruction. In our
-experiments, $\lambda_1$ was tuned in such a way as to maximize the
+experiments, $\lambda_1$ was tuned to maximize the
 SSIM of the complete reconstructed test volume using the TV-only
-regularizer.  In particular, regions of interest (RoI) are obviously
-not known in advance, and thus not considered for the purpose of
-tuning.  Further, this value was retained for our spatially-varying
+regularizer.  In particular, regions of interest (RoI) are 
+not known in advance, and thus not considered for the purpose of this
+tuning. Thus, we compare our reconstruction with the best possible baseline TV reconstruction by choosing the $\lambda_1$ that gives the best SSIM for TV reconstruction. Further, this value was retained for our spatially-varying
 prior-based reconstruction as well, that is, the value optimized for
 the TV-only regularizer is maintained for the method proposed in this
 paper.  In principle, one could have jointly optimized both
 $\lambda_1$ and $\lambda_2$ to get even better results compared to the
 one we have in Sections~\ref{sec:results_with_imaging_model},
-and~\ref{sec:results_without_imaging_model}.  The value of $\lambda_2$
+and~\ref{sec:results_without_imaging_model}. 
+
+The value of $\lambda_2$
 largely depends on the amount of artefacts one aims to remove by the
 use of object-prior at the cost of their dominance in the new
-regions. This value was empirically chosen to lie between $(0,3)$ for
-our datasets (having the fixed $\lambda_1$).
+regions. This value is chosen omnisciently, i.e., with the chosen $\lambda_1$, we apply our method for a range of $\lambda_2$ values and select the one that gives the best SSIM. This  was found to lie between $(0,3)$ for
+our datasets. In practice however, one may select $\lambda_2$ omnisciently only while imaging a particular class of object (say `sprouts') for the first time, and thereafter retain the same $\lambda_2$ while imaging other objects of the same class in future. 
+
 
 The hyper-parameter $k$ defines the sensitivity of the weights map to
 the difference between test image and object-prior (projection of test
@@ -1187,14 +1192,11 @@ reconstruction (also see Sec~3 of \cite{supp_paper}).
         \includegraphics[width=\textwidth]{../images/okra/post_TCI/2D/48_views/tuning_k/weighted_prior_kk_130_lambda_prior_0.700000.png}
         \caption{k=130,\\ SSIM = 0.53}
      \end{subfigure}
-    \caption{2D reconstructions for varying values of $k$. The SSIM values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
+    \caption{2D reconstructions for varying values of $k$. The SSIM (structure-focussed) values for all images are computed within the red RoI (shown in Fig.~\ref{fig:okra_2D_results}(a)), the region where the test is different from all of the previously scanned objects.}
 \label{fig:reconstructions_as_k_varies}
 \end{figure}
 
-Alternatively, in cases where one wishes to completely avoid the use
-of this hyper-parameter, one can construct a binary weights-map using
-a learning based method described in the supplementary
-material~\cite{supp_paper}.
+Our supplementary material~\cite{supp_paper} (part-3) discusses an alternate reconstruction method that does not require two of the three hyperparameters: $\lambda_1$ and $\lambda_2$. In this method, the computed weights-map is used to stitch parts of the pilot reconstruction and object-prior based on the weights map, and hence there is no optimization to be solved involving $\lambda_1$ and $\lambda_2$. The computation of weights map alone requires selection of the hyperparameter value k.
 
 
 \subsection{Motivation for the use of multiple types of eigenspaces for the computation of weights}
@@ -1288,7 +1290,7 @@ weights-maps for all 3D reconstructions.
       \caption{The motivation for multiple methods is demonstrated
         with a slice of the data in Fig.~\ref{fig:potato_data_2D}.
         The test image in Fig.~\ref{fig:potato_data_2D}(d) is
-        reconstructed using only $6$ paltry views.  The weights-maps
+        reconstructed using only $6$ views.  The weights-maps
         %(corresponding to the difference between pilot reconstruction
         %of the test and its projection onto the eigenspace
         %$\boldsymbol{V_\text{low}}$) 
@@ -1347,7 +1349,7 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{SSIM and RMSE of the reconstructions shown in
+\caption{Standard-SSIM (`SSIM-1'), structure-focussed SSIM (`SSIM-2') and RMSE of the reconstructions shown in
   Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(h). %The SSIM of
                                 %ideal reconstruction is 1. The ideal
                                 %RMSE is 0, and the worst RMSE
@@ -1355,8 +1357,9 @@ weights-maps for all 3D reconstructions.
 }
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
 \hline
- & \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
-SSIM & 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
+& \textbf{(a)} & \textbf{(b)} & \textbf{(c)} & \textbf{(d)} & \textbf{(e)} & \textbf{(f)} &  \textbf{(g)} &  \textbf{(h)} \\\hline
+SSIM-1 & 0.31 & 0.48  & 0.39  & 0.51 & 0.55  & 0.42 & 0.68 &\textcolor{red}{0.78} \\ \hline
+SSIM-2 & 0.64 & 0.72  & 0.68 & 0.83 & 0.81 & 0.69 & 0.83 &\textcolor{red}{0.88} \\ \hline
 RMSE & 0.38 & 0.18 & 0.25 & 0.43 & 0.33 & 0.21 & 0.11 & \textcolor{red}{0.04}\\ \hline
 \end{tabular}
 \label{table:potato_2D_ssim}
@@ -1405,15 +1408,15 @@ the reconstructed new regions using various methods.
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{SSIM (RMSE) within the RoI of reconstructed potato from various
+  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed potato from various
     methods. 
 %The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
 The 2D reconstructed images are shown in Fig.~\ref{fig:potato_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.52 (0.36)
-& 0.92 (0.06) & \textcolor{red}{0.97 (0.03)} \\ \hline \textbf{3D} & 0.58 (0.26) & 0.75 (0.21) & \textcolor{red}{0.84 (0.16)}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.22, 0.52 (0.36)
+& 0.86, 0.92 (0.06) & \textcolor{red}{0.95, 0.97 (0.03)} \\ \hline \textbf{3D} & 0.30, 0.58 (0.26) & 0.56, 0.75 (0.21) & \textcolor{red}{0.72, 0.84 (0.16)}
 \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
@@ -1466,16 +1469,16 @@ Table~\ref{table:okra_ssim}.
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{SSIM (RMSE) within the RoI of reconstructed okra from various
+  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed okra from various
     methods. 
 %SSIM of the ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
 The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.46 (0.28)
-& 0.50 (0.24) & \textcolor{red}{0.74 (0.15)} \\ 
-\hline \textbf{3D} & 0.65 (0.22) & 0.70 (0.21) & \textcolor{red}{0.71 (0.19)}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.26, 0.46 (0.28)
+& 0.27, 0.50 (0.24) & \textcolor{red}{0.56, 0.74 (0.15)} \\ 
+\hline \textbf{3D} & 0.52, 0.65 (0.22) & 0.56, 0.70 (0.21) & \textcolor{red}{0.57, 0.71 (0.19)}
 \\ \hline
 \end{tabular}
 \label{table:okra_ssim}
@@ -1529,13 +1532,13 @@ SSIM and RMSE in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{SSIM (RMSE) within the RoI of 2D reconstruction of radio-frequency ablation data of liver from various methods.  
+  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of 2D reconstruction of radio-frequency ablation data of liver from various methods.  
 %For ideal reconstruction, SSIM equals 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
 The  reconstructed images are shown in Fig.~\ref{fig:tmh_2D_results},}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline  0.73 (0.04)
-& 0.91 (0.09) & \textcolor{red}{0.95 (0.03)} \\ \hline 
+\textbf{This paper} \\ \hline 0.54, 0.73 (0.04)
+& 0.80, 0.91 (0.09) & \textcolor{red}{0.90, 0.95 (0.03)} \\ \hline 
 \end{tabular}
 \label{table:tmh_ssim}
 \end{table}
@@ -1589,15 +1592,15 @@ reconstructed new regions as compared to other methods.
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{SSIM (RMSE) within the RoI of reconstructed sprouts from various
+  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed sprouts from various
     methods. 
 %The SSIM of ideal reconstruction) is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
 The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
- \\ \hline \textbf{2D} & 0.67 (0.24)
-& 0.82 (0.17) & \textcolor{red}{0.86 (0.13)} \\ \hline \textbf{3D} & 0.67 (0.25) & 0.73 (0.23) & \textcolor{red}{0.82 (0.14)}
+ \\ \hline \textbf{2D} & 0.42, 0.67 (0.24)
+& 0.61, 0.82 (0.17) & \textcolor{red}{0.72, 0.86 (0.13)} \\ \hline \textbf{3D} & 0.44, 0.67 (0.25) & 0.47, 0.73 (0.23) & \textcolor{red}{0.66, 0.82 (0.14)}
 \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
@@ -1607,12 +1610,12 @@ The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 
 
 %---------------------------------------------------------
 
-\section{Discussion}
+\section{Computational Complexity}
 \label{sec:discussion}
-In this section, we discuss computational
-complexity of our method and requirements for applying deep learning
-techniques in longitudinal few-view reconstruction.
-\subsection{Computational Complexity}
+%In this section, we discuss computational
+%complexity of our method and requirements for applying deep learning
+%techniques in longitudinal few-view reconstruction.
+%\subsection{Computational Complexity}
 
 We discuss the computing burden of our method in two parts: the big-Oh
 (symbolic) complexity, and the actual time taken on a specific dataset
@@ -1671,16 +1674,17 @@ of Liver on MATLAB 2019a on an AMD
 \begin{table}[!h]
  \centering
   \caption{Computation times (in seconds) for various stages of
-    reconstruction of a 2D slice of Liver on MATLAB 2019a on an  AMD
+    reconstruction of a (512$\times$512) 2D slice of Liver from 30 views, on MATLAB 2019a on an  AMD
     2920X 12-Core Processor machine with 64GB RAM. Our code is
     available for inspection~\cite{codeRepo}.}
 \begin{tabular}{|l|l|l|l|}
 \hline
- \begin{tabular}[c]{@{}l@{}} FBP (Sufficient \\ views)\end{tabular}             & \begin{tabular}[c]{@{}l@{}} TV (Moderate \\ views)  \end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map \\ (Very few \\views)\end{tabular} & \begin{tabular}[c]{@{}l@{}}Alternate\\ Minimization \\ (Very few \\views)\end{tabular} \\ \hline
+ \begin{tabular}[c]{@{}l@{}} FBP \end{tabular}             & \begin{tabular}[c]{@{}l@{}} TV  \end{tabular}                      & \begin{tabular}[c]{@{}l@{}}Computation of \\ weights map \end{tabular} & \begin{tabular}[c]{@{}l@{}}Alternate\\ Minimization \end{tabular} \\ \hline
 \multicolumn{1}{|c|}{0.01} & \multicolumn{1}{c|}{5.63} & \multicolumn{1}{c|}{0.01}                                             & \multicolumn{1}{c|}{34.00}                                                                     \\ \hline
 \end{tabular}
 \label{table:compute_time}
 \end{table}
+\begin{comment}
 \subsection{Requirements for applying deep learning techniques}
 Deep learning techniques are powerful tools to learn an unknown
 parametric function relating an input space and an output space. In such
@@ -1708,7 +1712,7 @@ this across multiple datasets poses a question mark.
   learn a specific set of latent features. This will again require
   atleast a few tens of volumes. We see this as a future direction of
   work.
-
+\end{comment}
 
 
 %--------------------------Conclusion-----------------------
