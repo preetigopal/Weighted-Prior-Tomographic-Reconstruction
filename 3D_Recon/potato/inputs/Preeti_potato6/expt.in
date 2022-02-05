@@ -1,0 +1,119 @@
+
+BeginSection Sample
+   project_name                            AM
+   sample_name                             Preeti_potato6
+   date_received                           sep 2016
+   obtained_by                             Preeti Gopal
+   organisation                            AM/IITB_Monash
+   origin_place                            
+   material_type                           biological
+   diameter                                
+   shape                                   biological
+   sample_notes                            __start_multi_string__
+   sample_notes                            __end_multi_string__
+EndSection 
+
+BeginSection Acquisition
+   operator_name                           michael.turner@anu.edu.au
+   notification_email                      
+   sample_filter_notes                     1mm Al
+   exposure_time                           1
+   specify_clearfield_exp_time             false
+   focus_exposure_time                     1
+   rotate_during_focus                     true
+
+   BeginSection FocusRotationSection
+      rotation_speed                          10
+   EndSection 
+   num_warm_up_frames                      1
+   skip_accums                             0
+   num_accumulations                       1
+   use_num_accums_for_snap                 false
+   do_auto_clearfields                     true
+
+   BeginSection ClearFieldSection
+      z_clearfield_position                   -90
+      clearfield_type                         both
+   EndSection 
+   num_clear_fields                        1
+   num_dark_fields                         2
+   key_field_spacing                       0
+   reverse_direction_of_keyfields          false
+   test_spacing                            220
+   experiment                              cone-circle-attenuation-001
+   rotation_start_position                 0
+   camera_x_start_position                 0
+   do_camera_x_shift                       true
+
+   BeginSection Sideways
+      camera_x_shift_columns                  6
+   EndSection 
+   specify_angle_increment                 false
+   trajectory                              circle
+
+   BeginSection Circle
+      num_projections                         900
+      num_revolutions                         1
+      total_num_projections                   900
+      z_acquisition_position                  0
+   EndSection 
+   do_multi_pass                           false
+   calculate_sd                            false
+   save_each_accum                         false
+   limit_tomo_angle                        false
+   do_tomo_image_analysis                  true
+   do_second_scan                          false
+   experiment_date                         2017-09-19 16:46:04
+   image_datatype                          ushort
+
+   BeginSection Geometry
+      sample_max_radius                       1
+      sample_max_height                       10
+      specimen_distance                       210
+      camera_length                           785.5
+      specimen_camera_distance                575.5
+      voxel_size                              158.709
+      num_voxels                              <718><718><560>
+      field_of_view                           <114><114><88.877>
+      rotation_x                              0
+      rotation_phi                            0
+      rotation_psi                            0
+      camera_psi                              0
+      camera_theta                            0
+      angle_range                             360000
+   EndSection 
+
+   BeginSection Info
+      acq_duration                            00:15:35
+      acq_finish_time                         2017-09-19 17:01:11
+      free_disk_space                         1378.4GB
+   EndSection 
+
+   BeginSection Detector
+      camera_type                             Pixium Flat Panel
+      system_id                               RF4343
+      image_width                             718
+      image_height                            710
+      camera_binning                          1
+      subsample_factor                        4
+      pixel_size_x                            0.1479
+      pixel_size_y                            0.1479
+   EndSection 
+EndSection 
+
+BeginSection Source
+   x_ray_energy                            60
+   x_ray_current                           80
+   x_ray_focus_mode                        0
+   x_ray_object_focus                      0
+   x_ray_initial_target_current            0
+   x_ray_final_target_current              0
+EndSection 
+
+BeginSection MetaData
+   qrumba_version                          1496
+   host_ip_address                         150.203.181.95
+   machine_name                            ANU1
+   flip_image_y                            true
+   flip_image_x                            false
+EndSection 

@@ -22,7 +22,7 @@ if strcmp(dataset,'potato6')
                 FDK = data.FDK;
             else
                 fprintf('Computing FDK reconstructions of template volumes\n');
-                projFolderName =  sprintf('Preeti_potato%d/projf32_LIN_AP_nc',templateNos(i))
+                projFolderName =  sprintf('inputs/potato%d/projf32_LIN_AP_nc',templateNos(i))
                 dirInfo = dir(projFolderName);
                 for j = 3:size(dirInfo,1)
                     fileName = dirInfo(j).name;
@@ -67,7 +67,7 @@ if strcmp(dataset,'potato6')
                 TV = data.TV;
             else
                 fprintf('Computing TV reconstructions of template volumes\n');
-                projFolderName =  sprintf('Preeti_potato%d/projf32_LIN_AP_nc',templateNos(i));
+                projFolderName =  sprintf('inputs/potato%d/projf32_LIN_AP_nc',templateNos(i));
                 dirInfo = dir(projFolderName);
                 for j = 3:size(dirInfo,1)
                     fileName = dirInfo(j).name;

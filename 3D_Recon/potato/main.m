@@ -3,7 +3,7 @@
 dataset = 'potato6';
 outDirectory = ('results/TV_with_weighted_prior/18_views/');
 mkdir(outDirectory);
-projFolderName =  sprintf('Preeti_%s/projf32_LIN_AP_nc',dataset);
+projFolderName =  sprintf('inputs/%s/projf32_LIN_AP_nc',dataset);
 dirInfo = dir(projFolderName);
 sliceNumber = 30;
 lambda_prior_list = [0.1 0.2 0.22 0.25 0.3 0.4 1];
