@@ -7,48 +7,16 @@ dataset ='okra3';
 
 file = load(sprintf('%s/okra3_testVol.mat',outDirectory));
 testVol = double(file.data);
-% testVol = testVol(:,110:end-100,:);
 file = load(sprintf('%s/FDK.mat',outDirectory));
 fdkVol = double(file.FDK);
-% fdkVol = fdkVol(:,110:end-100,:);
 file = load(sprintf('%s/TV_lambdaTV_0.45.mat',outDirectory));
 tvVol = file.TV;
-% tvVol = tvVol(:,110:end-100,:);
 file = load(sprintf('%s/weighted_prior_kk_1_lambda_prior_0.500000.mat',outDirectory));
 weightedPriorVol = file.result_weighted_pca;
-% weightedPriorVol = weightedPriorVol(:,110:end-100,:);
-
-
-
-
-
-% testVol = testVol - min(testVol(:));
-% testVol  = testVol./max(testVol(:));
-% fdkVol = fdkVol - min(fdkVol(:));
-% fdkVol = fdkVol./max(fdkVol(:));
-% tvVol = tvVol - min(tvVol(:));
-% tvVol = tvVol./max(tvVol(:));
-% weightedPriorVol = weightedPriorVol - min(weightedPriorVol(:));
-% weightedPriorVol = weightedPriorVol./max(weightedPriorVol(:));  
-
-
-% leaveSlices = 0;
-% ssim_fdk = ssim(fdkVol(:,:,end-leaveSlices),testVol(:,:,end-leaveSlices))
-% ssim_tv = ssim(tvVol(:,:,end-leaveSlices),testVol(:,:,end-leaveSlices))
-% ssim_wightedPrior = ssim(weightedPriorVol(:,:,end-leaveSlices),testVol(:,:,end-leaveSlices))
-% 
-% relRMSE_fdk = rmseVol(fdkVol,testVol)
-% relRMSE_tv = rmseVol(tvVol,testVol)
-% relRMSE_weightedPrior = rmseVol(weightedPriorVol,testVol)
-% 
-% ssim_fdk_1 = ssim(fdkVol(:,:,end-leaveSlices),testVol(:,:,end-leaveSlices),'Exponent',[0.1 0.2 0.7])
-% ssim_tv_1 = ssim(tvVol(:,:,end-leaveSlices),testVol(:,:,end-leaveSlices),'Exponent',[0.1 0.2 0.7])
-% ssim_wightedPrior_1 = ssim(weightedPriorVol(:,:,end-leaveSlices),testVol(:,:,end-leaveSlices),'Exponent',[0.1 0.2 0.7])
-
 
 roi1_col = 145:160;
 roi1_row = 171:197;
-roi2_col = 160:200;%160:185
+roi2_col = 160:200;
 roi2_row = 131:131+86;
 % roi3_col = 130:145;
 % roi3_row = 140:180;
@@ -57,7 +25,6 @@ roi2_frames = 32:38;
 
 ssim_exponent = [0.1 0.2 0.7];
 %ssim_exponent = [1 1 1];
-
 
 roi1_testVol = testVol(roi1_row,roi1_col,roi1_frames);
 roi1_fbp = fdkVol(roi1_row,roi1_col,roi1_frames);
@@ -113,18 +80,12 @@ tvVol = tvVol./max(tvVol(:));
 weightedPriorVol = weightedPriorVol - min(weightedPriorVol(:));
 weightedPriorVol = weightedPriorVol./max(weightedPriorVol(:));  
 
-% relRMSE_fbp = rmseVol(fdkVol,testVol);
-% relRMSE_tv = rmseVol(tvVol,testVol);
-% relRMSE_weighted_pca = rmseVol(weightedPriorVol,testVol);
-
 ssim_fbp = ssim(fdkVol,testVol,'Exponent',ssim_exponent);
 ssim_tv = ssim(tvVol,testVol,'Exponent',ssim_exponent);
 ssim_weighted_pca = ssim(weightedPriorVol,testVol,'Exponent',ssim_exponent); 
 
-
 sliceNo = 31;
 testIm = testVol(:,:,sliceNo);
-
 
 image = testIm;
 image = image - min(image(:));
