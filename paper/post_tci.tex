@@ -1049,28 +1049,18 @@ then present reconstruction results for each of the datasets.
 
 \subsection{Tuning of parameters}
 \label{sec:tuning_parameters}
-The three hyper-parameters, $\lambda_1$, $\lambda_2$ and $k$
-need to be chosen carefully for optimal reconstruction. In our
-experiments, $\lambda_1$ was tuned to maximize the
+The aim of our experiments is to demonstrate the benefit of using weighted prior reconstruction when optimal hyperparameter values for $\lambda_1$, $\lambda_2$ and $k$ are chosen.  In this regard, we assume the ground-truth to be known. Specifically, $\lambda_1$ was tuned to maximize the
 SSIM of the complete reconstructed test volume using the TV-only
 regularizer.  In particular, regions of interest (RoI) are 
 not known in advance, and thus not considered for the purpose of this
-tuning. Thus, we compare our reconstruction with the best possible baseline TV reconstruction by choosing the $\lambda_1$ that gives the best SSIM for TV reconstruction. Further, this value was retained for our spatially-varying
-prior-based reconstruction as well, that is, the value optimized for
-the TV-only regularizer is maintained for the method proposed in this
-paper.  In principle, one could have jointly optimized both
-$\lambda_1$ and $\lambda_2$ to get even better results compared to the
-one we have in Sections~\ref{sec:results_with_imaging_model},
-and~\ref{sec:results_without_imaging_model}. 
+tuning. This optimal $\lambda_1$ was retained for spatially-varying prior-based reconstruction. With the already chosen optimal $\lambda_1$, we apply our method for a range of $\lambda_2$ values and select the one that gives the best SSIM with reference to the ground truth. %The value of $\lambda_2$ influences the amount of artefacts that can be removed by the use of object-prior at the expense of its dominance in new regions. %This value was found to lie between $(0,3)$ for our datasets.
+%In principle, one could have jointly optimized both $\lambda_1$ and $\lambda_2$ to get even better results compared to the one we have in Sections~\ref{sec:results_with_imaging_model}, and~\ref{sec:results_without_imaging_model}. 
+In practice however, since ground-truth will never be available, these parameters must be tuned using only the set of templates available.  One of the templates can be assumed to be a pseudo-test, and a grid search can be performed to get the best possible hyperparameter values. These values can then be used for reconstructing the `real' test volume.
 
-The value of $\lambda_2$
-largely depends on the amount of artefacts one aims to remove by the
-use of object-prior at the cost of their dominance in the new
-regions. This value is chosen omnisciently, i.e., with the chosen $\lambda_1$, we apply our method for a range of $\lambda_2$ values and select the one that gives the best SSIM. This  was found to lie between $(0,3)$ for
-our datasets. In practice however, one may select $\lambda_2$ omnisciently only while imaging a particular class of object (say `sprouts') for the first time, and thereafter retain the same $\lambda_2$ while imaging other objects of the same class in future. 
+%in the nvone may select $\lambda_2$ omnisciently only while imaging a particular class of object (say `sprouts') for the first time, and thereafter retain the same $\lambda_2$ while imaging other objects of the same class in future. 
 
 
-The hyper-parameter $k$ defines the sensitivity of the weights map to
+$k$ defines the sensitivity of the weights map to
 the difference between test image and object-prior (projection of test
 onto the space of object-prior). When $k=0$, our method behaves
 similar to the reconstruction using TV-only regularization. As $k$
