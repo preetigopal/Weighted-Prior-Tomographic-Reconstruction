@@ -109,7 +109,8 @@
   from previously existing longitudinal scans of the same object
   (`object-prior') helps in the reconstruction of the current object
   (`test') from its significantly fewer measurements. A common problem
-  with these techniques is the strong influence of object-priors in
+  with these techniques is the %strong 
+  influence of object-priors in
   the reconstruction of new changes in the test.  In this work, we
   mitigate this problem by first estimating the location of changes (`new
   regions') and then imposing object-prior in \textit{only} those regions
@@ -1016,10 +1017,17 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
 
 In this section, we first illustrate the advantage of using multiple
 types of eigenspaces for the computation of weights map, and then
-present reconstruction results on all datasets. We show both
-qualitative and quantitative results. For the latter,
+present reconstruction results on all datasets.  We show both
+qualitative and quantitative results.  Before we do this, it is import
+to first consider our method of reporting our results.
+
+\subsection{Metrics}
+In order to show the efficacy, we will clearly need to have either a
+gold-standard method, or a ground truth reference reconstruction such
+as those described in Sec~\ref{sec:datasets} (see, for example, the
+top left figure in Fig.~\ref{fig:story}).  For quantitative results,
 we use two metrics: the Root Mean Squared Error (RMSE) and the
-Structural Similarity Index Metric (SSIM)~\cite{ssim}. 
+Structural Similarity Index Metric (SSIM)~\cite{ssim}.
 % If
 % $\boldsymbol{x}$ is the groundtruth data with $N$ voxels and
 % $\hat{\boldsymbol{x}}$ is the reconstructed data, then RMSE is
@@ -1030,34 +1038,79 @@ Structural Similarity Index Metric (SSIM)~\cite{ssim}.
 %     \hat{\boldsymbol{x}}(i))^2}.
 %  \end{equation}
 RMSE corresponds to error in intensity values and is a measure of
-absolute error. For purposes of normalization, while reporting numbers
-we rescale intensity values of both the ground truth and the
-reconstructed results to lie between 0 to 1, so that the best possible
-RMSE is 0, and the worst value is 1.  On the other hand, SSIM seeks to
-consider perceptual changes, as well as correlation between adjacent
-pixels. This can be useful in a clinical context. The SSIM~\cite{multiscale_ssim} also provides a flexibility to set coefficients for the following three factors: Structure, Contrast and Intensity. In all our results, we report SSIM with both the standard setting, i.e., with coefficients $1.0,1.0,1.0$ and a structure-focussed setting, wherein we assign a higher weightage to structure preservation. In the latter case, we assign the following coefficients to the factors Structure, Contrast, and Intensity respectively: $0.7,0.2,0.1$. Our results are optimized for structure-focussed SSIM, but
-it can be verified that in all cases for the various datasets
-considered, our results are favourable with either metric.
+absolute error. Our results depend on the optimization library (as
+mentioned earlier) \cite{TVReg-lib}; however, the range of values
+returned by other libraries (such as the Matlab implementation of FDK
+used in our ground truth reconstructions) are not compatible with
+these.  This is not an issue for qualtitative results since the
+display program compensates for range differences. For RMSE, and
+for purposes of normalization and a fair comparison, while reporting
+numbers, we therefore rescale intensity values of both the ground
+truth and the reconstructed results to lie between 0 to 1, so that the
+best possible RMSE is 0, and the worst value is 1.
 
-Here below, we first discuss tuning of parameters followed by the
-rationale for using multiple eigenspaces to compute weightsmap. We
-then present reconstruction results for each of the datasets.
+On the other hand, SSIM seeks to consider perceptual changes, as well
+as correlation between adjacent pixels. This can be useful in a
+clinical context. The SSIM~\cite{multiscale_ssim} was designed to
+flexible set coefficients for the following three factors: Structure,
+Contrast and Intensity. We observed that in many cases, our
+qualitative results (e.g., when the standard TV regularization method
+outperforms FDK) do not correspond favourably to the default SSIM settings.  We
+therefore assigned the following coefficients to the factors
+Structure, Contrast, and Intensity respectively: $0.7,0.2,0.1$. Our
+results are optimized for structure-focussed SSIM, but it can be
+verified that in all cases for the various datasets considered, our
+results are favourable with either the default metric, i.e, with
+coefficients $1.0,1.0,1.0$ or with our structure-focused metric
+wherein we assign a relatively higher weightage to structure
+preservation.
+
 %The reason for emphasizing the structure with an
 %exponent of 0.7 stems from the optimization process since the
 %intensity span (and, in general, the histogram) of reconstructed volumes
 %differ across various methods and solvers. 
 
-\subsection{Tuning of parameters}
-\label{sec:tuning_parameters}
-The aim of our experiments is to demonstrate the benefit of using weighted prior reconstruction when optimal hyperparameter values for $\lambda_1$, $\lambda_2$ and $k$ are chosen.  In this regard, we assume the ground-truth to be known. Specifically, $\lambda_1$ was tuned to maximize the
-SSIM of the complete reconstructed test volume using the TV-only
-regularizer.  In particular, regions of interest (RoI) are 
-not known in advance, and thus not considered for the purpose of this
-tuning. This optimal $\lambda_1$ was retained for spatially-varying prior-based reconstruction. With the already chosen optimal $\lambda_1$, we apply our method for a range of $\lambda_2$ values and select the one that gives the best SSIM with reference to the ground truth. %The value of $\lambda_2$ influences the amount of artefacts that can be removed by the use of object-prior at the expense of its dominance in new regions. %This value was found to lie between $(0,3)$ for our datasets.
-%In principle, one could have jointly optimized both $\lambda_1$ and $\lambda_2$ to get even better results compared to the one we have in Sections~\ref{sec:results_with_imaging_model}, and~\ref{sec:results_without_imaging_model}. 
-In practice however, since ground-truth will never be available, these parameters must be tuned using only the set of templates available.  One of the templates can be assumed to be a pseudo-test, and a grid search can be performed to get the best possible hyperparameter values. These values can then be used for reconstructing the `real' test volume.
+Finally, for a fair comparison in order to not distort metrics,
+we report these values in what we believe is a reasonable area of
+``new regions''. In particular, these regions of interest (RoI) are
+obviously not known in advance, and is thus appropriate for a ``test''.
 
-%in the nvone may select $\lambda_2$ omnisciently only while imaging a particular class of object (say `sprouts') for the first time, and thereafter retain the same $\lambda_2$ while imaging other objects of the same class in future. 
+
+% \subsection{Tuning of parameters}
+\label{sec:tuning_parameters}
+
+Next, we turn to the parameters of the algorithm.  $\lambda_1$,
+$\lambda_2$ and $k$ are the three hyper-parameters that need to be
+chosen carefully for best results. Since the aim of our experiments is
+to demonstrate the benefit of using weighted prior reconstruction, we
+proceed to adjust these parameters by (as mentioned earlier) assuming
+the ground-truth to be known.
+
+Specifically, $\lambda_1$ was tuned to maximize the SSIM of the
+complete reconstructed test volume using the TV-only regularizer.
+It's important to note that we retain this value of $\lambda_1$ for
+the spatially-varying prior-based reconstruction, i.e., we \emph{do
+  not} adjust this value for our spatially-varying method, and,
+neither do we know the target ROI where the metric is going to be
+finally employed.  With the already chosen optimal $\lambda_1$, we
+apply our method for a range of $\lambda_2$ values and select the one
+that gives the best SSIM with reference to the ground
+truth. %The value of $\lambda_2$ influences the amount of artefacts that can be removed by the use of object-prior at the expense of its dominance in new regions. %This value was found to lie between $(0,3)$ for our datasets.
+%In principle, one could have jointly optimized both $\lambda_1$ and
+%$\lambda_2$ to get even better results compared to the one we have in
+%Sections~\ref{sec:results_with_imaging_model},
+%and~\ref{sec:results_without_imaging_model}.  
+We note that in practice, however, since ground-truth will never be
+available, these parameters must be tuned using only the set of
+templates available.  One of the templates can be assumed to be a
+pseudo-test, and a grid search can be performed to get the best
+possible hyperparameter values. These values can then be used for
+reconstructing the `real' test volume. 
+
+%in the nvone may select $\lambda_2$ omnisciently only while imaging a
+%particular class of object (say `sprouts') for the first time, and
+%thereafter retain the same $\lambda_2$ while imaging other objects of
+%the same class in future.  
 
 
 $k$ defines the sensitivity of the weights map to
