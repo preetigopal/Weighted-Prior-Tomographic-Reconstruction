@@ -75,7 +75,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Eliminating object prior-bias from sparse-projection tomographic reconstructions}
+\title{Reducing object prior-bias from sparse-projection tomographic reconstructions}
 %
 %
 % author names and IEEE memberships
@@ -133,9 +133,7 @@
   synthetic as well as real projection data, in both 2D and 3D. Our
   technique significantly improves the overall quality of
   reconstructions while minimizing the number of measurements needed
-  for imaging in longitudinal studies. We show that with
-  as little as $2\%$ of measurements, our method achieves a structural
-  fidelity of $0.84$, with $1.00$ representing ideal reconstruction.
+  for imaging in longitudinal studies.% We show that with   as little as $2\%$ of measurements, our method achieves a structural   fidelity of $0.84$, with $1.00$ representing ideal reconstruction.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -1076,7 +1074,7 @@ we report these values in what we believe is a reasonable area of
 obviously not known in advance, and is thus appropriate for a ``test''.
 
 
-% \subsection{Tuning of parameters}
+\subsection{Hyper-parameters}
 \label{sec:tuning_parameters}
 
 Next, we turn to the parameters of the algorithm.  $\lambda_1$,
@@ -1392,7 +1390,7 @@ weights-maps for all 3D reconstructions.
 %----------------------------------------------
 \begin{table}[!h]
   \centering
-\caption{Standard-SSIM (`SSIM-1'), structure-focussed SSIM (`SSIM-2') and RMSE of the reconstructions shown in
+\caption{Default-SSIM (`SSIM-1'), structure-focussed SSIM (`SSIM-2') and RMSE of the reconstructions shown in
   Fig.~\ref{fig:reconstructions_diff_methods}:(a)-(h). %The SSIM of
                                 %ideal reconstruction is 1. The ideal
                                 %RMSE is 0, and the worst RMSE
@@ -1451,7 +1449,7 @@ the reconstructed new regions using various methods.
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed potato from various
+  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed potato from various
     methods. 
 %The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
 The 2D reconstructed images are shown in Fig.~\ref{fig:potato_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
@@ -1512,7 +1510,7 @@ Table~\ref{table:okra_ssim}.
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed okra from various
+  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed okra from various
     methods. 
 %SSIM of the ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
 The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
@@ -1575,7 +1573,7 @@ SSIM and RMSE in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of 2D reconstruction of radio-frequency ablation data of liver from various methods.  
+  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of 2D reconstruction of radio-frequency ablation data of liver from various methods.  
 %For ideal reconstruction, SSIM equals 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
 The  reconstructed images are shown in Fig.~\ref{fig:tmh_2D_results},}
 \begin{tabular}{|l|c|c|c|c|}
@@ -1635,7 +1633,7 @@ reconstructed new regions as compared to other methods.
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{Standard-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed sprouts from various
+  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed sprouts from various
     methods. 
 %The SSIM of ideal reconstruction) is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
 The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
