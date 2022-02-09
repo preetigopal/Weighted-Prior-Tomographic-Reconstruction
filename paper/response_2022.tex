@@ -93,7 +93,21 @@ As far as the stability of parameter $k$ is concerned, in Fig. 8 of our paper, w
 }}\\
 
 \textbf{Response}:
-Since SSIM inherently offers a flexibility to set coefficients based on what we want to evaluate, we believe that having a set of coefficients that focus on measuring structural preservation is better suited for our goal. However, in the paper, we have now included quantitative results with both custom (structure-focussed) SSIM and default SSIM. The benefit of the proposed method is seen with either setting of the metric.\\
+Since SSIM inherently offers a flexibility to set coefficients based on what we want to evaluate, we believe that having a set of coefficients that focus on measuring structural preservation is better suited for our goal. However, in the paper, we have now included quantitative results with both custom (structure-focussed) SSIM and default SSIM. The benefit of the proposed method is seen with either setting of the metric.
+
+For computation of both SSIM and RMSE, we find that rescaling is necessary because different optimization routines generate solutions whose intensity ranges vary from that of the ground truth. For example, for reconstruction of the potato data from 18 views, Table~\ref{Tab:ranges} shows the min. and max. intensity values of the groundtruth and reconstructed volumes.\\
+
+\begin{table}[]
+  \centering
+  \caption{Minimum and maximum intensity values of groundtruth and reconstructed volumes of potato data, reconstructed from 18 views.}
+  \begin{tabular}{|l|l|l|l|}
+\hline
+ & \textbf{\begin{tabular}[c]{@{}l@{}}Ground\\ truth\end{tabular}} & \textbf{FDK} & \textbf{TV} \\ \hline
+\textbf{Min.} & 0.00 & -0.19 & 0.00 \\ \hline
+\textbf{Max.} & 1.00 & 0.24 & 0.24 \\ \hline
+  \end{tabular}
+  \label{Tab:ranges}
+\end{table}
 
 
 \textcolor{blue}{\textbf{[R2-2]:}\textit{The computation comparison is not very convincing to me. In practice, given a certain number of projections, a user might want to compare possible reconstruction algorithms to decide what is the best one to use from a computation time / reconstruction quality tradeoff point of view. Therefore, it would be good to compare times between methods for the same number of projections (it is of course possible to show results for a few different cases, e.g. many views, moderate views, and few views). It is also useful to include more detailed information about the data size (detector size, reconstruction size, number of projections, etcetera). Furthermore, please show timing results for all steps of the algorithm, including the computation of the low quality reconstructions, pilot reconstructions, and building of eigenspaces.}}\\
