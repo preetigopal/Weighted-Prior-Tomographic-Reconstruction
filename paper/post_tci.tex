@@ -822,15 +822,15 @@ they must be first registered before computing the prior.
 
 The prior is built by computing the covariance matrix from the
 template set $\{Q_i\}_{i=1}^L$. The space spanned by the eigenvectors
-$\{\boldsymbol{V_k}\}_{k=1}^{L-1}$ (eigenspace) of the covariance
+$\{\boldsymbol{V_p}\}_{p=1}^{L-1}$ (eigenspace) of the covariance
 matrix is the object prior and is assumed to contain most of the test
 slice (or volume in the case of 3D) that is similar, but not
 necessarily identical to the object-prior. We use all of the $L-1$
 orthogonal eigenvectors as a basis to represent the unknown test
 volume. Let $\boldsymbol{\mu}$ denote the mean of the previously
 scanned objects, and $\boldsymbol{\alpha}$ the unknown vector of
-eigen-coefficients of the test scan, of which $\alpha_k$ is the
-$k^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed,
+eigen-coefficients of the test scan, of which $\alpha_p$ is the
+$p^{\textrm{th}}$ element. Then, once the eigenspace is pre-computed,
 the test was reconstructed in~\cite{my_dicta_paper} by imposing a
 penalty if the estimated slice does not lie within the eigen-space of
 the object prior. Although such a prior can be very useful in some circumstances, it poses a limitation when we want accurate details of a portion of
@@ -847,7 +847,7 @@ overcomes this limitation by minimizing the following cost function:
 %   \setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{0pt}
 %\setlength{\abovedisplayskip}{-2pt} \setlength{\abovedisplayshortskip}{-2pt}
   J_3(\boldsymbol{x},\boldsymbol{\alpha}) = &\lVert\boldsymbol{\mathcal{R} x}-\boldsymbol{y}\rVert_2^2  + \lambda_1TV(\boldsymbol{x}) +\\
-  &\lambda_2\lVert\boldsymbol{W}(\boldsymbol{x} - (\boldsymbol{\mu} + \sum_{k}\boldsymbol{V_k}\alpha_k))\rVert_2^2.
+  &\lambda_2\lVert\boldsymbol{W}(\boldsymbol{x} - (\boldsymbol{\mu} + \sum_{p}\boldsymbol{V_p}\alpha_p))\rVert_2^2.
   \label{eq:spatially_varying_prior}
   \end{split}
 \end{equation}
