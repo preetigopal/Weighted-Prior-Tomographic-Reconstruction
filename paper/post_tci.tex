@@ -1449,15 +1449,15 @@ the reconstructed new regions using various methods.
 %-------------------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed potato from various
+  \caption{Default-SSIM, structure-focussed SSIM and RMSE within the RoI of reconstructed potato from various
     methods. 
 %The SSIM of ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
 The 2D reconstructed images are shown in Fig.~\ref{fig:potato_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.22, 0.52 (0.36)
-& 0.86, 0.92 (0.06) & \textcolor{red}{0.95, 0.97 (0.03)} \\ \hline \textbf{3D} & 0.30, 0.58 (0.26) & 0.56, 0.75 (0.21) & \textcolor{red}{0.72, 0.84 (0.16)}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.22, 0.52, 0.36
+& 0.86, 0.92, 0.06 & \textcolor{red}{0.95, 0.97, 0.03} \\ \hline \textbf{3D} & 0.30, 0.58, 0.26 & 0.56, 0.75, 0.21 & \textcolor{red}{0.72, 0.84, 0.16}
 \\ \hline
 \end{tabular}
 \label{table:potato_ssim}
@@ -1510,16 +1510,16 @@ Table~\ref{table:okra_ssim}.
 %---------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed okra from various
+  \caption{Default-SSIM, structure-focussed SSIM and RMSE within the RoI of reconstructed okra from various
     methods. 
 %SSIM of the ideal reconstruction is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
 The 2D reconstructed images are shown in Fig.~\ref{fig:okra_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline \textbf{2D} & 0.26, 0.46 (0.28)
-& 0.27, 0.50 (0.24) & \textcolor{red}{0.56, 0.74 (0.15)} \\ 
-\hline \textbf{3D} & 0.52, 0.65 (0.22) & 0.56, 0.70 (0.21) & \textcolor{red}{0.57, 0.71 (0.19)}
+\textbf{This paper} \\ \hline \textbf{2D} & 0.26, 0.46, 0.28
+& 0.27, 0.50, 0.24 & \textcolor{red}{0.56, 0.74, 0.15} \\ 
+\hline \textbf{3D} & 0.52, 0.65, 0.22 & 0.56, 0.70, 0.21 & \textcolor{red}{0.57, 0.71, 0.19}
 \\ \hline
 \end{tabular}
 \label{table:okra_ssim}
@@ -1573,13 +1573,13 @@ SSIM and RMSE in Table~\ref{table:tmh_ssim}.
 
 \begin{table}[!h]
   \centering
-  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of 2D reconstruction of radio-frequency ablation data of liver from various methods.  
+  \caption{Default-SSIM, structure-focussed SSIM and RMSE within the RoI of 2D reconstruction of radio-frequency ablation data of liver from various methods.  
 %For ideal reconstruction, SSIM equals 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here.  
 The  reconstructed images are shown in Fig.~\ref{fig:tmh_2D_results},}
 \begin{tabular}{|l|c|c|c|c|}
 \hline \textbf{Backprojection} & \textbf{TV} &
-\textbf{This paper} \\ \hline 0.54, 0.73 (0.04)
-& 0.80, 0.91 (0.09) & \textcolor{red}{0.90, 0.95 (0.03)} \\ \hline 
+\textbf{This paper} \\ \hline 0.54, 0.73, 0.04
+& 0.80, 0.91, 0.09 & \textcolor{red}{0.90, 0.95, 0.03} \\ \hline 
 \end{tabular}
 \label{table:tmh_ssim}
 \end{table}
@@ -1633,15 +1633,15 @@ reconstructed new regions as compared to other methods.
 %--------------------------------------------------------------
 \begin{table}[!h]
   \centering
-  \caption{Default-SSIM, structure-focussed SSIM (RMSE) within the RoI of reconstructed sprouts from various
+  \caption{Default-SSIM, structure-focussed SSIM and RMSE within the RoI of reconstructed sprouts from various
     methods. 
 %The SSIM of ideal reconstruction) is 1. The ideal RMSE is 0, and the worst RMSE possible is 1 here. 
 The 2D reconstructed images are shown in Fig.~\ref{fig:sprouts_2D_results}, and 3D reconstructed volumes can be seen in~\cite{supp_paper}.}
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline &
 \textbf{Backprojection} & \textbf{TV} & \textbf{This paper}
- \\ \hline \textbf{2D} & 0.42, 0.67 (0.24)
-& 0.61, 0.82 (0.17) & \textcolor{red}{0.72, 0.86 (0.13)} \\ \hline \textbf{3D} & 0.44, 0.67 (0.25) & 0.47, 0.73 (0.23) & \textcolor{red}{0.66, 0.82 (0.14)}
+ \\ \hline \textbf{2D} & 0.42, 0.67, 0.24
+& 0.61, 0.82, 0.17 & \textcolor{red}{0.72, 0.86, 0.13} \\ \hline \textbf{3D} & 0.44, 0.67, 0.25 & 0.47, 0.73, 0.23 & \textcolor{red}{0.66, 0.82, 0.14}
 \\ \hline
 \end{tabular}
 \label{table:sprouts_ssim}
