@@ -2,21 +2,15 @@
 
 This code repository is part of the following work which has been submitted to IEEE Transactions on Computational Imaging for peer review.
 
-Title: "Eliminating object prior-bias from sparse-projection tomographic reconstructions"
+Title: "Mitigating object prior-bias from sparse-projection tomographic reconstructions"
 
 Authors: Preeti Gopal, Sharat Chandran, Imants Svalbe and Ajit Rajwade
 
-This codebase is for 2D reconstruction of Liver and serves only as an example for measuring the compute times for various stages of weighted-prior reconstruction as specified in Section.7B of the paper. 
+This codebase has 2 independent parts: 2D_recon and 3D_recon, with scripts for 2D and 3D reconstructions respectively.
 
-Below are the instructions to use the scripts here:
+Please follow the instructions in ReadMe.txt within each directory for running the scripts.
 
-Requirements: Matlab 2019 or later version
 
-Command:  For reconstructing, run `driver.m` with the argument `tmh_7`, i.e.,
 
-> driver('tmh_7')
 
-Reconstruction results can be viewed within the generated 'results' directory.
 
-Data and scripts for reconstructing other datasets will be made
-available after the review process is complete.
