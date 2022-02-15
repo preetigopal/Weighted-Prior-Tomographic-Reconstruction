@@ -113,16 +113,16 @@ changes in the paper, especially related to the comments in Section~6
   \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-4]:}\textit{In page 7 and lines 39-42
       left column, what are the weights for? I don't see any equation
       where these can be substituted for quantifying results. Also,
-      RMSE and SSIM have their own definitions.}}
+      RMSE and \hypertarget{ssim-R1}{SSIM have their own definitions}.}}
 
   \textbf{Response:} This point has come up in R2 as well (in a larger
-  context), and we defer our detailed response to that section. In
+  context), and we defer our detailed response to that section \textcolor{blue}{\textbf{\hyperlink{ssim}{[R2-1]}}}. In
   general, we agree that our earlier usage of the term `weights' with
   respect to SSIM might have been confusing since we also refer to
   `weights-map' throughout our paper.
   
 
-  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-5, 6 (on Hyper-parameters)]:} \textit{In
+  \vspace{0.5cm}\textcolor{blue}{\textbf{\hypertarget{hyperparameters}{[R1-5, 6 (on Hyper-parameters)]:}} \textit{In
       page 7 and lines 52-56 left column, I don't understand your
       tuning of $\lambda_1$. How is SSIM optimized when ground-truth
       is unknown for the test volume?  It appears that the weight
@@ -227,7 +227,7 @@ optimization program mentioned. %TODO give section or reference?
 
   \item 
 
-    [Meta comment: This section is also in response to R1 (\ldots \emph{SSIM
+    [\hypertarget{ssim}{Meta comment:} This section is also in response to \hyperlink{ssim-R1}{R1} (\ldots \emph{SSIM
       have their own definitions}\ldots]
     
     [Standard vs custom:] We have used the commonly used SSIM metric,
@@ -424,7 +424,7 @@ The number of alternate minimization cycles (between Eq.4 and~5) was set to 3. W
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R2-7]:}\textit{How was the $\lambda_2$ parameter empirically chosen?
 }}\\
 
-\textbf{Response}: Please refer to our response to a similar query in \textcolor{blue}{\textbf{[R1-5,6]}}.\\
+\textbf{Response}: Please refer to our response to a similar query in \textcolor{blue}{\textbf{\hyperlink{hyperparameters}{[R1-5,6]}}}.\\
 
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R2-8]:}\textit{In some parts of the paper, the use of language could be improved. Also, I think it is better to not use words like `paltry'.}}\\
 
@@ -448,7 +448,7 @@ We note that in practice, a pilot reconstruction of the test must be registered 
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R3-2]:}\textit{Another challenge, as the authors acknowledge, is the high number of hyper-parameters. I believe the paper can benefit a lot from an in depth analysis to get some insights about how this parameters should be chosen. Because otherwise the applicability of the method is limited given the amount of time required to solve the reconstruction problem.
 }}\\
 
-\textbf{Response}: Please refer to our response to a similar query in \textcolor{blue}{\textbf{[R1-5,6]}}.\\
+\textbf{Response}: Please refer to our response to a similar query in \textcolor{blue}{\textbf{\hyperlink{hyperparameters}{[R1-5,6]}}}.\\
 
 
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R3-3]:}\textit{The title says ``eliminating object prior-bias'', but I think this is not accurate, because you give a weight to those priors, but not fully eliminate them. A more appropriate wording might be ``Prior-informed sparse-projection...'' or ``Weighted object-priors from past CT-scans for ...'' or something like this.}}\\
