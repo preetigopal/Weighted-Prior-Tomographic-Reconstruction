@@ -77,15 +77,21 @@ instead of ``Eliminating''.
 
   \textbf{Response:}
 
-  Duly noted the issue of ``old-regions'', we have defined and
+  
+\begin{enumerate}
+
+\item \emph{ \ldots introduces terms such as "new regions" and "old regions"
+      that don't carry any meaning. \ldots }Duly noted the issue of ``old-regions'', we have defined and
   re-written the  abstract. 
 
-  While we appreciate the suggestion on the quantification of our
+  \item \emph {\ldots You may want to add a line or two that quantifies
+      the fidelity of your reconstructions \ldots} While we appreciate the suggestion on the quantification of our
   results, we felt that (as styles go) it would be better to keep a
   lower profile because of the dependency on various factors such as
-  the number of views and structural complexity of the object data
+  the number of views, type of imaging geometry and structural complexity of the object data
   itself.
 
+  \end{enumerate}
 
   \textcolor{blue}{\textbf{[R1-3]:}\textit{In page 3 and lines 50-53
       right column, you mention that your code will be
@@ -111,19 +117,23 @@ instead of ``Eliminating''.
 \textcolor{blue}{\textbf{[R1-5, 6 (on Hyper-parameters)]:}\textit{In page 7 and lines 52-56 left column, I don't understand your tuning of $\lambda_1$. How is SSIM optimized when ground-truth is unknown for the test volume?
     It appears that the weight $\lambda_2$ must be chosen carefully and sufficiently high to ensure that we achieve the very fidelity reconstruction shown in Fig. 11 (h) with just 6 views. A lower incorrect choice for $\lambda_2$ will certainly bring back the artifacts. Even the parameter k probably plays an important role in achieving Fig. 11(h). Thus, your explanation for choosing $\lambda_2$ (in page 7 and lines 8-10 right column) and k (in page 7 and lines 23-27 right column) is inadequate. If you base your choice of $\lambda_2$ and k on "tolerance for noise" and/or "artifacts", how do you even quantify the relevant noise and artifacts? If $\lambda_2$ and k are chosen incorrectly, I am sure your method won't work. Hence, this detail needs to be discussed.}}\\
 
-\textbf{Response:} Since the aim of our experiments is to demonstrate the benefit of using weighted prior reconstruction, we adjust these parameters by assuming the ground-truth to be known. However, we do not assume the Region Of Interest (RoI) of the test to be known.
+\textbf{Response:}
+\begin{enumerate}
+  
+\item Use of ground-truth:\\ Since the aim of our experiments is to demonstrate the benefit of using weighted prior reconstruction, we adjust these parameters by assuming the ground-truth to be known. However, we do not assume the Region Of Interest (RoI) of the test to be known.
 
-We note that in practice, however, since ground-truth will never be
+\item Choosing paramters in real-life scenario: \\We note that in practice, however, since ground-truth will never be
 available, these parameters must be tuned using only the set of
 templates available.  One of the templates can be assumed to be a
 pseudo-test, and a grid search can be performed to get the best
 possible hyperparameter values. These values can then be used for
 reconstructing the `real' test volume.
 
-As mentioned in Sec.6-B of the paper, $\lambda_1$ was tuned to maximize the SSIM of the complete reconstructed test volume using the TV-only regularizer. With the already chosen optimal $\lambda_1$, we apply our method for a range of $\lambda_2$ values and select the one that gives the best SSIM with reference to the ground truth.
+\item Our choice of $\lambda_1$ and $\lambda_2$ for demonstration: \\As mentioned in Sec.6-B of the paper, $\lambda_1$ was tuned to maximize the SSIM of the complete reconstructed test volume using the TV-only regularizer. With the already chosen optimal $\lambda_1$, we apply our method for a range of $\lambda_2$ values and select the one that gives the best SSIM with reference to the ground truth.
 
-As far as the stability of parameter $k$ is concerned, in Fig. 8 of our paper, we show how the quality of reconstructions vary for different values of $k$. We see that the reconstructions are similar for a significant range of $k$ values. (5-40) for Okra. For the purposes of demonstrating the benefit of our method, we choose $k$ omnisciently assuming known ground truth of test (and unknown RoI). In real-world, $k$ must also be tuned by using one of the templates as pseudo-test and performing a grid search to select the best value.\\
+\item Choosing $k$:\\ As far as the stability of parameter $k$ is concerned, in Fig. 8 of our paper, we show how the quality of reconstructions vary for different values of $k$. We see that the reconstructions are similar for a significant range of $k$ values. (5-40) for Okra. For the purposes of demonstrating the benefit of our method, we choose $k$ omnisciently assuming known ground truth of test (and unknown RoI). In real-world, $k$ must also be tuned by using one of the templates as pseudo-test and performing a grid search to select the best value.\\
 
+  \end{enumerate}
 
 \section{Recommendation R2: RQ - Review Again After Major Changes}
 
