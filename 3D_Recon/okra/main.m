@@ -9,7 +9,7 @@ mkdir(outDirectory);
 sliceNumber = 30;
 lambda_prior_list = [0.1,0.3,0.5,0.7,0.9];
 
-projFileName = sprintf('inputs/Preeti_%s/projf32_LIN_AP.nc',dataset);
+projFileName = sprintf('inputs/%s/projf32_LIN_AP.nc',dataset);
 ncid = netcdf.open(projFileName);
 proj = double(netcdf.getVar(ncid,1));
 netcdf.close(ncid);
