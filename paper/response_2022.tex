@@ -67,7 +67,7 @@ changes in the paper, especially related to the comments in Section~6
   paper when compared to the earlier rejected submission. The results
   are now much clearer. I have a few relatively minor comments below.
 
-  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-1,2; re-wording abstract]:} \textit{In
+  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-1,2]:} \textit{In
       the abstract, I feel you are underselling your
       contributions. You may want to add a line or two that quantifies
       the fidelity of your reconstructions for a given percentage of
@@ -100,7 +100,7 @@ changes in the paper, especially related to the comments in Section~6
 
   \end{enumerate}
 
-  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-3]:}\textit{In page 3 and lines 50-53
+  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-3]:} \textit{In page 3 and lines 50-53
       right column, you mention that your code will be
       released. However, I recommend including a link to github or
       other website with the code before publication.}} 
@@ -110,7 +110,7 @@ changes in the paper, especially related to the comments in Section~6
     our github repository}. To this, we have now added code for 3D
   reconstructions for all datasets.
 
-  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-4]:}\textit{In page 7 and lines 39-42
+  \vspace{0.5cm}\textcolor{blue}{\textbf{[R1-4]:} \textit{In page 7 and lines 39-42
       left column, what are the weights for? I don't see any equation
       where these can be substituted for quantifying results. Also,
       RMSE and \hypertarget{ssim-R1}{SSIM have their own definitions}.}}
@@ -176,11 +176,11 @@ changes in the paper, especially related to the comments in Section~6
 
 \section{R2: RQ - Review Again After Major Changes}
 
-\textbf{Comments:}The paper has greatly improved with the new focus! I
+\textbf{Comments:} The paper has greatly improved with the new focus! I
 would like to thank the authors for the extra work. I do have a few
 remaining comments:
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-1]:}\textit{I highly suggest to use
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-1]:} \textit{I highly suggest to use
     standard metrics for comparison, instead of the custom metrics
     currently used. For SSIM, reporting with the standard weightings
     is important (if the authors want, of course they can show both
@@ -227,14 +227,14 @@ optimization program mentioned. %TODO give section or reference?
 
   \item 
 
-    [\hypertarget{ssim}{Meta comment:} This section is also in response to \hyperlink{ssim-R1}{R1} (\ldots \emph{SSIM
+    [\hypertarget{ssim}{Meta comment:}  This section is also in response to \hyperlink{ssim-R1}{R1} (\ldots \emph{SSIM
       have their own definitions}\ldots]
     
     [Standard vs custom:] We have used the commonly used SSIM metric,
     for which, we have now provided reference to the original paper
     where the metric has been defined. As is well know, SSIM comprises
     of three factors: Luminance, Contrast and Structure. These factors
-    (now termed `coefficients', earlier `weights' paper) for these
+    (now termed `coefficients', earlier `weights') for these
     three terms are adjustable to suit the application at hand.  Since
     SSIM inherently offers a flexibility to set coefficients based on
     what we want to evaluate, we believe that having a set of
@@ -283,7 +283,7 @@ $\alpha$, $\beta$ and $\gamma$ are set to $1$ as default, but need to
 be adjusted to suit the application goal.
 \end{enumerate}
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-2]:}\textit{The computation comparison is
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-2]:} \textit{The computation comparison is
     not very convincing to me. In practice, given a certain number of
     projections, a user might want to compare possible reconstruction
     algorithms to decide what is the best one to use from a
@@ -303,10 +303,10 @@ be adjusted to suit the application goal.
 \begin{enumerate}
 
 \item \emph{ \ldots therefore it would be good \ldots } Indeed, this
-  is precisely what we have done.  Sadly our column header of Table-6
-  conveyed a different impression. We intended to indicate that FDK is
-  good for sufficient views, and TV is sufficent for moderate
-  views. We ended up misleading the reviewer.
+  is precisely what we have done.  Sadly, our earlier column header of
+  Table-6 conveyed a different impression. We intended to indicate
+  that FDK is good for sufficient views, and TV is sufficent for
+  moderate views. We ended up misleading the reviewer.
   
   Hence, we have edited the caption and Table-field titles of Table-6
   (Page 10) to accurately describe details of measurement. 
@@ -381,7 +381,7 @@ be adjusted to suit the application goal.
 \label{fig:okra_zoomed_3D_results}
 \end{figure}
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-3]:}\textit{In several parts of the
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-3]:} \textit{In several parts of the
     paper, the authors claim that existing object-prior based methods
     have problems, e.g.: "A common problem with these techniques is
     the strong influence of object-priors in the reconstruction of new
@@ -400,7 +400,7 @@ affect the reconstruction of new regions in the test.
 
 
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-4]:}\textit{The discussion of deep learning methods in Section 7B is not very strong in my opinion. There are many existing techniques that have shown quite convincing results for reconstructing CT images with a low number of projections, even without taking into account any static parts across time. These methods rely on learning image-based correlations instead of the "given intensities of a voxel at various time instants in a longitudinal setting and partial measurements of the voxel at the current time, what will be the intensity of the same voxel at the current time instant?" given by the authors. These image-based methods often don't need 'hundreds of labeled data', sometimes being able to accurately learn from just one time step. In the paper, these methods should be discussed, and proper references should be included.}}\\
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-4]:} \textit{The discussion of deep learning methods in Section 7B is not very strong in my opinion. There are many existing techniques that have shown quite convincing results for reconstructing CT images with a low number of projections, even without taking into account any static parts across time. These methods rely on learning image-based correlations instead of the "given intensities of a voxel at various time instants in a longitudinal setting and partial measurements of the voxel at the current time, what will be the intensity of the same voxel at the current time instant?" given by the authors. These image-based methods often don't need 'hundreds of labeled data', sometimes being able to accurately learn from just one time step. In the paper, these methods should be discussed, and proper references should be included.}}\\
 
 \textbf{Response}: We acknowledge that there has been significant work pertaining to training neural networks to directly predict full-view sinogram and reconstruction of the test object from its limited-view measurements. We have now included a discussion of deep-learning methods in `Related Work', Section 2, of our paper, and have now cited a few notable references.
 
@@ -408,7 +408,7 @@ We also believe that information from longitudinal data, if available, is helpfu
 
 
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-5]:}\textit{What algorithm is used to minimize Eq 3? How many iterations were used for this minimization? How was convergence ensured?}}\\
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-5]:} \textit{What algorithm is used to minimize Eq 3? How many iterations were used for this minimization? How was convergence ensured?}}\\
 
 \textbf{Response}: Eq. 3 consists of alternately solving for Eq.4 and Eq.5. While Eq.5 has a closed form solution, Eq.4 was solved using the solver mentioned in Reference [18]. (as mentioned in page 6, just above Eq.4). 
 For solving Eq.4, maximum number of iterations was set to 200 and tolerance was set to 1e-4.
@@ -416,17 +416,17 @@ For solving Eq.4, maximum number of iterations was set to 200 and tolerance was 
 The number of alternate minimization cycles (between Eq.4 and~5) was set to 3. We observed that further cycles did not improve reconstruction significantly for the extra time consumed.
 \\
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-6]:}\textit{What were the various parameters of the reconstructions show in Fig 11? How were they chosen?
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-6]:} \textit{What were the various parameters of the reconstructions show in Fig 11? How were they chosen?
 }}\\
 
 \textbf{Response}: For 2D reconstructions using ART, SIRT and SART, we set the maximum iterations to 50 and observed that further iterations did not improve the quality of reconstructions.\\
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-7]:}\textit{How was the $\lambda_2$ parameter empirically chosen?
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-7]:} \textit{How was the $\lambda_2$ parameter empirically chosen?
 }}\\
 
 \textbf{Response}: Please refer to our response to a similar query in \textcolor{blue}{\textbf{\hyperlink{hyperparameters}{[R1-5,6]}}}.\\
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-8]:}\textit{In some parts of the paper, the use of language could be improved. Also, I think it is better to not use words like `paltry'.}}\\
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R2-8]:} \textit{In some parts of the paper, the use of language could be improved. Also, I think it is better to not use words like `paltry'.}}\\
 
 \textbf{Response}: Although we had meant to use `paltry' in a neutral way to only suggest the use of very few measuremetns, we  have noted this and made the change.\\
 
@@ -445,19 +445,19 @@ The structure of the paper is good and the authors did a good job in presenting 
 We note that in practice, a pilot reconstruction of the test must be registered with similarly imaged, pilot reconstructed templates. This registration is challenging due to the presence of sub-sampling artefacts. We consider the problem of registration as a separate one and intend the practitioners to use any state-of-the-art registration algorithm before applying the proposed method in our paper. 
 \\
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R3-2]:}\textit{Another challenge, as the authors acknowledge, is the high number of hyper-parameters. I believe the paper can benefit a lot from an in depth analysis to get some insights about how this parameters should be chosen. Because otherwise the applicability of the method is limited given the amount of time required to solve the reconstruction problem.
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R3-2]:} \textit{Another challenge, as the authors acknowledge, is the high number of hyper-parameters. I believe the paper can benefit a lot from an in depth analysis to get some insights about how this parameters should be chosen. Because otherwise the applicability of the method is limited given the amount of time required to solve the reconstruction problem.
 }}\\
 
 \textbf{Response}: Please refer to our response to a similar query in \textcolor{blue}{\textbf{\hyperlink{hyperparameters}{[R1-5,6]}}}.\\
 
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R3-3]:}\textit{The title says ``eliminating object prior-bias'', but I think this is not accurate, because you give a weight to those priors, but not fully eliminate them. A more appropriate wording might be ``Prior-informed sparse-projection...'' or ``Weighted object-priors from past CT-scans for ...'' or something like this.}}\\
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R3-3]:} \textit{The title says ``eliminating object prior-bias'', but I think this is not accurate, because you give a weight to those priors, but not fully eliminate them. A more appropriate wording might be ``Prior-informed sparse-projection...'' or ``Weighted object-priors from past CT-scans for ...'' or something like this.}}\\
 
 \textbf{Response}: Thank you for suggesting other possible titles. We
 agree. We have changed the title to ``Mitigating object prior-bias from sparse-projection tomographic reconstructions''\\
 
 
-\vspace{0.5cm}\textcolor{blue}{\textbf{[R3-4]:}\textit{As a final remark, the authors can also use this technique for imaging dynamical samples. A discussion would be nice.}}\\
+\vspace{0.5cm}\textcolor{blue}{\textbf{[R3-4]:} \textit{As a final remark, the authors can also use this technique for imaging dynamical samples. A discussion would be nice.}}\\
 
 \textbf{Response}: Based on our understanding, dynamic imaging is a technique for acquiring only those measurements that have high entropy. This involves computing the next the measurement location based on the past measurements acquired for the \textit{same} object volume. This is different from our scenario in which we consider measurements from \textit{multiple volumes} of an object, each taken at a different time. The measurement-locations of the test are also not pre-computed while imaging, in our case. 
 
