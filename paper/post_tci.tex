@@ -75,7 +75,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Reducing object prior-bias from sparse-projection tomographic reconstructions}
+\title{Mitigating object prior-bias from sparse-projection tomographic reconstructions}
 %
 %
 % author names and IEEE memberships
@@ -422,7 +422,14 @@ also make use of the additional information available in multiple
 priors. Our technique also has the advantage of not requiring any
 expert-domain knowledge about the object being scanned.
 
- In the recent past, deep learning based techniques have also been widely used for limited view CT reconstruction without the use of any longitudinal object-prior. For example, in~\cite{anirudh}, a neural network is trained to predict the complete sinogram from an incomplete one obtained from few-view imaging. This complete sinogram is then fed to analytical reconstruction algorithms to obtain the final reconstruction. Hence, one may in principle use this full sinogram as an alternate initial reconstruction of the test within our framework. \cite{bo2021} presented a cascade of neural networks that predict full-view reconstruction from limited view FBP reconstruction while simlutaneously ensuring consistency between the predicted sinugram and the acquired sinogram. \cite{special} trains an adverserial network for artifact removal and edge preservation in limited view reconstruction. While all of the above methods predict full-view reconstruction from the measurements of test object alone, we believe it is beneficial to use information from longitudinal data, especially if naturally available, like in the radio-frequency ablation datasets that we use. In this context, we present an analytical method that uses the available longitudinal data to better inform the reconstruction of the test. We first construct a `weights map' that gives clear insights about regions of change within the object over time.  
+In the recent past, deep learning based techniques have also been widely used for limited view CT reconstruction without the use of any longitudinal object-prior. For example, in~\cite{anirudh}, a neural network is trained to predict the complete sinogram from an incomplete one obtained from few-view imaging. This complete sinogram is then fed to analytical reconstruction algorithms to obtain the final reconstruction. Hence, one may in principle use this full sinogram as an alternate initial reconstruction of the test within our framework. In ~\cite{kim2019extreme}, a generative adversarial network is used to predict a reconstruction from an extremely sparse sinogram. This is used as an initialization in  a traditional iterative reconstruction algorithm to compute the final reconstruction. Given this pipeline, our method can be used to further inform the iterative reconstruction of the available template information, as presented in Fig.~\ref{fig:Lit}. Among other techniques, \cite{bo2021} presented a cascade of neural networks that predict full-view reconstruction from limited view FBP reconstruction while simlutaneously ensuring consistency between the predicted sinugram and the acquired sinogram. \cite{special} trains an adverserial network for artifact removal and edge preservation in limited view reconstruction. While all of the above methods predict full-view reconstruction from the measurements of test object alone, we believe it is beneficial to use information from longitudinal data, especially if naturally available, like in the radio-frequency ablation datasets that we use. In this context, we present an analytical method that uses the available longitudinal data to better inform the reconstruction of the test. We first construct a `weights map' that gives clear insights about regions of change within the object over time.
+
+\begin{figure}[t]
+\centering
+	\includegraphics[width=0.5\textwidth]{../images/Lit.png}
+        \caption{Illustration of the application of our method within the framework presented in~\cite{kim2019extreme}.}
+ \label{fig:Lit}
+ \end{figure} 
  
 %-------------------------------------------------------------------
 
