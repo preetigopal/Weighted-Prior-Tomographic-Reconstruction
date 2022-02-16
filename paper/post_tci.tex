@@ -405,36 +405,71 @@ mechanism to mitigate them (unlike the method that we propose). %This
 %can be seen in Sec.~4 of our supplementary material~\cite{supp_paper},
 %where we have compared our method with~\cite{Lee2012}.
 
+In the recent past, deep learning based
+techniques~\cite{anirudh},\cite{kim2019extreme},\cite{bo2021},\cite{special}
+have been used for limited view CT reconstruction. For example,
+in~\cite{anirudh}, a neural network is trained to predict the complete
+sinogram (measurements) from an incomplete one.  This complete
+sinogram is then fed to analytical reconstruction algorithms to obtain
+the final reconstruction.  ~\cite{bo2021} presented a cascade of
+neural networks that predict full-view reconstruction from limited
+view FBP reconstruction while simultaneously ensuring consistency
+between the predicted sinogram and the acquired
+sinogram. \cite{special} trains an adversarial network for artifact
+removal and edge preservation in limited view reconstruction.
+However, all of the above existing methods predict full-view
+reconstruction from the measurements of the test object alone. We
+believe it is beneficial to use information from longitudinal data,
+especially if naturally available, like in the radio-frequency
+ablation datasets that we use.
 
-In this paper, we present a technique that makes use of multiple
-object priors, corresponding to high quality reconstructions of
-similar objects across time, typically in a longitudinal study.  We
-use these priors to improve the reconstruction of the test from
-largely undersampled measurements. In particular, we define regions of
-change between the test and the eigenspace spanned by previous high
-quality object-priors in a purely data driven manner. Additionally,
-our technique differentiates between genuine structural changes and
-``changes'' that appear due to undersampling artefacts.  Besides this,
-since we use a statistical model with multiple object-priors, we avoid
-the problem of selecting an appropriate single object-prior
+That said, the ability of these data-driven techniques to uncover new
+features is not being disputed in this work. In fact, our work can be
+used in tandem with these methods. For example, one of the state of
+the art works is \cite{kim2019extreme}, where an adversarial network
+is used to predict a reconstruction from extremely sparse measurements
+(similar to the ones we employ in this work, albeit for chest
+X-rays). This reconstruction is used as an initialization in a
+traditional analytical iterative reconstruction algorithm to compute
+the final reconstruction.  Given this pipeline, and our emphasis on
+longitudinal data, our method can be used to further inform the
+iterative algorithm of the available template information. The scheme
+is presented in Fig.~\ref{fig:Lit}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{../images/Lit.png}
+  \caption{Illustration of the application of our method (marked
+    in yellow, red) within the deep learning based framework of
+    \cite{kim2019extreme} (in blue).}
+  \label{fig:Lit}
+\end{figure} 
+
+
+ %Hence, one may in principle use this full sinogram as an alternate initial reconstruction of the test within our framework.
+
+Our focus in this paper instead is an analytical method that uses the
+available longitudinal data to better inform the reconstruction of the
+test.  We present a technique that makes use of multiple object
+priors, corresponding to high quality reconstructions of similar
+objects across time, typically in a longitudinal study.  We use these
+priors to improve the reconstruction of the test from largely
+undersampled measurements. In particular, we define regions of change
+between the test and the eigenspace spanned by previous high quality
+object-priors in a purely data driven manner.  We first construct a
+`weights map' that gives clear insights about regions of change within
+the object over time.  Additionally, our technique differentiates
+between genuine structural changes and ``changes'' that appear due to
+undersampling artefacts.  Besides this, since we use a statistical
+model with multiple object-priors, we avoid the problem of selecting
+an appropriate single object-prior
 unlike~\cite{PICCS,Pourmorteza2015,Lee2012,pirple,Marjolein2016} and
 also make use of the additional information available in multiple
 priors. Our technique also has the advantage of not requiring any
 expert-domain knowledge about the object being scanned.
 
-In the recent past, deep learning based techniques~\cite{anirudh},\cite{kim2019extreme},\cite{bo2021},\cite{special} have also been widely used for limited view CT reconstruction. For example, in~\cite{anirudh}, a neural network is trained to predict the complete sinogram from an incomplete one.% This complete sinogram is then fed to analytical reconstruction algorithms to obtain the final reconstruction.
- ~\cite{bo2021} presented a cascade of neural networks that predict full-view reconstruction from limited view FBP reconstruction while simlutaneously ensuring consistency between the predicted sinugram and the acquired sinogram. \cite{special} trains an adverserial network for artifact removal and edge preservation in limited view reconstruction. In this work, the ability of these techniques to
-uncover new features from one or many example training images is not being disputed. Instead, we focus on a new discrete algorithm that builds structural maps that can and does point to new features. Having said that, our work is complementary to learning-based teachniques and can fit alongside a deep learning framework. For example, in~\cite{kim2019extreme}, an adversarial network is used to predict a reconstruction from extremely sparse measurements. This is used as an initialization in  a traditional iterative reconstruction algorithm to compute the final reconstruction. Given this pipeline, our method can be used to further inform the iterative algorithm of the available template information, as presented in Fig.~\ref{fig:Lit}.
 
-    %Hence, one may in principle use this full sinogram as an alternate initial reconstruction of the test within our framework.
-      We further note that all of the above existing methods predict full-view reconstruction from the measurements of test object alone. We believe it is beneficial to use information from longitudinal data, especially if naturally available, like in the radio-frequency ablation datasets that we use. In this context, we present an analytical method that uses the available longitudinal data to better inform the reconstruction of the test. We first construct a `weights map' that gives clear insights about regions of change within the object over time.
-
-\begin{figure}[t]
-\centering
-	\includegraphics[width=0.5\textwidth]{../images/Lit.png}
-        \caption{Illustration of the application of our method (marked in yellow, red) within the deep learning based framework presented in~\cite{kim2019extreme}.}
- \label{fig:Lit}
- \end{figure} 
+      
  
 %-------------------------------------------------------------------
 
@@ -1028,7 +1063,7 @@ Selection of $k$ is discussed in detail in Sec.~\ref{sec:discussion}.\\
 In this section, we first illustrate the advantage of using multiple
 types of eigenspaces for the computation of weights map, and then
 present reconstruction results on all datasets.  We show both
-qualitative and quantitative results.  Before we do this, it is import
+qualitative and quantitative results.  Before we do this, it is important
 to first consider our method of reporting our results.
 
 \subsection{Metrics}
