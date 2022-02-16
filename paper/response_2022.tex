@@ -37,10 +37,12 @@ changes in the paper, especially related to the comments in Section~6
     `Related Work', Section 2, of our paper, and have cited a few
     notable references pertaining to training neural networks to
     directly predict full-view sinogram and reconstruct the test
-    object from its limited-view measurements. We also discuss how
-    our work is complementary to learning-based teachniques and can
-    fit alongside a deep learning framework, as seen in Figure.2 of the paper. Hence, the ability of DL to
-    uncover new features from one or many example training images is not being disputed. Here the focus is on a new discrete algorithm that builds structural maps that can and does point to new features.
+    object from its limited-view measurements. We also discuss how our
+    work is complementary to learning-based teachniques and can fit
+    alongside a recent, state of the art, deep learning framework, as
+    seen in Fig.~2 of the paper. Hence, the ability of DL to uncover
+    new features is not being disputed. Instead, our focus is on a
+    novel discrete method.
     
 
     \item\textcolor{blue}{\textit{Presenting all relevant details so
@@ -403,10 +405,16 @@ affect the reconstruction of new regions in the test.
 
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R2-4]:} \textit{The discussion of deep learning methods in Section 7B is not very strong in my opinion. There are many existing techniques that have shown quite convincing results for reconstructing CT images with a low number of projections, even without taking into account any static parts across time. These methods rely on learning image-based correlations instead of the "given intensities of a voxel at various time instants in a longitudinal setting and partial measurements of the voxel at the current time, what will be the intensity of the same voxel at the current time instant?" given by the authors. These image-based methods often don't need 'hundreds of labeled data', sometimes being able to accurately learn from just one time step. In the paper, these methods should be discussed, and proper references should be included.}}\\
 
-\textbf{Response}: We acknowledge that there has been significant work pertaining to training neural networks to directly predict full-view sinogram and reconstruction of the test object from its limited-view measurements. We have now included a discussion of deep-learning methods in `Related Work', Section 2, of our paper, and have now cited a few notable references. We also discuss how
-    our work is complementary to learning-based teachniques and can
-    fit alongside a deep learning framework, as seen in Figure.2 of the paper. Hence, the ability of DL to
-    uncover new features from one or many example training images is not being disputed. Here the focus is on a new discrete algorithm that builds structural maps that can and does point to new features.
+\textbf{Response}: We acknowledge that there has been significant work
+pertaining to training neural networks to directly predict full-view
+sinogram and reconstruction of the test object from its limited-view
+measurements. We have now included a discussion of deep-learning
+methods in `Related Work', Section 2, of our paper, and have now cited
+a few notable references. We also discuss how our work is
+complementary to learning-based teachniques and can fit alongside a
+deep learning framework, as seen in Fig.~2 of the revised paper. That
+said, the focus of our work is on a new discrete algorithm that builds
+structural maps that can and does point to new features.
 
 We also believe that information from longitudinal data, if available, is helpful and must be used to better inform reconstruction of the test. This is especially the case in applications where longitudinal data is naturally available as part of the process as in radio frequency ablations. It is in this context that our paper presents an analytical method to fuse the existing prior data with test measurements in order to construct a `weights map'. This map gives clear insights about regions of change within the object over time.\\
 
