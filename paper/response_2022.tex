@@ -234,7 +234,7 @@ optimization program mentioned. %TODO give section or reference?
     
     [Standard vs custom:] We have used the commonly used SSIM metric,
     for which, we have now provided reference to the original paper
-    where the metric has been defined. As is well know, SSIM comprises
+    where the metric has been defined. As is well known, SSIM comprises
     of three factors: Luminance, Contrast and Structure. These factors
     (now termed `coefficients', earlier `weights') for these
     three terms are adjustable to suit the application at hand.  Since
@@ -452,9 +452,9 @@ The structure of the paper is good and the authors did a good job in presenting 
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R3-1]:} \textit{One challenge of the method that I can see is that these datasets needs to be aligned but there is not much discussion on this procedure or how this can be performed in a realistic setting. Are the variation from a past to present scans looking similar? In addition to the variations in scans taken at different times, in the low-quality scan, the features are less pronounced so the registration might pose a challenge even if the sample looks similar. So, it would be good to see the artifacts due to an intentionally less-aligned images and a discussion about the limitations would be nice.
 }}\\
 
-\textbf{Response}: Yes, registration between the unknown test and templates is important for our method. Registration is also a common problem in many other fields such as MRI/CT/PET data.  There is a lot of research on linear and non-linear methods to optimise this. The focus in our paper is not on registration but on building accurate maps that delineate regions of structural changes in already pre-registered data (registered using state-of-the-art methods).  Hence, in this work, we do not intend to predict what difficulties registration might present but rather that show that it is possible to blend prior and new views.\\
-
-We note that in practice, a pilot reconstruction of the test must be registered with similarly imaged, pilot reconstructed templates. This registration is challenging due to the presence of sub-sampling artefacts. We consider the problem of registration as a separate one and intend the practitioners to use any state-of-the-art registration algorithm before applying the proposed method in our paper. 
+\textbf{Response}: Yes, registration between the unknown test and templates is important for our method. Registration is also a common problem in many other fields such as MRI/CT/PET data.  There is a lot of research on linear and non-linear methods to optimise this. The focus in our paper is not on registration but on building accurate maps that delineate regions of structural changes in already pre-registered data (registered using state-of-the-art methods).  Hence, in this work, we do not intend to predict what difficulties registration might present but rather that show that it is possible to blend prior and new views.
+%We note that in practice, a pilot reconstruction of the test must be registered with similarly imaged, pilot reconstructed templates. This registration is challenging due to the presence of sub-sampling artefacts.
+We consider the problem of registration as a separate one and intend the practitioners to use any state-of-the-art registration algorithm, such as~\cite{robert2021},\cite{registrationThesis}, before applying the proposed method in our paper. 
 \\
 
 \vspace{0.5cm}\textcolor{blue}{\textbf{[R3-2]:} \textit{Another challenge, as the authors acknowledge, is the high number of hyper-parameters. I believe the paper can benefit a lot from an in depth analysis to get some insights about how this parameters should be chosen. Because otherwise the applicability of the method is limited given the amount of time required to solve the reconstruction problem.
@@ -477,11 +477,7 @@ Hence, our method may not be directly applicable for reconstruction from dynamic
 
 
 
-    
-  \end{document}
-
-
-\bibliography{tci_ref}
+ \bibliography{tci_ref}
 \end{document}
 \begin{table}[!h]
   \centering
